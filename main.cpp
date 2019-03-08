@@ -135,7 +135,6 @@ void draw_objects(void)
 {
     glDisable(GL_LIGHTING);
     
-
 	glPushMatrix();
 
 	glDisable(GL_CULL_FACE);
@@ -183,10 +182,37 @@ void draw_objects(void)
 	glVertex3f(-half_court_width, 0, 0);
 	glVertex3f( half_court_width, 0, 0);
 
-    
+	glEnd();
+
+
     glLineWidth(1.0f);
     
- 
+    
+	// If we do draw the axis at all, make sure not to draw its outline.
+	if(true == draw_axis)
+	{
+		glBegin(GL_LINES);
+
+		glColor3f(1, 0, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(1, 0, 0);
+		glColor3f(0, 1, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 1, 0);
+		glColor3f(0, 0, 1);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 0, 1);
+
+		glColor3f(0.5, 0.5, 0.5);
+		glVertex3f(0, 0, 0);
+		glVertex3f(-1, 0, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, -1, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 0, -1);
+
+		glEnd();
+	}
 
 	glPopMatrix();
 }
