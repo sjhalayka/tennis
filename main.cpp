@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	size_t num_vectors = 5;
+	size_t num_vectors = 10;
 
 	paths.resize(num_vectors);
 
@@ -28,9 +28,7 @@ int main(int argc, char **argv)
 		get_path(paths[i], server_pos, server_vel, server_ang_vel, target_pos);
 	}
 
-
 	// find two closest path ends
-
 	size_t smallest_index = 0;
 	size_t second_smallest_index = 0;
 
@@ -63,7 +61,9 @@ int main(int argc, char **argv)
 	{
 		if (i == smallest_index || i == second_smallest_index)
 		{
-			custom_math::vector_3 sv = server_vels[i];
+			//get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
+
+
 
 		}
 		else
