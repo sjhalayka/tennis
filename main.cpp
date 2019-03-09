@@ -6,37 +6,35 @@ int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	paths.resize(4);
+	size_t num_vectors = 10;
+
+	paths.resize(num_vectors);
 
 	server_vel = target_pos - server_pos;
 	const double server_vel_len = server_vel.length();
+	const custom_math::vector_3 up(0, server_vel_len, 0);
+	double step_size = 1.0 / num_vectors;
 
-	custom_math::vector_3 up(0, server_vel.length(), 0);
+	for (size_t i = 0; i < num_vectors; i++)
+	{
+		server_vel = lerp(target_pos - server_pos, up, i*step_size);
+		server_vel.normalize();
+		server_vel *= server_vel_len;
 
-	server_vel = lerp(target_pos - server_pos, up, 0.8);
-	server_vel.normalize();
-	server_vel *= server_vel_len;
+		get_path(paths[i], server_pos, server_vel, server_ang_vel, target_pos);
+	}
 
-	get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 
-	server_vel = lerp(target_pos - server_pos, up, 0.6);
-	server_vel.normalize();
-	server_vel *= server_vel_len;
+	// find two closest path ends
 
-	get_path(paths[1], server_pos, server_vel, server_ang_vel, target_pos);
+	size_t largest_index = 0;
+	size_t second_largest_index = 0;
 
-	server_vel = lerp(target_pos - server_pos, up, 0.4);
-	server_vel.normalize();
-	server_vel *= server_vel_len;
+	for (size_t i = 0; i < num_vectors; i++)
+	{
 
-	get_path(paths[2], server_pos, server_vel, server_ang_vel, target_pos);
 
-	server_vel = lerp(target_pos - server_pos, up, 0.2);
-	server_vel.normalize();
-	server_vel *= server_vel_len;
-
-	get_path(paths[3], server_pos, server_vel, server_ang_vel, target_pos);
-
+	}
 
 
 
