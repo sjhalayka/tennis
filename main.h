@@ -119,12 +119,14 @@ short unsigned int get_positions(vector<custom_math::vector_3> &p)
 		// if collides with net, reflect vector
 		if (curr_pos.z < 0 && last_pos.z >= 0 &&
 			curr_pos.y >= 0 && curr_pos.y <= net_height &&
-			curr_pos.x >= -half_court_length && curr_pos.x <= half_court_length)
+			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
 		{
-			cout << "net" << endl;
-			custom_math::vector_3 N(1, 0, 0);
+			custom_math::vector_3 N(0, 0, 1);
 			curr_vel = N * curr_vel.dot(N)*2.0 - curr_vel;
+			
+			curr_vel.x = -curr_vel.x;
 			curr_vel.y = -curr_vel.y;
+			curr_vel.z = -curr_vel.z;
 		}
 
 		last_pos = curr_pos;

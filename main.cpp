@@ -185,32 +185,32 @@ void draw_objects(void)
 
 	glEnd();
 
- //   
-	//// If we do draw the axis at all, make sure not to draw its outline.
-	//if(true == draw_axis)
-	//{
-	//	glBegin(GL_LINES);
+    
+	// If we do draw the axis at all, make sure not to draw its outline.
+	if(true == draw_axis)
+	{
+		glBegin(GL_LINES);
 
-	//	glColor3f(1, 0, 0);
-	//	glVertex3f(0, 0, 0);
-	//	glVertex3f(1, 0, 0);
-	//	glColor3f(0, 1, 0);
-	//	glVertex3f(0, 0, 0);
-	//	glVertex3f(0, 1, 0);
-	//	glColor3f(0, 0, 1);
-	//	glVertex3f(0, 0, 0);
-	//	glVertex3f(0, 0, 1);
+		//glColor3f(1, 0, 0);
+		//glVertex3f(0, 0, 0);
+		//glVertex3f(1, 0, 0);
+		//glColor3f(0, 1, 0);
+		//glVertex3f(0, 0, 0);
+		//glVertex3f(0, 1, 0);
+		glColor3f(0, 0, 1);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 0, 1);
 
-	//	glColor3f(0.5, 0.5, 0.5);
-	//	glVertex3f(0, 0, 0);
-	//	glVertex3f(-1, 0, 0);
-	//	glVertex3f(0, 0, 0);
-	//	glVertex3f(0, -1, 0);
-	//	glVertex3f(0, 0, 0);
-	//	glVertex3f(0, 0, -1);
+		glColor3f(0.5, 0.5, 0.5);
+		//glVertex3f(0, 0, 0);
+		//glVertex3f(-1, 0, 0);
+		//glVertex3f(0, 0, 0);
+		//glVertex3f(0, -1, 0);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 0, -1);
 
-	//	glEnd();
-	//}
+		glEnd();
+	}
 
 	glPopMatrix();
 }
