@@ -125,11 +125,7 @@ short unsigned int get_positions(vector<custom_math::vector_3> &p, const custom_
 			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
 		{
 			custom_math::vector_3 N(0, 0, 1);
-			curr_vel = N * curr_vel.dot(N)*2.0 - curr_vel;
-			
-			curr_vel.x = -curr_vel.x;
-			curr_vel.y = -curr_vel.y;
-			curr_vel.z = -curr_vel.z;
+			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 		}
 
 		last_pos = curr_pos;
