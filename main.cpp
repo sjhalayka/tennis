@@ -13,25 +13,25 @@ int main(int argc, char **argv)
 
 	custom_math::vector_3 up(0, server_vel.length(), 0);
 
-	server_vel = lerp(target_pos - server_pos, up, 0.9);
+	server_vel = lerp(target_pos - server_pos, up, 0.8);
 	server_vel.normalize();
 	server_vel *= server_vel_len;
 
 	get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 
-	server_vel = lerp(target_pos - server_pos, up, 0.666666666666);
+	server_vel = lerp(target_pos - server_pos, up, 0.6);
 	server_vel.normalize();
 	server_vel *= server_vel_len;
 
 	get_path(paths[1], server_pos, server_vel, server_ang_vel, target_pos);
 
-	server_vel = lerp(target_pos - server_pos, up, 0.3333333333333);
+	server_vel = lerp(target_pos - server_pos, up, 0.4);
 	server_vel.normalize();
 	server_vel *= server_vel_len;
 
 	get_path(paths[2], server_pos, server_vel, server_ang_vel, target_pos);
 
-	server_vel = lerp(target_pos - server_pos, up, 0.1);
+	server_vel = lerp(target_pos - server_pos, up, 0.2);
 	server_vel.normalize();
 	server_vel *= server_vel_len;
 
