@@ -59,7 +59,7 @@ double net_height = 3;
 
 custom_math::vector_3 server_pos(10, 4, 10);
 custom_math::vector_3 server_vel(-10, 3, -15);
-custom_math::vector_3 server_ang_vel(50, 5, 0);
+custom_math::vector_3 server_ang_vel(1000, 5, 0);
 
 vector< vector<custom_math::vector_3> > paths;
 
@@ -70,7 +70,8 @@ custom_math::vector_3 grav_and_magnus_acceleration(const custom_math::vector_3 &
 {
 	custom_math::vector_3 accel(0, -9.81, 0);
 
-	custom_math::vector_3 magnus_accel = 0;// ang_vel.cross(vel)*0.5*0.1*0.1*1.0; // fluid_density*drag_coeff*ball_cross_section_area
+	// angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
+	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.5*0.01*0.01*0.01 / 1.0;
 	//magnus_accel /= ball_mass;
 
 	return custom_math::vector_3(accel.x + magnus_accel.x, accel.y + magnus_accel.y, accel.z + magnus_accel.z);
