@@ -58,58 +58,72 @@ double half_court_length = court_length / 2.0;
 double net_height = 3;
 
 custom_math::vector_3 server_pos(10, 4, 10);
-custom_math::vector_3 server_velocity(-10, 3, -15);
-custom_math::vector_3 server_angular_velocity(50, 5, 0);
+custom_math::vector_3 server_vel(-10, 3, -15);
+custom_math::vector_3 server_ang_vel(50, 5, 0);
 
-vector<custom_math::vector_3> positions;
+vector< vector<custom_math::vector_3> > paths;
 
 custom_math::vector_3 target_pos(15, 0, -15);
 
 
-custom_math::vector_3 grav_and_magnus_acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel)
+custom_math::vector_3 grav_and_magnus_acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	custom_math::vector_3 accel(0, -9.81, 0);
 
-	custom_math::vector_3 magnus_accel = server_angular_velocity.cross(server_velocity)*0.5*0.1*0.1*1.0; // fluid_density*drag_coeff*ball_cross_section_area
-	//magnus_accel.x /= 1;// accel = force/ball_mass
-	//magnus_accel.y /= 1;// accel = force/ball_mass
-	//magnus_accel.z /= 1;// accel = force/ball_mass
+	custom_math::vector_3 magnus_accel = 0;// ang_vel.cross(vel)*0.5*0.1*0.1*1.0; // fluid_density*drag_coeff*ball_cross_section_area
+	//magnus_accel /= ball_mass;
 
 	return custom_math::vector_3(accel.x + magnus_accel.x, accel.y + magnus_accel.y, accel.z + magnus_accel.z);
 }
 
-void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel)
+void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	static const double one_sixth = 1.0 / 6.0;
 	static const double dt = 0.0001;
 
 	custom_math::vector_3 k1_velocity = vel;
-	custom_math::vector_3 k1_acceleration = grav_and_magnus_acceleration(pos, k1_velocity);
-	custom_math::vector_3 k2_velocity = vel + k1_acceleration * dt*0.5;
-	custom_math::vector_3 k2_acceleration = grav_and_magnus_acceleration(pos + k1_velocity * dt*0.5, k2_velocity);
+	custom_math::vector_3 k1_acceleration = grav_and_magnus_acceleration(pos, k1_velocity, ang_vel);
+	custom_math::vector_3 k2_velocity = vel + k1_acceleration * dt*0.5;	
+	custom_math::vector_3 k2_acceleration = grav_and_magnus_acceleration(pos + k1_velocity * dt*0.5, k2_velocity, ang_vel);
 	custom_math::vector_3 k3_velocity = vel + k2_acceleration * dt*0.5;
-	custom_math::vector_3 k3_acceleration = grav_and_magnus_acceleration(pos + k2_velocity * dt*0.5, k3_velocity);
+	custom_math::vector_3 k3_acceleration = grav_and_magnus_acceleration(pos + k2_velocity * dt*0.5, k3_velocity, ang_vel);
 	custom_math::vector_3 k4_velocity = vel + k3_acceleration * dt;
-	custom_math::vector_3 k4_acceleration = grav_and_magnus_acceleration(pos + k3_velocity * dt, k4_velocity);
+	custom_math::vector_3 k4_acceleration = grav_and_magnus_acceleration(pos + k3_velocity * dt, k4_velocity, ang_vel);
 
 	vel += (k1_acceleration + (k2_acceleration + k3_acceleration)*2.0 + k4_acceleration)*one_sixth*dt;
 	pos += (k1_velocity + (k2_velocity + k3_velocity)*2.0 + k4_velocity)*one_sixth*dt;
 }
 
-short unsigned int get_positions(vector<custom_math::vector_3> &p, const custom_math::vector_3 &target_position)
+custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::vector_3 &B, double t)
+{
+	custom_math::vector_3 a = A;
+	a *= t;
+
+	custom_math::vector_3 b = B;
+	b *= (1.0 - t);
+
+	return a + b;
+}
+
+short unsigned int get_path(
+	vector<custom_math::vector_3> &p, 
+	custom_math::vector_3 server_position, 
+	custom_math::vector_3 server_velocity,
+	custom_math::vector_3 server_angular_velocity,
+	custom_math::vector_3 target_position)
 {
 	p.clear();
 
-	p.push_back(server_pos);
+	p.push_back(server_position);
 
-	custom_math::vector_3 last_pos = server_pos;
+	custom_math::vector_3 last_pos = server_position;
 	custom_math::vector_3 last_vel = server_velocity;	
 
 	while (1)
 	{
 		custom_math::vector_3 curr_pos = last_pos;
 		custom_math::vector_3 curr_vel = last_vel;
-		proceed_rk4(curr_pos, curr_vel);
+		proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
 
 		p.push_back(curr_pos);	
 

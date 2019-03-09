@@ -6,7 +6,39 @@ int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	get_positions(positions, target_pos);
+	paths.resize(4);
+
+	server_vel = target_pos - server_pos;
+	const double server_vel_len = server_vel.length();
+
+	custom_math::vector_3 up(0, server_vel.length(), 0);
+
+	server_vel = lerp(target_pos - server_pos, up, 0.9);
+	server_vel.normalize();
+	server_vel *= server_vel_len;
+
+	get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+
+	server_vel = lerp(target_pos - server_pos, up, 0.666666666666);
+	server_vel.normalize();
+	server_vel *= server_vel_len;
+
+	get_path(paths[1], server_pos, server_vel, server_ang_vel, target_pos);
+
+	server_vel = lerp(target_pos - server_pos, up, 0.3333333333333);
+	server_vel.normalize();
+	server_vel *= server_vel_len;
+
+	get_path(paths[2], server_pos, server_vel, server_ang_vel, target_pos);
+
+	server_vel = lerp(target_pos - server_pos, up, 0.1);
+	server_vel.normalize();
+	server_vel *= server_vel_len;
+
+	get_path(paths[3], server_pos, server_vel, server_ang_vel, target_pos);
+
+
+
 
 	glutInit(&argc, argv);
 	init_opengl(win_x, win_y);
@@ -171,24 +203,26 @@ void draw_objects(void)
 
 	glColor3f(1, 1, 1);
 	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-	glVertex3f(server_pos.x + server_velocity.x, server_pos.y + server_velocity.y, server_pos.z + server_velocity.z);
+	glVertex3f(server_pos.x + server_vel.x, server_pos.y + server_vel.y, server_pos.z + server_vel.z);
 
 	glColor3f(0, 0, 0);
 	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-	glVertex3f(server_pos.x + server_angular_velocity.x, server_pos.y + server_angular_velocity.y, server_pos.z + server_angular_velocity.z);
+	glVertex3f(server_pos.x + server_ang_vel.x, server_pos.y + server_ang_vel.y, server_pos.z + server_ang_vel.z);
 
 	glEnd();
 
-
-	glBegin(GL_LINE_STRIP);
 
 	glColor3f(1.0, 0.0, 0.0);
 
-	for (size_t i = 0; i < positions.size(); i++)
-		glVertex3f(positions[i].x, positions[i].y, positions[i].z);
+	for (size_t i = 0; i < paths.size(); i++)
+	{
+		glBegin(GL_LINE_STRIP);
 
-	glEnd();
+		for (size_t j = 0; j < paths[i].size(); j++)
+			glVertex3f(paths[i][j].x, paths[i][j].y, paths[i][j].z);
 
+		glEnd();
+	}
     
 	// If we do draw the axis at all, make sure not to draw its outline.
 	if(true == draw_axis)
@@ -293,19 +327,19 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'q':
 	{
 		server_pos.x += 1;
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'w':
 	{
 		server_pos.x -= 1;
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'a':
 	{
 		server_pos.z += 1;
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 's':
@@ -315,19 +349,19 @@ void keyboard_func(unsigned char key, int x, int y)
 		if(server_pos.z < 0)
 			server_pos.z = 0;
 
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'e':
 	{
 		target_pos.x += 1;
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'r':
 	{
 		target_pos.x -= 1;
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'd':
@@ -337,13 +371,13 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (target_pos.z > 0)
 			target_pos.z = 0;
 
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'f':
 	{
 		target_pos.z -= 1;
-		get_positions(positions, target_pos);
+		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 
