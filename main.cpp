@@ -250,10 +250,16 @@ void display_func(void)
 		ostringstream oss;
 
 		render_string(10, start + 1 * break_size, GLUT_BITMAP_HELVETICA_18, string("Keyboard controls:"));
-        render_string(10, start + 2 * break_size, GLUT_BITMAP_HELVETICA_18, string("  q: Server pos.x++"));
-		render_string(10, start + 3 * break_size, GLUT_BITMAP_HELVETICA_18, string("  w: Server pos.x--"));
-		render_string(10, start + 4 * break_size, GLUT_BITMAP_HELVETICA_18, string("  a: Server pos.z++"));
-		render_string(10, start + 5 * break_size, GLUT_BITMAP_HELVETICA_18, string("  s: Server pos.z--"));
+
+        render_string(10, start + 3 * break_size, GLUT_BITMAP_HELVETICA_18, string("  q: Server pos.x++"));
+		render_string(10, start + 4 * break_size, GLUT_BITMAP_HELVETICA_18, string("  w: Server pos.x--"));
+		render_string(10, start + 5 * break_size, GLUT_BITMAP_HELVETICA_18, string("  a: Server pos.z++"));
+		render_string(10, start + 6 * break_size, GLUT_BITMAP_HELVETICA_18, string("  s: Server pos.z--"));
+
+		render_string(10, start + 8 * break_size, GLUT_BITMAP_HELVETICA_18, string("  e: Target pos.x++"));
+		render_string(10, start + 9 * break_size, GLUT_BITMAP_HELVETICA_18, string("  r: Target pos.x--"));
+		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  d: Target pos.z++"));
+		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  f: Target pos.z--"));
 
 								
         custom_math::vector_3 eye = main_camera.eye;
@@ -312,7 +318,34 @@ void keyboard_func(unsigned char key, int x, int y)
 		get_positions(positions, target_pos);
 		break;
 	}
+	case 'e':
+	{
+		target_pos.x += 1;
+		get_positions(positions, target_pos);
+		break;
+	}
+	case 'r':
+	{
+		target_pos.x -= 1;
+		get_positions(positions, target_pos);
+		break;
+	}
+	case 'd':
+	{
+		target_pos.z += 1;
 
+		if (target_pos.z > 0)
+			target_pos.z = 0;
+
+		get_positions(positions, target_pos);
+		break;
+	}
+	case 'f':
+	{
+		target_pos.z -= 1;
+		get_positions(positions, target_pos);
+		break;
+	}
 
 
 	default:
