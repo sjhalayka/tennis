@@ -23,34 +23,8 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-//custom_math::vector_3 grav_acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const double G)
-//{
-//	custom_math::vector_3 grav_dir = sun_pos - pos;
-//
-//	float distance = grav_dir.length();
-//
-//	grav_dir.normalize();
-//	custom_math::vector_3 accel = grav_dir * (G*sun_mass / pow(distance, 2.0));
-//
-//	return accel;
-//}
-
-//
-//
-//void proceed_Euler(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const double G, const double dt)
-//{
-//	custom_math::vector_3 accel = grav_acceleration(pos, vel, G);
-//
-//	vel += accel * dt;
-//	pos += vel * dt;
-//}
-//
-
-
 void idle_func(void)
 {
-//	const double dt = 10000;
-
     glutPostRedisplay();
 }
 

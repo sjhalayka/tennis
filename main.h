@@ -52,14 +52,13 @@ void draw_objects(void);
 
 
 double court_width = 36;
-
 double half_court_width = court_width / 2.0;
 double court_length = 75;
 double half_court_length = court_length / 2.0;
 double net_height = 3;
 
 custom_math::vector_3 server_pos(10, 4, 10);
-custom_math::vector_3 server_velocity(-15, 3, -15);
+custom_math::vector_3 server_velocity(-10, 3, -9);
 custom_math::vector_3 server_angular_velocity(50, 5, 0);
 
 vector<custom_math::vector_3> positions;
@@ -111,17 +110,22 @@ short unsigned int get_positions(vector<custom_math::vector_3> &p)
 		custom_math::vector_3 curr_vel = last_vel;
 		proceed_rk4(curr_pos, curr_vel);
 
-		p.push_back(curr_pos);
+		p.push_back(curr_pos);	
 
 		// if collides with surface
 		if (curr_pos.y <= 0)
 			break;
 
-		// if collides with net
-		if (curr_pos.x < 0 && last_pos.x >= 0 &&
+		// if collides with net, reflect vector
+		if (curr_pos.z < 0 && last_pos.z >= 0 &&
 			curr_pos.y >= 0 && curr_pos.y <= net_height &&
-			curr_pos.z >= -half_court_width && curr_pos.z <= half_court_width)
-			break;
+			curr_pos.x >= -half_court_length && curr_pos.x <= half_court_length)
+		{
+			cout << "net" << endl;
+			custom_math::vector_3 N(1, 0, 0);
+			curr_vel = N * curr_vel.dot(N)*2.0 - curr_vel;
+			curr_vel.y = -curr_vel.y;
+		}
 
 		last_pos = curr_pos;
 		last_vel = curr_vel;
