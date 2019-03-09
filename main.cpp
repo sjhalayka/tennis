@@ -27,14 +27,46 @@ int main(int argc, char **argv)
 
 	// find two closest path ends
 
-	size_t largest_index = 0;
-	size_t second_largest_index = 0;
+	size_t smallest_index = 0;
+	size_t second_smallest_index = 0;
+
+	double smallest_val = 1e10;
+	double second_smallest_val = 1e10;
 
 	for (size_t i = 0; i < num_vectors; i++)
 	{
+		// get distance of end point from target_pos
+		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
+		custom_math::vector_3 diff = end_point - target_pos;
+		
+		double val = diff.length();
 
-
+		if (val < smallest_val)
+		{
+			second_smallest_index = smallest_index;
+			second_smallest_val = smallest_val;
+			smallest_val = val;
+			smallest_index = i;
+		}
+		else if (val < second_smallest_val)
+		{
+			second_smallest_index = smallest_index;
+			second_smallest_val = smallest_val;
+		}
 	}
+
+	for (size_t i = 0; i < num_vectors; i++)
+	{
+		if (i == smallest_index || i == second_smallest_index)
+		{
+			// do nothing
+		}
+		else
+		{
+			paths[i].clear();
+		}
+	}
+
 
 
 
