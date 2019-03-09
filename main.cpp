@@ -59,12 +59,14 @@ int main(int argc, char **argv)
 
 	for (size_t i = 0; i < num_vectors; i++)
 	{
-		if (i == smallest_index || i == second_smallest_index)
+		if (i == smallest_index)
 		{
 			//get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
 
-
-
+		}
+		else if (i == second_smallest_index)
+		{
+			//get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
 		}
 		else
 		{
