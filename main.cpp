@@ -5,6 +5,8 @@ int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
+	get_positions(positions);
+
 	glutInit(&argc, argv);
 	init_opengl(win_x, win_y);
 	glutReshapeFunc(reshape_func);
@@ -43,26 +45,11 @@ int main(int argc, char **argv)
 //	pos += vel * dt;
 //}
 //
-//void proceed_RK4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const double G, const double dt)
-//{
-//	static const double one_sixth = 1.0 / 6.0;
-//
-//	custom_math::vector_3 k1_velocity = vel;
-//	custom_math::vector_3 k1_acceleration = grav_acceleration(pos, k1_velocity, G);
-//	custom_math::vector_3 k2_velocity = vel + k1_acceleration * dt*0.5;
-//	custom_math::vector_3 k2_acceleration = grav_acceleration(pos + k1_velocity * dt*0.5, k2_velocity, G);
-//	custom_math::vector_3 k3_velocity = vel + k2_acceleration * dt*0.5;
-//	custom_math::vector_3 k3_acceleration = grav_acceleration(pos + k2_velocity * dt*0.5, k3_velocity, G);
-//	custom_math::vector_3 k4_velocity = vel + k3_acceleration * dt;
-//	custom_math::vector_3 k4_acceleration = grav_acceleration(pos + k3_velocity * dt, k4_velocity, G);
-//
-//	vel += (k1_acceleration + (k2_acceleration + k3_acceleration)*2.0 + k4_acceleration)*one_sixth*dt;
-//	pos += (k1_velocity + (k2_velocity + k3_velocity)*2.0 + k4_velocity)*one_sixth*dt;
-//}
+
 
 void idle_func(void)
 {
-	const double dt = 10000;
+//	const double dt = 10000;
 
     glutPostRedisplay();
 }
@@ -133,22 +120,22 @@ void render_string(int x, const int y, void *font, const string &text)
 
 void draw_objects(void)
 {
-    glDisable(GL_LIGHTING);
-    
+	glDisable(GL_LIGHTING);
+
 	glPushMatrix();
 
 	glDisable(GL_CULL_FACE);
 
 	glBegin(GL_QUADS);
 
-	glColor3f(0.0f, 0.5, 0.0f);
+	glColor3f(1.0f, 0.5, 0.0f);
 
 	glVertex3f(-half_court_width, 0, -half_court_length);
 	glVertex3f(-half_court_width, 0, half_court_length);
 	glVertex3f(half_court_width, 0, half_court_length);
 	glVertex3f(half_court_width, 0, -half_court_length);
 
-	glColor4f(1.0f, 0.5, 0.0f, 0.5f);
+	glColor3f(0.0f, 0.5, 1.0f);
 
 	glVertex3f(-half_court_width, 0, 0);
 	glVertex3f(half_court_width, 0, 0);
@@ -168,51 +155,88 @@ void draw_objects(void)
 	glColor3f(1, 1, 1);
 
 	glVertex3f(-half_court_width, 0, half_court_length);
-	glVertex3f( half_court_width, 0, half_court_length);
+	glVertex3f(half_court_width, 0, half_court_length);
 
 	glVertex3f(-half_court_width, 0, -half_court_length);
-	glVertex3f( half_court_width, 0, -half_court_length);
+	glVertex3f(half_court_width, 0, -half_court_length);
 
 	glVertex3f(-half_court_width, 0, half_court_length);
 	glVertex3f(-half_court_width, 0, -half_court_length);
-	
+
 	glVertex3f(half_court_width, 0, half_court_length);
 	glVertex3f(half_court_width, 0, -half_court_length);
 
-	glVertex3f(-half_court_width, 0, 0);
-	glVertex3f( half_court_width, 0, 0);
+	//glVertex3f(-half_court_width, 0, 0);
+	//glVertex3f(half_court_width, 0, 0);
 
 	glEnd();
 
 
-    glLineWidth(1.0f);
-    
-    
-	// If we do draw the axis at all, make sure not to draw its outline.
-	if(true == draw_axis)
-	{
-		glBegin(GL_LINES);
+	glPointSize(10.0f);
 
-		glColor3f(1, 0, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(1, 0, 0);
-		glColor3f(0, 1, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 1, 0);
-		glColor3f(0, 0, 1);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, 1);
+	glBegin(GL_POINTS);
 
-		glColor3f(0.5, 0.5, 0.5);
-		glVertex3f(0, 0, 0);
-		glVertex3f(-1, 0, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, -1, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, -1);
+	glColor3f(1, 1, 1);
+	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
+                                                                                      
+	glEnd();
 
-		glEnd();
-	}
+
+
+	glLineWidth(1.0f);
+
+	glBegin(GL_LINES);
+
+	glColor3f(0.5, 0.5, 0.5);
+	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
+	glVertex3f(server_pos.x, 0, server_pos.z);
+
+	glColor3f(1, 1, 1);
+	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
+	glVertex3f(server_pos.x + server_velocity.x, server_pos.y + server_velocity.y, server_pos.z + server_velocity.z);
+
+	glColor3f(0, 0, 0);
+	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
+	glVertex3f(server_pos.x + server_angular_velocity.x, server_pos.y + server_angular_velocity.y, server_pos.z + server_angular_velocity.z);
+
+	glEnd();
+
+
+	glBegin(GL_LINE_STRIP);
+
+	glColor3f(1.0, 0.0, 0.0);
+
+	for (size_t i = 0; i < positions.size(); i++)
+		glVertex3f(positions[i].x, positions[i].y, positions[i].z);
+
+	glEnd();
+
+ //   
+	//// If we do draw the axis at all, make sure not to draw its outline.
+	//if(true == draw_axis)
+	//{
+	//	glBegin(GL_LINES);
+
+	//	glColor3f(1, 0, 0);
+	//	glVertex3f(0, 0, 0);
+	//	glVertex3f(1, 0, 0);
+	//	glColor3f(0, 1, 0);
+	//	glVertex3f(0, 0, 0);
+	//	glVertex3f(0, 1, 0);
+	//	glColor3f(0, 0, 1);
+	//	glVertex3f(0, 0, 0);
+	//	glVertex3f(0, 0, 1);
+
+	//	glColor3f(0.5, 0.5, 0.5);
+	//	glVertex3f(0, 0, 0);
+	//	glVertex3f(-1, 0, 0);
+	//	glVertex3f(0, 0, 0);
+	//	glVertex3f(0, -1, 0);
+	//	glVertex3f(0, 0, 0);
+	//	glVertex3f(0, 0, -1);
+
+	//	glEnd();
+	//}
 
 	glPopMatrix();
 }
