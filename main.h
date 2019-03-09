@@ -58,11 +58,12 @@ double half_court_length = court_length / 2.0;
 double net_height = 3;
 
 custom_math::vector_3 server_pos(10, 4, 10);
-custom_math::vector_3 server_velocity(-10, 3, -9);
+custom_math::vector_3 server_velocity(-10, 3, -15);
 custom_math::vector_3 server_angular_velocity(50, 5, 0);
 
 vector<custom_math::vector_3> positions;
 
+custom_math::vector_3 target_pos(15, 0, -15);
 
 
 custom_math::vector_3 grav_and_magnus_acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel)
@@ -95,7 +96,7 @@ void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel)
 	pos += (k1_velocity + (k2_velocity + k3_velocity)*2.0 + k4_velocity)*one_sixth*dt;
 }
 
-short unsigned int get_positions(vector<custom_math::vector_3> &p)
+short unsigned int get_positions(vector<custom_math::vector_3> &p, const custom_math::vector_3 &target_position)
 {
 	p.clear();
 
@@ -116,8 +117,10 @@ short unsigned int get_positions(vector<custom_math::vector_3> &p)
 		if (curr_pos.y <= 0)
 			break;
 
+		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
+		
 		// if collides with net, reflect vector
-		if (curr_pos.z < 0 && last_pos.z >= 0 &&
+		if (is_near_net &&
 			curr_pos.y >= 0 && curr_pos.y <= net_height &&
 			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
 		{

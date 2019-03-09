@@ -1,11 +1,12 @@
 #include "main.h"
 
+#pragma comment(lib, "freeglut.lib")
 
 int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	get_positions(positions);
+	get_positions(positions, target_pos);
 
 	glutInit(&argc, argv);
 	init_opengl(win_x, win_y);
@@ -152,7 +153,10 @@ void draw_objects(void)
 
 	glColor3f(1, 1, 1);
 	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-                                                                                      
+
+	glColor3f(0, 0, 0);
+	glVertex3f(target_pos.x, target_pos.y, target_pos.z);
+
 	glEnd();
 
 
@@ -189,7 +193,7 @@ void draw_objects(void)
 	// If we do draw the axis at all, make sure not to draw its outline.
 	if(true == draw_axis)
 	{
-		glBegin(GL_LINES);
+		//glBegin(GL_LINES);
 
 		//glColor3f(1, 0, 0);
 		//glVertex3f(0, 0, 0);
@@ -197,19 +201,19 @@ void draw_objects(void)
 		//glColor3f(0, 1, 0);
 		//glVertex3f(0, 0, 0);
 		//glVertex3f(0, 1, 0);
-		glColor3f(0, 0, 1);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, 1);
+		//glColor3f(0, 0, 1);
+		//glVertex3f(0, 0, 0);
+		//glVertex3f(0, 0, 1);
 
-		glColor3f(0.5, 0.5, 0.5);
+		//glColor3f(0.5, 0.5, 0.5);
 		//glVertex3f(0, 0, 0);
 		//glVertex3f(-1, 0, 0);
 		//glVertex3f(0, 0, 0);
 		//glVertex3f(0, -1, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, -1);
+		//glVertex3f(0, 0, 0);
+		//glVertex3f(0, 0, -1);
 
-		glEnd();
+		//glEnd();
 	}
 
 	glPopMatrix();
@@ -245,20 +249,13 @@ void display_func(void)
 		size_t start = 20;
 		ostringstream oss;
 
-		render_string(10, start, GLUT_BITMAP_HELVETICA_18, string("Mouse controls:"));
-		render_string(10, start + 1*break_size, GLUT_BITMAP_HELVETICA_18, string("  LMB + drag: Rotate camera"));
-		render_string(10, start + 2*break_size, GLUT_BITMAP_HELVETICA_18, string("  RMB + drag: Zoom camera"));
+		render_string(10, start + 1 * break_size, GLUT_BITMAP_HELVETICA_18, string("Keyboard controls:"));
+        render_string(10, start + 2 * break_size, GLUT_BITMAP_HELVETICA_18, string("  q: Server pos.x++"));
+		render_string(10, start + 3 * break_size, GLUT_BITMAP_HELVETICA_18, string("  w: Server pos.x--"));
+		render_string(10, start + 4 * break_size, GLUT_BITMAP_HELVETICA_18, string("  a: Server pos.z++"));
+		render_string(10, start + 5 * break_size, GLUT_BITMAP_HELVETICA_18, string("  s: Server pos.z--"));
 
-		render_string(10, start + 4*break_size, GLUT_BITMAP_HELVETICA_18, string("Keyboard controls:"));
-        render_string(10, start + 5*break_size, GLUT_BITMAP_HELVETICA_18, string("  w: Draw axis"));
-		render_string(10, start + 6*break_size, GLUT_BITMAP_HELVETICA_18, string("  e: Draw text"));
-		render_string(10, start + 7*break_size, GLUT_BITMAP_HELVETICA_18, string("  u: Rotate camera +u"));
-		render_string(10, start + 8*break_size, GLUT_BITMAP_HELVETICA_18, string("  i: Rotate camera -u"));
-		render_string(10, start + 9*break_size, GLUT_BITMAP_HELVETICA_18, string("  o: Rotate camera +v"));
-		render_string(10, start + 10*break_size, GLUT_BITMAP_HELVETICA_18, string("  p: Rotate camera -v"));
-
-
-		
+								
         custom_math::vector_3 eye = main_camera.eye;
 		custom_math::vector_3 eye_norm = eye;
 		eye_norm.normalize();
@@ -287,40 +284,36 @@ void keyboard_func(unsigned char key, int x, int y)
 {
 	switch(tolower(key))
 	{
+	case 'q':
+	{
+		server_pos.x += 1;
+		get_positions(positions, target_pos);
+		break;
+	}
 	case 'w':
-		{
-			draw_axis = !draw_axis;
-			break;
-		}
-	case 'e':
-		{
-			draw_control_list = !draw_control_list;
-			break;
-		}
-	case 'u':
-		{
-			main_camera.u -= u_spacer;
-			main_camera.Set();
-			break;
-		}
-	case 'i':
-		{
-			main_camera.u += u_spacer;
-			main_camera.Set();
-			break;
-		}
-	case 'o':
-		{
-			main_camera.v -= v_spacer;
-			main_camera.Set();
-			break;
-		}
-	case 'p':
-		{
-			main_camera.v += v_spacer;
-			main_camera.Set();
-			break;
-		}
+	{
+		server_pos.x -= 1;
+		get_positions(positions, target_pos);
+		break;
+	}
+	case 'a':
+	{
+		server_pos.z += 1;
+		get_positions(positions, target_pos);
+		break;
+	}
+	case 's':
+	{
+		server_pos.z -= 1;
+
+		if(server_pos.z < 0)
+			server_pos.z = 0;
+
+		get_positions(positions, target_pos);
+		break;
+	}
+
+
 
 	default:
 		break;
