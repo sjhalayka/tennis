@@ -29,48 +29,50 @@ int main(int argc, char **argv)
 	}
 
 	// find two closest path ends
+	set<d> index_double;
+
+	for (size_t i = 0; i < num_vectors; i++)
+	{
+		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
+		custom_math::vector_3 diff = end_point - target_pos;
+
+		double val = diff.length();
+
+		d dval;
+		dval.index = i;
+		dval.val = val;
+
+		index_double.insert(dval);
+	}
+
 	size_t smallest_index = 0;
 	size_t second_smallest_index = 0;
 
 	double smallest_val = 1e10;
 	double second_smallest_val = 1e10;
 
-	for (size_t i = 0; i < num_vectors; i++)
-	{
-		// get distance of end point from target_pos
-		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
-		custom_math::vector_3 diff = end_point - target_pos;
-		
-		double val = diff.length();
+	set<d>::const_iterator ci = index_double.begin();
+	smallest_index = ci->index;
+	smallest_val = ci->val;
 
-		if (val < smallest_val)
-		{
-			second_smallest_index = smallest_index;
-			second_smallest_val = smallest_val;
-			smallest_val = val;
-			smallest_index = i;
-		}
-		else if (val < second_smallest_val)
-		{
-			second_smallest_index = smallest_index;
-			second_smallest_val = smallest_val;
-		}
-	}
+	ci++;
+	second_smallest_index = ci->index;
+	second_smallest_val = ci->val;
 
 	for (size_t i = 0; i < num_vectors; i++)
 	{
+		paths[i].clear();
+
 		if (i == smallest_index)
 		{
-			//get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
-
+			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
+			cout << "i" << " " << i << endl;
 		}
-		else if (i == second_smallest_index)
+		
+		if (i == second_smallest_index)
 		{
-			//get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
-		}
-		else
-		{
-			paths[i].clear();
+			cout << "i2" << " " << i << endl;	
+			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
 		}
 	}
 
