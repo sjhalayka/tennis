@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 	}
 
 	// find two closest path ends
-	set<d> index_double;
+	vector<d> index_double;
 
 	for (size_t i = 0; i < num_vectors; i++)
 	{
@@ -42,22 +42,15 @@ int main(int argc, char **argv)
 		dval.index = i;
 		dval.val = val;
 
-		index_double.insert(dval);
+		index_double.push_back(dval);
 	}
 
 	size_t smallest_index = 0;
 	size_t second_smallest_index = 0;
 
-	double smallest_val = 1e10;
-	double second_smallest_val = 1e10;
-
-	set<d>::const_iterator ci = index_double.begin();
-	smallest_index = ci->index;
-	smallest_val = ci->val;
-
-	ci++;
-	second_smallest_index = ci->index;
-	second_smallest_val = ci->val;
+	sort(index_double.begin(), index_double.end());
+	smallest_index = index_double[0].index;
+	second_smallest_index = index_double[1].index;
 
 	for (size_t i = 0; i < num_vectors; i++)
 	{
@@ -66,12 +59,10 @@ int main(int argc, char **argv)
 		if (i == smallest_index)
 		{
 			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
-			cout << "i" << " " << i << endl;
 		}
 		
 		if (i == second_smallest_index)
 		{
-			cout << "i2" << " " << i << endl;	
 			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
 		}
 	}
