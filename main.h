@@ -83,6 +83,16 @@ vector< vector<custom_math::vector_3> > paths;
 
 custom_math::vector_3 target_pos(15, 0, -15);
 
+custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::vector_3 &B, double t)
+{
+	custom_math::vector_3 a = A;
+	a *= t;
+
+	custom_math::vector_3 b = B;
+	b *= (1.0 - t);
+
+	return a + b;
+}
 
 custom_math::vector_3 grav_and_magnus_acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
@@ -102,7 +112,7 @@ void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const c
 
 	custom_math::vector_3 k1_velocity = vel;
 	custom_math::vector_3 k1_acceleration = grav_and_magnus_acceleration(pos, k1_velocity, ang_vel);
-	custom_math::vector_3 k2_velocity = vel + k1_acceleration * dt*0.5;	
+	custom_math::vector_3 k2_velocity = vel + k1_acceleration * dt*0.5;
 	custom_math::vector_3 k2_acceleration = grav_and_magnus_acceleration(pos + k1_velocity * dt*0.5, k2_velocity, ang_vel);
 	custom_math::vector_3 k3_velocity = vel + k2_acceleration * dt*0.5;
 	custom_math::vector_3 k3_acceleration = grav_and_magnus_acceleration(pos + k2_velocity * dt*0.5, k3_velocity, ang_vel);
@@ -113,20 +123,9 @@ void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const c
 	pos += (k1_velocity + (k2_velocity + k3_velocity)*2.0 + k4_velocity)*one_sixth*dt;
 }
 
-custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::vector_3 &B, double t)
-{
-	custom_math::vector_3 a = A;
-	a *= t;
-
-	custom_math::vector_3 b = B;
-	b *= (1.0 - t);
-
-	return a + b;
-}
-
 short unsigned int get_path(
-	vector<custom_math::vector_3> &p, 
-	custom_math::vector_3 server_position, 
+	vector<custom_math::vector_3> &p,
+	custom_math::vector_3 server_position,
 	custom_math::vector_3 server_velocity,
 	custom_math::vector_3 server_angular_velocity,
 	custom_math::vector_3 target_position)
@@ -136,7 +135,7 @@ short unsigned int get_path(
 	p.push_back(server_position);
 
 	custom_math::vector_3 last_pos = server_position;
-	custom_math::vector_3 last_vel = server_velocity;	
+	custom_math::vector_3 last_vel = server_velocity;
 
 	while (1)
 	{
@@ -144,14 +143,14 @@ short unsigned int get_path(
 		custom_math::vector_3 curr_vel = last_vel;
 		proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
 
-		p.push_back(curr_pos);	
+		p.push_back(curr_pos);
 
 		// if collides with surface
 		if (curr_pos.y <= 0)
 			break;
 
 		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
-		
+
 		// if collides with net, reflect vector
 		if (is_near_net &&
 			curr_pos.y >= 0 && curr_pos.y <= net_height &&
@@ -167,6 +166,80 @@ short unsigned int get_path(
 
 	return 0;
 }
+
+
+
+
+void get_target(void)
+{
+	size_t num_vectors = 10;
+
+	paths.resize(num_vectors);
+
+	server_vel = target_pos - server_pos;
+	const double server_vel_len = server_vel.length();
+	const custom_math::vector_3 up(0, server_vel_len, 0);
+	double step_size = 1.0 / num_vectors;
+
+	vector<custom_math::vector_3> server_vels;
+
+	for (size_t i = 0; i < num_vectors; i++)
+	{
+		server_vel = lerp(target_pos - server_pos, up, i*step_size);
+		server_vel.normalize();
+		server_vel *= server_vel_len;
+
+		server_vels.push_back(server_vel);
+
+		get_path(paths[i], server_pos, server_vel, server_ang_vel, target_pos);
+	}
+
+	// find two closest path ends
+	vector<d> index_double;
+
+	for (size_t i = 0; i < num_vectors; i++)
+	{
+		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
+		custom_math::vector_3 diff = end_point - target_pos;
+
+		double val = diff.length();
+
+		d dval;
+		dval.index = i;
+		dval.val = val;
+
+		index_double.push_back(dval);
+	}
+			
+	sort(index_double.begin(), index_double.end());
+	size_t smallest_index = index_double[0].index;
+	size_t second_smallest_index = index_double[1].index;
+
+	for (size_t i = 0; i < num_vectors; i++)
+	{
+		paths[i].clear();
+
+		if (i == smallest_index)
+		{
+			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
+		}
+
+		if (i == second_smallest_index)
+		{
+			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
+		}
+	}
+
+
+
+
+}
+
+
+
+
+
+
 
 
 

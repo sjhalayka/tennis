@@ -2,71 +2,22 @@
 
 #pragma comment(lib, "freeglut.lib")
 
+
+
+
+
+
+
+
+
+
+
+
 int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	size_t num_vectors = 10;
-
-	paths.resize(num_vectors);
-
-	server_vel = target_pos - server_pos;
-	const double server_vel_len = server_vel.length();
-	const custom_math::vector_3 up(0, server_vel_len, 0);
-	double step_size = 1.0 / num_vectors;
-
-	vector<custom_math::vector_3> server_vels;
-
-	for (size_t i = 0; i < num_vectors; i++)
-	{
-		server_vel = lerp(target_pos - server_pos, up, i*step_size);
-		server_vel.normalize();
-		server_vel *= server_vel_len;
-
-		server_vels.push_back(server_vel);
-
-		get_path(paths[i], server_pos, server_vel, server_ang_vel, target_pos);
-	}
-
-	// find two closest path ends
-	vector<d> index_double;
-
-	for (size_t i = 0; i < num_vectors; i++)
-	{
-		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
-		custom_math::vector_3 diff = end_point - target_pos;
-
-		double val = diff.length();
-
-		d dval;
-		dval.index = i;
-		dval.val = val;
-
-		index_double.push_back(dval);
-	}
-
-	size_t smallest_index = 0;
-	size_t second_smallest_index = 0;
-
-	sort(index_double.begin(), index_double.end());
-	smallest_index = index_double[0].index;
-	second_smallest_index = index_double[1].index;
-
-	for (size_t i = 0; i < num_vectors; i++)
-	{
-		paths[i].clear();
-
-		if (i == smallest_index)
-		{
-			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
-		}
-		
-		if (i == second_smallest_index)
-		{
-			get_path(paths[i], server_pos, server_vels[i], server_ang_vel, target_pos);
-		}
-	}
-
+	get_target();
 
 
 
@@ -357,19 +308,19 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'q':
 	{
 		server_pos.x += 1;
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 	case 'w':
 	{
 		server_pos.x -= 1;
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 	case 'a':
 	{
 		server_pos.z += 1;
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 	case 's':
@@ -379,19 +330,19 @@ void keyboard_func(unsigned char key, int x, int y)
 		if(server_pos.z < 0)
 			server_pos.z = 0;
 
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 	case 'e':
 	{
 		target_pos.x += 1;
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 	case 'r':
 	{
 		target_pos.x -= 1;
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 	case 'd':
@@ -401,13 +352,13 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (target_pos.z > 0)
 			target_pos.z = 0;
 
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 	case 'f':
 	{
 		target_pos.z -= 1;
-		get_path(paths[0], server_pos, server_vel, server_ang_vel, target_pos);
+		get_target();
 		break;
 	}
 
