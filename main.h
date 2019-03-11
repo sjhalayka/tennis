@@ -100,7 +100,7 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	custom_math::vector_3 grav_accel(0, -9.81, 0);
 
 	// Magnus effect
-	// angular velocity cross velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
+	// angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
 	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.001;
 
 	// Wind and drag
