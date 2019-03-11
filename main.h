@@ -77,7 +77,7 @@ double net_height = 3;
 
 custom_math::vector_3 server_pos(10, 4, 10);
 custom_math::vector_3 server_vel(-10, 3, -15);
-custom_math::vector_3 server_ang_vel(1000, 5, 0);
+custom_math::vector_3 server_ang_vel(10, 5, 0);
 
 vector< vector<custom_math::vector_3> > paths;
 
@@ -182,8 +182,6 @@ short unsigned int hone_path(
 		target_position);
 
 	custom_math::vector_3 end_position = p[p.size() - 1];
-	end_position.y = 0;
-
 	custom_math::vector_3 v1 = server_position - target_position;
 	custom_math::vector_3 v2 = server_position - end_position;
 	v1.normalize();
@@ -194,12 +192,6 @@ short unsigned int hone_path(
 	server_velocity.rotate_y(-angle);
 	server_angular_velocity.rotate_y(-angle);
 
-	// adjust velocity length to get closer to the target position
-
-
-
-		
-
 	get_path(
 		p,
 		server_position,
@@ -207,6 +199,26 @@ short unsigned int hone_path(
 		server_angular_velocity,
 		target_position);
 
+	for (size_t i = 0; i < 50; i++)
+	{
+		// adjust velocity length to get closer to the target position
+		custom_math::vector_3 begin_pos = p[0];
+		custom_math::vector_3 end_pos = p[p.size() - 1];
+		custom_math::vector_3 diff_a = end_pos - begin_pos;
+		custom_math::vector_3 diff_b = target_position - begin_pos;
+		double len_a = diff_a.length();
+		double len_b = diff_b.length();
+		double slope = len_a / len_b;
+
+		server_velocity /= slope;
+
+		get_path(
+			p,
+			server_position,
+			server_velocity,
+			server_angular_velocity,
+			target_position);
+	}
 
 	return 0;
 }
