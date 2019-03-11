@@ -79,7 +79,7 @@ custom_math::vector_3 server_pos(10, 4, 10);
 custom_math::vector_3 server_vel(-10, 3, -15);
 custom_math::vector_3 server_ang_vel(1000, 5, 0);
 
-vector< vector<custom_math::vector_3> > paths;	
+vector< vector<custom_math::vector_3> > paths;
 
 custom_math::vector_3 target_pos(15, 0, -15);
 
@@ -181,25 +181,25 @@ short unsigned int hone_path(
 		server_angular_velocity,
 		target_position);
 
-		custom_math::vector_3 end_position = p[p.size() - 1];
-		end_position.y = 0;
+	custom_math::vector_3 end_position = p[p.size() - 1];
+	end_position.y = 0;
 
-		custom_math::vector_3 v1 = server_position - target_position;
-		custom_math::vector_3 v2 = server_position - end_position;
-		v1.normalize();
-		v2.normalize();
+	custom_math::vector_3 v1 = server_position - target_position;
+	custom_math::vector_3 v2 = server_position - end_position;
+	v1.normalize();
+	v2.normalize();
 
-		const double angle = acos(v1.dot(v2));
+	const double angle = acos(v1.dot(v2));
 
-		server_velocity.rotate_y(-angle);
-		server_angular_velocity.rotate_y(-angle);
+	server_velocity.rotate_y(-angle);
+	server_angular_velocity.rotate_y(-angle);
 
-		get_path(
-			p,
-			server_position,
-			server_velocity,
-			server_angular_velocity,
-			target_position);
+	get_path(
+		p,
+		server_position,
+		server_velocity,
+		server_angular_velocity,
+		target_position);
 
 	return 0;
 }
@@ -246,7 +246,7 @@ void get_target(void)
 
 		index_double.push_back(dval);
 	}
-			
+
 	sort(index_double.begin(), index_double.end());
 	size_t smallest_index = index_double[0].index;
 	size_t second_smallest_index = index_double[1].index;

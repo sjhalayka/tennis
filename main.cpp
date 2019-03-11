@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 
 void idle_func(void)
 {
-    glutPostRedisplay();
+	glutPostRedisplay();
 }
 
 void init_opengl(const int &width, const int &height)
@@ -47,13 +47,13 @@ void init_opengl(const int &width, const int &height)
 	win_x = width;
 	win_y = height;
 
-	if(win_x < 1)
+	if (win_x < 1)
 		win_x = 1;
 
-	if(win_y < 1)
+	if (win_y < 1)
 		win_y = 1;
 
-	glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(win_x, win_y);
 	win_id = glutCreateWindow("orbit");
@@ -71,7 +71,7 @@ void init_opengl(const int &width, const int &height)
 	glClearDepth(1.0f);
 
 	main_camera.Set(0, 0, camera_w, camera_fov, win_x, win_y, camera_near, camera_far);
-	main_camera.u += custom_math::pi/6.0;
+	main_camera.u += custom_math::pi / 6.0;
 	main_camera.v += custom_math::pi / 4.0;
 	main_camera.Set();
 }
@@ -81,10 +81,10 @@ void reshape_func(int width, int height)
 	win_x = width;
 	win_y = height;
 
-	if(win_x < 1)
+	if (win_x < 1)
 		win_x = 1;
 
-	if(win_y < 1)
+	if (win_y < 1)
 		win_y = 1;
 
 	glutSetWindow(win_id);
@@ -97,7 +97,7 @@ void reshape_func(int width, int height)
 // Text drawing code originally from "GLUT Tutorial -- Bitmap Fonts and Orthogonal Projections" by A R Fernandes
 void render_string(int x, const int y, void *font, const string &text)
 {
-	for(size_t i = 0; i < text.length(); i++)
+	for (size_t i = 0; i < text.length(); i++)
 	{
 		glRasterPos2i(x, y);
 		glutBitmapCharacter(font, text[i]);
@@ -204,9 +204,9 @@ void draw_objects(void)
 
 		glEnd();
 	}
-    
+
 	// If we do draw the axis at all, make sure not to draw its outline.
-	if(true == draw_axis)
+	if (true == draw_axis)
 	{
 		//glBegin(GL_LINES);
 
@@ -239,12 +239,12 @@ void draw_objects(void)
 
 void display_func(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Draw the model's components using OpenGL/GLUT primitives.
 	draw_objects();
 
-	if(true == draw_control_list)
+	if (true == draw_control_list)
 	{
 		// Text drawing code originally from "GLUT Tutorial -- Bitmap Fonts and Orthogonal Projections" by A R Fernandes
 		// http://www.lighthouse3d.com/opengl/glut/index.php?bmpfontortho
@@ -266,7 +266,7 @@ void display_func(void)
 
 		render_string(10, start + 1 * break_size, GLUT_BITMAP_HELVETICA_18, string("Keyboard controls:"));
 
-        render_string(10, start + 3 * break_size, GLUT_BITMAP_HELVETICA_18, string("  q: Server pos.x++"));
+		render_string(10, start + 3 * break_size, GLUT_BITMAP_HELVETICA_18, string("  q: Server pos.x++"));
 		render_string(10, start + 4 * break_size, GLUT_BITMAP_HELVETICA_18, string("  w: Server pos.x--"));
 		render_string(10, start + 5 * break_size, GLUT_BITMAP_HELVETICA_18, string("  a: Server pos.z++"));
 		render_string(10, start + 6 * break_size, GLUT_BITMAP_HELVETICA_18, string("  s: Server pos.z--"));
@@ -276,15 +276,15 @@ void display_func(void)
 		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  d: Target pos.z++"));
 		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  f: Target pos.z--"));
 
-								
-        custom_math::vector_3 eye = main_camera.eye;
+
+		custom_math::vector_3 eye = main_camera.eye;
 		custom_math::vector_3 eye_norm = eye;
 		eye_norm.normalize();
 
 		oss.clear();
-		oss.str("");		
+		oss.str("");
 		oss << "Camera position: " << eye.x << ' ' << eye.y << ' ' << eye.z;
-		render_string(10, win_y - 2*break_size, GLUT_BITMAP_HELVETICA_18, oss.str());
+		render_string(10, win_y - 2 * break_size, GLUT_BITMAP_HELVETICA_18, oss.str());
 
 		oss.clear();
 		oss.str("");
@@ -303,7 +303,7 @@ void display_func(void)
 
 void keyboard_func(unsigned char key, int x, int y)
 {
-	switch(tolower(key))
+	switch (tolower(key))
 	{
 	case 'q':
 	{
@@ -327,7 +327,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	{
 		server_pos.z -= 1;
 
-		if(server_pos.z < 0)
+		if (server_pos.z < 0)
 			server_pos.z = 0;
 
 		get_target();
@@ -370,23 +370,23 @@ void keyboard_func(unsigned char key, int x, int y)
 
 void mouse_func(int button, int state, int x, int y)
 {
-	if(GLUT_LEFT_BUTTON == button)
+	if (GLUT_LEFT_BUTTON == button)
 	{
-		if(GLUT_DOWN == state)
+		if (GLUT_DOWN == state)
 			lmb_down = true;
 		else
 			lmb_down = false;
 	}
-	else if(GLUT_MIDDLE_BUTTON == button)
+	else if (GLUT_MIDDLE_BUTTON == button)
 	{
-		if(GLUT_DOWN == state)
+		if (GLUT_DOWN == state)
 			mmb_down = true;
 		else
 			mmb_down = false;
 	}
-	else if(GLUT_RIGHT_BUTTON == button)
+	else if (GLUT_RIGHT_BUTTON == button)
 	{
-		if(GLUT_DOWN == state)
+		if (GLUT_DOWN == state)
 			rmb_down = true;
 		else
 			rmb_down = false;
@@ -404,16 +404,16 @@ void motion_func(int x, int y)
 	int mouse_delta_x = mouse_x - prev_mouse_x;
 	int mouse_delta_y = prev_mouse_y - mouse_y;
 
-	if(true == lmb_down && (0 != mouse_delta_x || 0 != mouse_delta_y))
+	if (true == lmb_down && (0 != mouse_delta_x || 0 != mouse_delta_y))
 	{
 		main_camera.u -= static_cast<float>(mouse_delta_y)*u_spacer;
 		main_camera.v += static_cast<float>(mouse_delta_x)*v_spacer;
 	}
-	else if(true == rmb_down && (0 != mouse_delta_y))
+	else if (true == rmb_down && (0 != mouse_delta_y))
 	{
 		main_camera.w -= static_cast<float>(mouse_delta_y)*w_spacer;
 
-		if(main_camera.w < 1.1f)
+		if (main_camera.w < 1.1f)
 			main_camera.w = 1.1f;
 
 	}
