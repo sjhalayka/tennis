@@ -198,7 +198,7 @@ short unsigned int hone_path(
 		custom_math::vector_3 diff_a = end_pos - begin_pos;
 		custom_math::vector_3 diff_b = target_position - begin_pos;
 		double len_a = diff_a.length();
-		double len_b = diff_b.length();
+		double len_b = diff_b.length();	
 		double slope = len_a / len_b;
 
 		server_velocity /= slope;
