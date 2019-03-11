@@ -104,12 +104,12 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.001;
 
 	// Wind and drag
-	custom_math::vector_3 wind_vel(20, 1, 0);
+	custom_math::vector_3 wind_vel(20, 1, 0); // Set this to 0, 0, 0 for plain drag
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	double drag_speed = drag_vel.length();
 
 	// velocity * (velocity length) * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball mass
-	custom_math::vector_3 drag_accel = drag_vel * drag_speed * 0.001;
+	custom_math::vector_3 drag_accel = drag_vel*drag_speed*0.001;
 	
 	return grav_accel + magnus_accel + drag_accel;
 }
