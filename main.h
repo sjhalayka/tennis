@@ -84,8 +84,11 @@ vector< vector<custom_math::vector_3> > paths;
 custom_math::vector_3 target_pos(15, 0, -15);
 
 const size_t num_vectors = 25;
-const size_t num_hone_iterations = 25;
-const size_t num_length_adjustment_iterations = 25;
+const size_t num_hone_iterations = 5;
+const size_t num_length_adjustment_iterations = 5;
+
+size_t path1_index = 0;
+size_t path2_index = 0;
 
 
 custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::vector_3 &B, double t)
@@ -109,7 +112,7 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.001;
 
 	// Wind and drag
-	custom_math::vector_3 wind_vel(20, 1, 0); // Set this to 0, 0, 0 for plain drag
+	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	double drag_speed = drag_vel.length();
 
@@ -284,9 +287,12 @@ void get_target(void)
 	size_t smallest_index = index_double[0].index;
 	size_t second_smallest_index = index_double[1].index;
 
+	path1_index = smallest_index;
+	path2_index = second_smallest_index;
+
 	for (size_t i = 0; i < num_vectors; i++)
 	{
-		paths[i].clear();
+		//paths[i].clear();
 
 		if (i == smallest_index)
 		{

@@ -193,18 +193,24 @@ void draw_objects(void)
 	glEnd();
 
 
-	glColor3f(1.0, 0.0, 0.0);
+	
 
 	for (size_t i = 0; i < paths.size(); i++)
 	{
 		glBegin(GL_LINE_STRIP);
+
+		if (i == path1_index)
+			glColor3f(0.0, 1.0, 0.0);
+		else if (i == path2_index)
+			glColor3f(0.0, 0.0, 1.0);
+		else
+			glColor3f(1.0, 0.0, 0.0);
 
 		for (size_t j = 0; j < paths[i].size(); j++)
 			glVertex3f(paths[i][j].x, paths[i][j].y, paths[i][j].z);
 
 		glEnd();
 	}
-
 
 
 
