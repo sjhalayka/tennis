@@ -194,12 +194,19 @@ short unsigned int hone_path(
 	server_velocity.rotate_y(-angle);
 	server_angular_velocity.rotate_y(-angle);
 
+	// adjust velocity length to get closer to the target position
+
+
+
+		
+
 	get_path(
 		p,
 		server_position,
 		server_velocity,
 		server_angular_velocity,
 		target_position);
+
 
 	return 0;
 }
