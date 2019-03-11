@@ -313,25 +313,25 @@ void keyboard_func(unsigned char key, int x, int y)
 	{
 	case 'q':
 	{
-		server_pos.x += 1;
+		server_pos.x += 10;
 		get_target();
 		break;
 	}
 	case 'w':
 	{
-		server_pos.x -= 1;
+		server_pos.x -= 10;
 		get_target();
 		break;
 	}
 	case 'a':
 	{
-		server_pos.z += 1;
+		server_pos.z += 10;
 		get_target();
 		break;
 	}
 	case 's':
 	{
-		server_pos.z -= 1;
+		server_pos.z -= 10;
 
 		if (server_pos.z < 0)
 			server_pos.z = 0;
@@ -341,19 +341,19 @@ void keyboard_func(unsigned char key, int x, int y)
 	}
 	case 'e':
 	{
-		target_pos.x += 1;
+		target_pos.x += 10;
 		get_target();
 		break;
 	}
 	case 'r':
 	{
-		target_pos.x -= 1;
+		target_pos.x -= 10;
 		get_target();
 		break;
 	}
 	case 'd':
 	{
-		target_pos.z += 1;
+		target_pos.z += 10;
 
 		if (target_pos.z > 0)
 			target_pos.z = 0;
@@ -363,7 +363,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	}
 	case 'f':
 	{
-		target_pos.z -= 1;
+		target_pos.z -= 10;
 		get_target();
 		break;
 	}

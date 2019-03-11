@@ -190,7 +190,7 @@ short unsigned int hone_path(
 		server_angular_velocity,
 		target_position);
 		
-	for (size_t i = 0; i < 25; i++)
+	for (size_t i = 0; i < 5; i++)
 	{
 		// adjust velocity length to get closer to the target position
 		custom_math::vector_3 begin_pos = p[0];
@@ -292,13 +292,13 @@ void get_target(void)
 
 		if (i == smallest_index)
 		{
-			//for(size_t j = 0; j < 10; j++)
+			for(size_t j = 0; j < 5; j++)
 			hone_path(paths[i], server_pos, server_vels[i], server_ang_vels[i], target_pos);
 		}
 
 		if (i == second_smallest_index)
 		{
-			//for (size_t j = 0; j < 10; j++)
+			for (size_t j = 0; j < 5; j++)
 			hone_path(paths[i], server_pos, server_vels[i], server_ang_vels[i], target_pos);
 		}
 
