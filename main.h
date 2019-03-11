@@ -94,15 +94,20 @@ custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::ve
 	return a + b;
 }
 
-custom_math::vector_3 grav_and_magnus_acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
+custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
-	custom_math::vector_3 accel(0, -9.81, 0);
+	// gravitation
+	custom_math::vector_3 grav_accel(0, -9.81, 0);
 
 	// angular velocity cross velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
 	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.001;
-	//magnus_accel /= ball_mass;
 
-	return custom_math::vector_3(accel.x + magnus_accel.x, accel.y + magnus_accel.y, accel.z + magnus_accel.z);
+	// (-velocity)*(velocity length)*0.5*fluid_density*drag_coeff*ball_cross_section_area / ball mass
+	custom_math::vector_3 neg_vel = vel;
+	neg_vel = -neg_vel;
+	custom_math::vector_3 drag_accel = neg_vel * (vel.length())*0.001;
+
+	return grav_accel + magnus_accel + drag_accel;
 }
 
 void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
@@ -111,13 +116,13 @@ void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const c
 	static const double dt = 0.0001;
 
 	custom_math::vector_3 k1_velocity = vel;
-	custom_math::vector_3 k1_acceleration = grav_and_magnus_acceleration(pos, k1_velocity, ang_vel);
+	custom_math::vector_3 k1_acceleration = acceleration(pos, k1_velocity, ang_vel);
 	custom_math::vector_3 k2_velocity = vel + k1_acceleration * dt*0.5;
-	custom_math::vector_3 k2_acceleration = grav_and_magnus_acceleration(pos + k1_velocity * dt*0.5, k2_velocity, ang_vel);
+	custom_math::vector_3 k2_acceleration = acceleration(pos + k1_velocity * dt*0.5, k2_velocity, ang_vel);
 	custom_math::vector_3 k3_velocity = vel + k2_acceleration * dt*0.5;
-	custom_math::vector_3 k3_acceleration = grav_and_magnus_acceleration(pos + k2_velocity * dt*0.5, k3_velocity, ang_vel);
+	custom_math::vector_3 k3_acceleration = acceleration(pos + k2_velocity * dt*0.5, k3_velocity, ang_vel);
 	custom_math::vector_3 k4_velocity = vel + k3_acceleration * dt;
-	custom_math::vector_3 k4_acceleration = grav_and_magnus_acceleration(pos + k3_velocity * dt, k4_velocity, ang_vel);
+	custom_math::vector_3 k4_acceleration = acceleration(pos + k3_velocity * dt, k4_velocity, ang_vel);
 
 	vel += (k1_acceleration + (k2_acceleration + k3_acceleration)*2.0 + k4_acceleration)*one_sixth*dt;
 	pos += (k1_velocity + (k2_velocity + k3_velocity)*2.0 + k4_velocity)*one_sixth*dt;
