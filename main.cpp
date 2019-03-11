@@ -205,6 +205,9 @@ void draw_objects(void)
 		glEnd();
 	}
 
+
+
+
 	// If we do draw the axis at all, make sure not to draw its outline.
 	if (true == draw_axis)
 	{
@@ -275,6 +278,9 @@ void display_func(void)
 		render_string(10, start + 9 * break_size, GLUT_BITMAP_HELVETICA_18, string("  r: Target pos.x--"));
 		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  d: Target pos.z++"));
 		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  f: Target pos.z--"));
+
+		render_string(10, start + 13 * break_size, GLUT_BITMAP_HELVETICA_18, string("  o: Angular velocity length++"));
+		render_string(10, start + 14 * break_size, GLUT_BITMAP_HELVETICA_18, string("  p: Angular velocity length--"));
 
 
 		custom_math::vector_3 eye = main_camera.eye;
@@ -361,7 +367,28 @@ void keyboard_func(unsigned char key, int x, int y)
 		get_target();
 		break;
 	}
+	case 'o':
+	{
+		double len = server_ang_vel.length();
 
+		server_ang_vel.normalize();
+		server_ang_vel *= len + 1;
+
+		get_target();
+
+		break;
+	}
+	case 'p':
+	{
+		double len = server_ang_vel.length();
+
+		server_ang_vel.normalize();
+		server_ang_vel *= len - 1;
+
+		get_target();
+
+		break;
+	}
 
 	default:
 		break;

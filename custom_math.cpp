@@ -105,6 +105,12 @@ custom_math::vector_3 &custom_math::vector_3::operator*=(const double &rhs)
 	return *this;
 }
 
+custom_math::vector_3 &custom_math::vector_3::operator-=(const double &rhs)
+{
+	x -= rhs; y -= rhs; z -= rhs;
+	return *this;
+}
+
 custom_math::vector_3 &custom_math::vector_3::operator/=(const double &rhs)
 {
 	x /= rhs; y /= rhs; z /= rhs;

@@ -99,7 +99,7 @@ custom_math::vector_3 grav_and_magnus_acceleration(const custom_math::vector_3 &
 	custom_math::vector_3 accel(0, -9.81, 0);
 
 	// angular velocity cross velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
-	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.0001;
+	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.001;
 	//magnus_accel /= ball_mass;
 
 	return custom_math::vector_3(accel.x + magnus_accel.x, accel.y + magnus_accel.y, accel.z + magnus_accel.z);
@@ -181,24 +181,6 @@ short unsigned int hone_path(
 		server_angular_velocity,
 		target_position);
 		
-	custom_math::vector_3 end_position = p[p.size() - 1];
-	custom_math::vector_3 v1 = server_position - target_position;
-	custom_math::vector_3 v2 = server_position - end_position;
-	v1.normalize();
-	v2.normalize();
-
-	const double angle = acos(v1.dot(v2));
-
-	server_velocity.rotate_y(-angle);
-	server_angular_velocity.rotate_y(-angle);
-
-	get_path(
-		p,
-		server_position,
-		server_velocity,
-		server_angular_velocity,
-		target_position);
-
 	for (size_t i = 0; i < 25; i++)
 	{
 		// adjust velocity length to get closer to the target position
@@ -219,6 +201,25 @@ short unsigned int hone_path(
 			server_angular_velocity,
 			target_position);
 	}
+
+	// rotate vectors on y axis to get closer to the target position
+	custom_math::vector_3 end_position = p[p.size() - 1];
+	custom_math::vector_3 v1 = server_position - target_position;
+	custom_math::vector_3 v2 = server_position - end_position;
+	v1.normalize();
+	v2.normalize();
+
+	const double angle = acos(v1.dot(v2));
+
+	server_velocity.rotate_y(-angle);
+	server_angular_velocity.rotate_y(-angle);
+
+	get_path(
+		p,
+		server_position,
+		server_velocity,	
+		server_angular_velocity,
+		target_position);
 
 	return 0;
 }
@@ -270,9 +271,15 @@ void get_target(void)
 	size_t smallest_index = index_double[0].index;
 	size_t second_smallest_index = index_double[1].index;
 
+	bool smallest_done = false;
+	bool second_smallest_done = false;
+
 	for (size_t i = 0; i < num_vectors; i++)
 	{
 		paths[i].clear();
+
+		if (smallest_done && second_smallest_done)
+			break;
 
 		if (i == smallest_index)
 		{
@@ -285,6 +292,7 @@ void get_target(void)
 			//for (size_t j = 0; j < 10; j++)
 			hone_path(paths[i], server_pos, server_vels[i], server_ang_vels[i], target_pos);
 		}
+
 	}
 
 
