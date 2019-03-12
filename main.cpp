@@ -150,9 +150,6 @@ void draw_objects(void)
 	glVertex3f(half_court_width, 0, half_court_length);
 	glVertex3f(half_court_width, 0, -half_court_length);
 
-	//glVertex3f(-half_court_width, 0, 0);
-	//glVertex3f(half_court_width, 0, 0);
-
 	glEnd();
 
 
@@ -210,53 +207,6 @@ void draw_objects(void)
 
 	glEnd();
 
-
-
-
-	//for (size_t i = 0; i < paths.size(); i++)
-	//{
-	//	if (i == path1_index)
-	//		glColor3f(0.0, 1.0, 0.0);
-	//	else if (i == path2_index)
-	//		glColor3f(0.0, 0.0, 1.0);
-	//	else
-	//		continue;
-
-	//	glBegin(GL_LINE_STRIP);
-
-	//	for (size_t j = 0; j < paths[i].size(); j++)
-	//		glVertex3f(paths[i][j].x, paths[i][j].y, paths[i][j].z);
-
-	//	glEnd();
-	//}
-
-
-
-	// If we do draw the axis at all, make sure not to draw its outline.
-	if (true == draw_axis)
-	{
-		//glBegin(GL_LINES);
-
-		//glColor3f(1, 0, 0);
-		//glVertex3f(0, 0, 0);
-		//glVertex3f(1, 0, 0);
-		//glColor3f(0, 1, 0);
-		//glVertex3f(0, 0, 0);
-		//glVertex3f(0, 1, 0);
-		//glColor3f(0, 0, 1);
-		//glVertex3f(0, 0, 0);
-		//glVertex3f(0, 0, 1);
-
-		//glColor3f(0.5, 0.5, 0.5);
-		//glVertex3f(0, 0, 0);
-		//glVertex3f(-1, 0, 0);
-		//glVertex3f(0, 0, 0);
-		//glVertex3f(0, -1, 0);
-		//glVertex3f(0, 0, 0);
-		//glVertex3f(0, 0, -1);
-
-		//glEnd();
-	}
 
 	glPopMatrix();
 }
