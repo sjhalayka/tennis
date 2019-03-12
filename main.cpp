@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	get_target(server_pos, server_vel, server_ang_vel);
+	get_target(server_pos, server_vel, server_ang_vel, target_pos);
 
 
 
@@ -320,19 +320,19 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'q':
 	{
 		server_pos.x += 10;
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'w':
 	{
 		server_pos.x -= 10;
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'a':
 	{
 		server_pos.z += 10;
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 's':
@@ -342,19 +342,19 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (server_pos.z < 0)
 			server_pos.z = 0;
 
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'e':
 	{
 		target_pos.x += 10;
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'r':
 	{
 		target_pos.x -= 10;
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'd':
@@ -364,13 +364,13 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (target_pos.z > 0)
 			target_pos.z = 0;
 
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'f':
 	{
 		target_pos.z -= 10;
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 		break;
 	}
 	case 'o':
@@ -380,7 +380,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		server_ang_vel.normalize();
 		server_ang_vel *= len + 1;
 
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 
 		break;
 	}
@@ -391,7 +391,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		server_ang_vel.normalize();
 		server_ang_vel *= len - 1;
 
-		get_target(server_pos, server_vel, server_ang_vel);
+		get_target(server_pos, server_vel, server_ang_vel, target_pos);
 
 		break;
 	}

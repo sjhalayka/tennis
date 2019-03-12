@@ -242,7 +242,7 @@ short unsigned int hone_path(
 	return 0;
 }
 
-void get_target(custom_math::vector_3 server_pos, custom_math::vector_3 server_vel, custom_math::vector_3 server_ang_vel)
+void get_target(custom_math::vector_3 server_pos, custom_math::vector_3 server_vel, custom_math::vector_3 server_ang_vel, custom_math::vector_3 target_pos)
 {
 	paths.resize(num_vectors);
 
