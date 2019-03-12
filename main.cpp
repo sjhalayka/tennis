@@ -175,13 +175,19 @@ void draw_objects(void)
 	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
 	glVertex3f(in_server_pos.x, 0, in_server_pos.z);
 
-	//glColor3f(1, 1, 1);
-	//glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-	//glVertex3f(server_pos.x + server_vel.x, server_pos.y + server_vel.y, server_pos.z + server_vel.z);
+	glColor3f(1, 1, 1);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_vel_1.x, in_server_pos.y + out_server_vel_1.y, in_server_pos.z + out_server_vel_1.z);
 
-	//glColor3f(0, 0, 0);
-	//glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-	//glVertex3f(server_pos.x + server_ang_vel.x, server_pos.y + server_ang_vel.y, server_pos.z + server_ang_vel.z);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_ang_vel_1.x, in_server_pos.y + out_server_ang_vel_1.y, in_server_pos.z + out_server_ang_vel_1.z);
+
+	glColor3f(0, 0, 0);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_vel_2.x, in_server_pos.y + out_server_vel_2.y, in_server_pos.z + out_server_vel_2.z);
+
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_ang_vel_2.x, in_server_pos.y + out_server_ang_vel_2.y, in_server_pos.z + out_server_ang_vel_2.z);
 
 	glEnd();
 

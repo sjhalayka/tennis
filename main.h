@@ -79,7 +79,7 @@ double net_height = 3;
 
 custom_math::vector_3 in_server_pos(10, 4, 10);
 custom_math::vector_3 in_server_vel(-10, 3, -15);
-custom_math::vector_3 in_server_ang_vel(10, 5, 0);
+custom_math::vector_3 in_server_ang_vel(100, 5, 0);
 custom_math::vector_3 in_target_pos(15, 0, -15);
 
 custom_math::vector_3 out_server_vel_1;
@@ -90,13 +90,11 @@ custom_math::vector_3 out_server_ang_vel_2;
 vector<custom_math::vector_3> out_p_1;
 vector<custom_math::vector_3> out_p_2;
 
-
+const double dt = 0.01;
 const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
 const size_t num_length_adjustment_iterations = 20;
 
-size_t path1_index = 0;
-size_t path2_index = 0;
 
 
 custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::vector_3 &B, double t)
@@ -112,7 +110,7 @@ custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::ve
 
 custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
-	// gravitation
+	// Gravitation
 	custom_math::vector_3 grav_accel(0, -9.81, 0);
 
 	// Magnus effect
@@ -133,7 +131,6 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	static const double one_sixth = 1.0 / 6.0;
-	static const double dt = 0.01;
 
 	custom_math::vector_3 k1_velocity = vel;
 	custom_math::vector_3 k1_acceleration = acceleration(pos, k1_velocity, ang_vel);
@@ -251,8 +248,8 @@ short unsigned int hone_path(
 }
 
 void get_targets(custom_math::vector_3 in_server_pos, custom_math::vector_3 in_server_vel, custom_math::vector_3 in_server_ang_vel, custom_math::vector_3 in_target_pos,
-	custom_math::vector_3 &out_server_vel_1, custom_math::vector_3 out_server_ang_vel_1,
-	custom_math::vector_3 &out_server_vel_2, custom_math::vector_3 out_server_ang_vel_2,
+	custom_math::vector_3 &out_server_vel_1, custom_math::vector_3 &out_server_ang_vel_1,
+	custom_math::vector_3 &out_server_vel_2, custom_math::vector_3 &out_server_ang_vel_2,
 	vector<custom_math::vector_3> &p_1,
 	vector<custom_math::vector_3> &p_2
 	)
@@ -301,13 +298,8 @@ void get_targets(custom_math::vector_3 in_server_pos, custom_math::vector_3 in_s
 	size_t smallest_index = index_double[0].index;
 	size_t second_smallest_index = index_double[1].index;
 
-	path1_index = smallest_index;
-	path2_index = second_smallest_index;
-
 	for (size_t i = 0; i < num_vectors; i++)
 	{
-		//paths[i].clear();
-
 		if (i == smallest_index)
 		{
 			for(size_t j = 0; j < num_hone_iterations; j++)
@@ -329,12 +321,6 @@ void get_targets(custom_math::vector_3 in_server_pos, custom_math::vector_3 in_s
 		}
 	}
 }
-
-
-
-
-
-
 
 
 
