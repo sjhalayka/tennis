@@ -80,6 +80,10 @@ custom_math::vector_3 server_vel(-10, 3, -15);
 custom_math::vector_3 server_ang_vel(10, 5, 0);
 
 vector< vector<custom_math::vector_3> > paths;
+vector<custom_math::vector_3> vels;
+vector<custom_math::vector_3> ang_vels;
+
+
 
 custom_math::vector_3 target_pos(15, 0, -15);
 
@@ -125,7 +129,7 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	static const double one_sixth = 1.0 / 6.0;
-	static const double dt = 0.0001;
+	static const double dt = 0.1;
 
 	custom_math::vector_3 k1_velocity = vel;
 	custom_math::vector_3 k1_acceleration = acceleration(pos, k1_velocity, ang_vel);
