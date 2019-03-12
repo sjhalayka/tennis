@@ -75,17 +75,21 @@ double court_length = 75;
 double half_court_length = court_length / 2.0;
 double net_height = 3;
 
-custom_math::vector_3 server_pos(10, 4, 10);
-custom_math::vector_3 server_vel(-10, 3, -15);
-custom_math::vector_3 server_ang_vel(10, 5, 0);
-
-vector< vector<custom_math::vector_3> > paths;
-vector<custom_math::vector_3> vels;
-vector<custom_math::vector_3> ang_vels;
 
 
+custom_math::vector_3 in_server_pos(10, 4, 10);
+custom_math::vector_3 in_server_vel(-10, 3, -15);
+custom_math::vector_3 in_server_ang_vel(10, 5, 0);
+custom_math::vector_3 in_target_pos(15, 0, -15);
 
-custom_math::vector_3 target_pos(15, 0, -15);
+custom_math::vector_3 out_server_vel_1;
+custom_math::vector_3 out_server_ang_vel_1;
+custom_math::vector_3 out_server_vel_2;
+custom_math::vector_3 out_server_ang_vel_2;
+
+vector<custom_math::vector_3> out_p_1;
+vector<custom_math::vector_3> out_p_2;
+
 
 const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
@@ -246,12 +250,18 @@ short unsigned int hone_path(
 	return 0;
 }
 
-void get_target(custom_math::vector_3 server_pos, custom_math::vector_3 server_vel, custom_math::vector_3 server_ang_vel, custom_math::vector_3 target_pos)
+void get_target(custom_math::vector_3 in_server_pos, custom_math::vector_3 in_server_vel, custom_math::vector_3 in_server_ang_vel, custom_math::vector_3 in_target_pos,
+	custom_math::vector_3 &out_server_vel_1, custom_math::vector_3 out_server_ang_vel_1,
+	custom_math::vector_3 &out_server_vel_2, custom_math::vector_3 out_server_ang_vel_2,
+	vector<custom_math::vector_3> &p_1,
+	vector<custom_math::vector_3> &p_2
+	)
 {
+	vector< vector<custom_math::vector_3> > paths;
 	paths.resize(num_vectors);
 
-	server_vel = target_pos - server_pos;
-	const double server_vel_len = server_vel.length();
+	in_server_vel = in_target_pos - in_server_pos;
+	const double server_vel_len = in_server_vel.length();
 	const custom_math::vector_3 up(0, server_vel_len, 0);
 	double step_size = 1.0 / num_vectors;
 
@@ -260,14 +270,14 @@ void get_target(custom_math::vector_3 server_pos, custom_math::vector_3 server_v
 
 	for (size_t i = 0; i < num_vectors; i++)
 	{
-		server_vel = lerp(target_pos - server_pos, up, i*step_size);
-		server_vel.normalize();
-		server_vel *= server_vel_len;
+		in_server_vel = lerp(in_target_pos - in_server_pos, up, i*step_size);
+		in_server_vel.normalize();
+		in_server_vel *= server_vel_len;
 
-		server_vels.push_back(server_vel);
-		server_ang_vels.push_back(server_ang_vel);
+		server_vels.push_back(in_server_vel);
+		server_ang_vels.push_back(in_server_ang_vel);
 
-		get_path(paths[i], server_pos, server_vel, server_ang_vel, target_pos);
+		get_path(paths[i], in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos);
 	}
 
 	// find two closest path ends
@@ -276,7 +286,7 @@ void get_target(custom_math::vector_3 server_pos, custom_math::vector_3 server_v
 	for (size_t i = 0; i < num_vectors; i++)
 	{
 		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
-		custom_math::vector_3 diff = end_point - target_pos;
+		custom_math::vector_3 diff = end_point - in_target_pos;
 
 		double val = diff.length();
 
@@ -301,20 +311,23 @@ void get_target(custom_math::vector_3 server_pos, custom_math::vector_3 server_v
 		if (i == smallest_index)
 		{
 			for(size_t j = 0; j < num_hone_iterations; j++)
-				hone_path(paths[i], server_pos, server_vels[i], server_ang_vels[i], target_pos, num_length_adjustment_iterations);
+				hone_path(paths[i], in_server_pos, server_vels[i], server_ang_vels[i], in_target_pos, num_length_adjustment_iterations);
+		
+			out_server_vel_1 = server_vels[i];
+			out_server_ang_vel_1 = server_ang_vels[i];
+			p_1 = paths[i];
 		}
 
 		if (i == second_smallest_index)
 		{
 			for (size_t j = 0; j < num_hone_iterations; j++)
-				hone_path(paths[i], server_pos, server_vels[i], server_ang_vels[i], target_pos, num_length_adjustment_iterations);
+				hone_path(paths[i], in_server_pos, server_vels[i], server_ang_vels[i], in_target_pos, num_length_adjustment_iterations);
+		
+			out_server_vel_2 = server_vels[i];
+			out_server_ang_vel_2= server_ang_vels[i];
+			p_2 = paths[i];
 		}
-
 	}
-
-
-
-
 }
 
 

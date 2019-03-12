@@ -4,22 +4,18 @@
 
 
 
-
-
-
-
-
-
-
-
-
 int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	get_target(server_pos, server_vel, server_ang_vel, target_pos);
-
-
+	get_target(
+		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+		out_server_vel_1,
+		out_server_ang_vel_1,
+		out_server_vel_2,
+		out_server_ang_vel_2,
+		out_p_1,
+		out_p_2);
 
 	glutInit(&argc, argv);
 	init_opengl(win_x, win_y);
@@ -165,10 +161,10 @@ void draw_objects(void)
 	glBegin(GL_POINTS);
 
 	glColor3f(1, 1, 1);
-	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
 
 	glColor3f(0, 0, 0);
-	glVertex3f(target_pos.x, target_pos.y, target_pos.z);
+	glVertex3f(in_target_pos.x, in_target_pos.y, in_target_pos.z);
 
 	glEnd();
 
@@ -179,8 +175,8 @@ void draw_objects(void)
 	glBegin(GL_LINES);
 
 	glColor3f(0.5, 0.5, 0.5);
-	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-	glVertex3f(server_pos.x, 0, server_pos.z);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x, 0, in_server_pos.z);
 
 	//glColor3f(1, 1, 1);
 	//glVertex3f(server_pos.x, server_pos.y, server_pos.z);
@@ -193,24 +189,46 @@ void draw_objects(void)
 	glEnd();
 
 
-	
 
-	for (size_t i = 0; i < paths.size(); i++)
+
+	glColor3f(0.0, 1.0, 0.0);
+
+	glBegin(GL_LINE_STRIP);
+
+	for (size_t i = 0; i < out_p_1.size(); i++)
 	{
-		if (i == path1_index)
-			glColor3f(0.0, 1.0, 0.0);
-		else if (i == path2_index)
-			glColor3f(0.0, 0.0, 1.0);
-		else
-			continue;
-
-		glBegin(GL_LINE_STRIP);
-
-		for (size_t j = 0; j < paths[i].size(); j++)
-			glVertex3f(paths[i][j].x, paths[i][j].y, paths[i][j].z);
-
-		glEnd();
+		glVertex3f(out_p_1[i].x, out_p_1[i].y, out_p_1[i].z);
 	}
+
+	glEnd();
+	glBegin(GL_LINE_STRIP);
+
+	for (size_t i = 0; i < out_p_2.size(); i++)
+	{
+		glVertex3f(out_p_2[i].x, out_p_2[i].y, out_p_2[i].z);
+	}
+
+	glEnd();
+
+
+
+
+	//for (size_t i = 0; i < paths.size(); i++)
+	//{
+	//	if (i == path1_index)
+	//		glColor3f(0.0, 1.0, 0.0);
+	//	else if (i == path2_index)
+	//		glColor3f(0.0, 0.0, 1.0);
+	//	else
+	//		continue;
+
+	//	glBegin(GL_LINE_STRIP);
+
+	//	for (size_t j = 0; j < paths[i].size(); j++)
+	//		glVertex3f(paths[i][j].x, paths[i][j].y, paths[i][j].z);
+
+	//	glEnd();
+	//}
 
 
 
@@ -319,79 +337,149 @@ void keyboard_func(unsigned char key, int x, int y)
 	{
 	case 'q':
 	{
-		server_pos.x += 10;
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		in_server_pos.x += 10;
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 'w':
 	{
-		server_pos.x -= 10;
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		in_server_pos.x -= 10;
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 'a':
 	{
-		server_pos.z += 10;
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		in_server_pos.z += 10;
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 's':
 	{
-		server_pos.z -= 10;
+		in_server_pos.z -= 10;
 
-		if (server_pos.z < 0)
-			server_pos.z = 0;
+		if (in_server_pos.z < 0)
+			in_server_pos.z = 0;
 
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 'e':
 	{
-		target_pos.x += 10;
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		in_target_pos.x += 10;
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 'r':
 	{
-		target_pos.x -= 10;
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		in_target_pos.x -= 10;
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 'd':
 	{
-		target_pos.z += 10;
+		in_target_pos.z += 10;
 
-		if (target_pos.z > 0)
-			target_pos.z = 0;
+		if (in_target_pos.z > 0)
+			in_target_pos.z = 0;
 
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 'f':
 	{
-		target_pos.z -= 10;
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		in_target_pos.z -= 10;
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 		break;
 	}
 	case 'o':
 	{
-		double len = server_ang_vel.length();
+		double len = in_server_ang_vel.length();
 
-		server_ang_vel.normalize();
-		server_ang_vel *= len + 1;
+		in_server_ang_vel.normalize();
+		in_server_ang_vel *= len + 1;
 
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 
 		break;
 	}
 	case 'p':
 	{
-		double len = server_ang_vel.length();
+		double len = in_server_ang_vel.length();
 
-		server_ang_vel.normalize();
-		server_ang_vel *= len - 1;
+		in_server_ang_vel.normalize();
+		in_server_ang_vel *= len - 1;
 
-		get_target(server_pos, server_vel, server_ang_vel, target_pos);
+		get_target(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 
 		break;
 	}
