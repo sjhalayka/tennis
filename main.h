@@ -83,9 +83,9 @@ vector< vector<custom_math::vector_3> > paths;
 
 custom_math::vector_3 target_pos(15, 0, -15);
 
-const size_t num_vectors = 25;
-const size_t num_hone_iterations = 5;
-const size_t num_length_adjustment_iterations = 5;
+const size_t num_vectors = 10;
+const size_t num_hone_iterations = 1;
+const size_t num_length_adjustment_iterations = 20;
 
 size_t path1_index = 0;
 size_t path2_index = 0;
@@ -227,7 +227,7 @@ short unsigned int hone_path(
 	v1.normalize();
 	v2.normalize();
 
-	const double angle = acos(v1.dot(v2));
+	double angle = acos(v1.dot(v2));
 
 	server_velocity.rotate_y(-angle);
 	server_angular_velocity.rotate_y(-angle);
