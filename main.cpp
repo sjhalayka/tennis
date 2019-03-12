@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	get_target();
+	get_target(server_pos, server_vel, server_ang_vel);
 
 
 
@@ -182,13 +182,13 @@ void draw_objects(void)
 	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
 	glVertex3f(server_pos.x, 0, server_pos.z);
 
-	glColor3f(1, 1, 1);
-	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-	glVertex3f(server_pos.x + server_vel.x, server_pos.y + server_vel.y, server_pos.z + server_vel.z);
+	//glColor3f(1, 1, 1);
+	//glVertex3f(server_pos.x, server_pos.y, server_pos.z);
+	//glVertex3f(server_pos.x + server_vel.x, server_pos.y + server_vel.y, server_pos.z + server_vel.z);
 
-	glColor3f(0, 0, 0);
-	glVertex3f(server_pos.x, server_pos.y, server_pos.z);
-	glVertex3f(server_pos.x + server_ang_vel.x, server_pos.y + server_ang_vel.y, server_pos.z + server_ang_vel.z);
+	//glColor3f(0, 0, 0);
+	//glVertex3f(server_pos.x, server_pos.y, server_pos.z);
+	//glVertex3f(server_pos.x + server_ang_vel.x, server_pos.y + server_ang_vel.y, server_pos.z + server_ang_vel.z);
 
 	glEnd();
 
@@ -320,19 +320,19 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'q':
 	{
 		server_pos.x += 10;
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 'w':
 	{
 		server_pos.x -= 10;
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 'a':
 	{
 		server_pos.z += 10;
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 's':
@@ -342,19 +342,19 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (server_pos.z < 0)
 			server_pos.z = 0;
 
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 'e':
 	{
 		target_pos.x += 10;
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 'r':
 	{
 		target_pos.x -= 10;
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 'd':
@@ -364,13 +364,13 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (target_pos.z > 0)
 			target_pos.z = 0;
 
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 'f':
 	{
 		target_pos.z -= 10;
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 		break;
 	}
 	case 'o':
@@ -380,7 +380,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		server_ang_vel.normalize();
 		server_ang_vel *= len + 1;
 
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 
 		break;
 	}
@@ -391,7 +391,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		server_ang_vel.normalize();
 		server_ang_vel *= len - 1;
 
-		get_target();
+		get_target(server_pos, server_vel, server_ang_vel);
 
 		break;
 	}

@@ -235,14 +235,14 @@ short unsigned int hone_path(
 	get_path(
 		p,
 		server_position,
-		server_velocity,	
+		server_velocity,
 		server_angular_velocity,
 		target_position);
 
 	return 0;
 }
 
-void get_target(void)
+void get_target(custom_math::vector_3 server_pos, custom_math::vector_3 server_vel, custom_math::vector_3 server_ang_vel)
 {
 	paths.resize(num_vectors);
 
