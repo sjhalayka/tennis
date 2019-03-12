@@ -250,7 +250,7 @@ short unsigned int hone_path(
 	return 0;
 }
 
-void get_target(custom_math::vector_3 in_server_pos, custom_math::vector_3 in_server_vel, custom_math::vector_3 in_server_ang_vel, custom_math::vector_3 in_target_pos,
+void get_targets(custom_math::vector_3 in_server_pos, custom_math::vector_3 in_server_vel, custom_math::vector_3 in_server_ang_vel, custom_math::vector_3 in_target_pos,
 	custom_math::vector_3 &out_server_vel_1, custom_math::vector_3 out_server_ang_vel_1,
 	custom_math::vector_3 &out_server_vel_2, custom_math::vector_3 out_server_ang_vel_2,
 	vector<custom_math::vector_3> &p_1,

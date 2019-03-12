@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 {
 	cout << setprecision(20) << endl;
 
-	get_target(
+	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 		out_server_vel_1,
 		out_server_ang_vel_1,
@@ -288,7 +288,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'q':
 	{
 		in_server_pos.x += 10;
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -301,7 +301,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'w':
 	{
 		in_server_pos.x -= 10;
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -314,7 +314,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'a':
 	{
 		in_server_pos.z += 10;
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -331,7 +331,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (in_server_pos.z < 0)
 			in_server_pos.z = 0;
 
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -344,7 +344,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'e':
 	{
 		in_target_pos.x += 10;
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -357,7 +357,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'r':
 	{
 		in_target_pos.x -= 10;
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -374,7 +374,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (in_target_pos.z > 0)
 			in_target_pos.z = 0;
 
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -387,7 +387,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'f':
 	{
 		in_target_pos.z -= 10;
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -404,7 +404,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		in_server_ang_vel.normalize();
 		in_server_ang_vel *= len + 1;
 
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
@@ -422,7 +422,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		in_server_ang_vel.normalize();
 		in_server_ang_vel *= len - 1;
 
-		get_target(
+		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
