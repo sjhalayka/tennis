@@ -129,7 +129,7 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	static const double one_sixth = 1.0 / 6.0;
-	static const double dt = 0.1;
+	static const double dt = 0.01;
 
 	custom_math::vector_3 k1_velocity = vel;
 	custom_math::vector_3 k1_acceleration = acceleration(pos, k1_velocity, ang_vel);
