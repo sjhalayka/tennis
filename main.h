@@ -110,8 +110,8 @@ custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::ve
 
 custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
-	// Gravitation
-	custom_math::vector_3 grav_accel(0, -9.81, 0);
+	// Gravitation, in feet per second, per second
+	custom_math::vector_3 grav_accel(0, -32.17405, 0);
 
 	// Magnus effect
 	// angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass

@@ -17,6 +17,9 @@ int main(int argc, char **argv)
 		out_p_1,
 		out_p_2);
 
+	cout << out_p_1[out_p_1.size() - 1].x << " " << out_p_1[out_p_1.size() - 1].y << " " << out_p_1[out_p_1.size() - 1].z << endl;
+	cout << out_p_2[out_p_2.size() - 1].x << " " << out_p_2[out_p_2.size() - 1].y << " " << out_p_2[out_p_2.size() - 1].z << endl;
+
 	glutInit(&argc, argv);
 	init_opengl(win_x, win_y);
 	glutReshapeFunc(reshape_func);
