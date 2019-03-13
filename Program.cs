@@ -5,7 +5,7 @@ using System.Text;
 
 namespace tennis_cs
 {
-    class d
+    class d : IComparable<d>
     {
         public int index;
         public double val;
@@ -14,6 +14,11 @@ namespace tennis_cs
         {
             index = 0;
             val = 0;
+        }
+
+        public int CompareTo(d other)
+        {
+            return other.val.CompareTo(this.val);
         }
 
         public static bool operator <(d d1, d d2)
@@ -400,7 +405,7 @@ namespace tennis_cs
                 index_double.Add(dval);
             }
 
-            index_double = index_double.OrderBy(o => o.val).ToList();
+            index_double.Sort();
 
             int smallest_index = index_double[0].index;
             int second_smallest_index = index_double[1].index;
