@@ -173,8 +173,8 @@ namespace tennis_cs
 
         vector_3 acceleration(vector_3 pos, vector_3 vel, vector_3 ang_vel)
         {
-            // Gravitation, in feet per second, per second
-            vector_3 grav_accel = new vector_3(0, -32.17405, 0);
+            // Gravitation, in metres per second, per second
+            vector_3 grav_accel = new vector_3(0, -9.81, 0);
 
             // Magnus effect, in metres per second per second
             // angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
@@ -189,13 +189,13 @@ namespace tennis_cs
             vector_3 drag_accel = drag_vel * drag_speed * 0.001;
 
             // Convert metres to feet
-            return grav_accel + magnus_accel*3.28084 + drag_accel*3.28084;
+            return grav_accel*3.28084 + magnus_accel*3.28084 + drag_accel*3.28084;
         }
 
         void proceed_rk4(ref vector_3 pos, ref vector_3 vel, vector_3 ang_vel)
         {
             const double one_sixth = 1.0 / 6.0;
-            const double dt = 0.01;
+            const double dt = 0.0001;
 
             vector_3 k1_velocity = vel;
             vector_3 k1_acceleration = acceleration(pos, k1_velocity, ang_vel);
