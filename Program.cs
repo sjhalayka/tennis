@@ -174,7 +174,7 @@ namespace tennis_cs
         vector_3 acceleration(vector_3 pos, vector_3 vel, vector_3 ang_vel)
         {
             // Gravitation
-            vector_3 grav_accel = new vector_3(0, -9.81, 0);
+            vector_3 grav_accel = new vector_3(0, -32.17405, 0);
 
             // Magnus effect
             // angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
