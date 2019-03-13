@@ -367,8 +367,6 @@ namespace tennis_cs
                 server_vels.Add(in_server_vel);
                 server_ang_vels.Add(in_server_ang_vel);
 
-                Console.WriteLine(i);
-
                 List<vector_3> p = paths[i];
 
                 get_path(
@@ -480,6 +478,14 @@ namespace tennis_cs
                  t.num_length_adjustment_iterations,
                  t.net_height,
                  t.half_court_width);
+
+             
+            Console.WriteLine(t.out_p_1[t.out_p_1.Count() - 1].x + " " + t.out_p_1[t.out_p_1.Count() - 1].y + " " + t.out_p_1[t.out_p_1.Count() - 1].z);
+            Console.WriteLine(t.out_p_2[t.out_p_2.Count() - 1].x + " " + t.out_p_2[t.out_p_2.Count() - 1].y + " " + t.out_p_2[t.out_p_2.Count() - 1].z);
+
+
+
+
 
 
         }
