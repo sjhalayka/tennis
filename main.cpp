@@ -406,6 +406,43 @@ void keyboard_func(unsigned char key, int x, int y)
 		break;
 	}
 
+	case 'o':
+	{
+		double len = in_server_ang_vel.length();
+
+		in_server_ang_vel.normalize();
+		in_server_ang_vel *= len + 1;
+
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
+
+		break;
+	}
+	case 'p':
+	{
+		double len = in_server_ang_vel.length();
+
+		in_server_ang_vel.normalize();
+		in_server_ang_vel *= len - 1;
+
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
+
+		break;
+	}
+
 	default:
 		break;
 	}
