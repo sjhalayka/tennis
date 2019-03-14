@@ -232,8 +232,8 @@ short unsigned int hone_path(
 
 	double angle = acos(v1.dot(v2));
 
-	server_velocity.rotate_y(-angle);
-	server_angular_velocity.rotate_y(-angle);
+	server_velocity.rotate_y(angle);
+	server_angular_velocity.rotate_y(angle);
 
 	get_path(
 		p,
