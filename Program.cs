@@ -116,21 +116,20 @@ namespace tennis_cs
     {
         public tennis_parameters()
         {
-            court_width = 36;
+            court_width = 10.9728; // 36 feet
             half_court_width = court_width / 2.0;
-            court_length = 75;
+            court_length = 22.86; // 75 feet
             half_court_length = court_length / 2.0;
-
-            net_height = 3;
+            net_height = 0.9144; // 3 feet
 
             num_vectors = 10;
             num_hone_iterations = 1;
             num_length_adjustment_iterations = 20;
 
-            in_server_pos = new vector_3(10, 4, 10);
-            in_server_vel = new vector_3(-10, 3, -15);
-            in_server_ang_vel = new vector_3(100, 5, 0);
-            in_target_pos = new vector_3(15, 0, -15);
+            in_server_pos = new vector_3(3, 1, 3);
+            in_server_vel = new vector_3(-3, 1, -5);
+            in_server_ang_vel = new vector_3(10, 5, 0);
+            in_target_pos = new vector_3(5, 0, -5);
 
             out_server_vel_1 = new vector_3(0, 0, 0);
             out_server_ang_vel_1 = new vector_3(0, 0, 0);
@@ -181,11 +180,11 @@ namespace tennis_cs
             // Gravitation, in metres per second, per second
             vector_3 grav_accel = new vector_3(0, -9.81, 0);
 
-            // Magnus effect, in metres per second per second
+            // Magnus effect, in metres per second, per second
             // angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
             vector_3 magnus_accel = ang_vel.cross(vel) * 0.001;
 
-            // Wind and drag, in metres per second per second
+            // Wind and drag, in metres per second, per second
             vector_3 wind_vel = new vector_3(5, 0, 0); // Set this to 0, 0, 0 for plain drag
             vector_3 drag_vel = wind_vel - vel;
             double drag_speed = drag_vel.length();
@@ -193,8 +192,7 @@ namespace tennis_cs
             // velocity * (velocity length) * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball mass
             vector_3 drag_accel = drag_vel * drag_speed * 0.001;
 
-            // Convert metres to feet
-            return grav_accel*3.28084 + magnus_accel*3.28084 + drag_accel*3.28084;
+            return grav_accel + magnus_accel + drag_accel;
         }
 
         void proceed_rk4(ref vector_3 pos, ref vector_3 vel, vector_3 ang_vel)
