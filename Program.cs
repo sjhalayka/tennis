@@ -316,8 +316,8 @@ namespace tennis_cs
 
             double angle = Math.Acos(v1.dot(v2));
 
-            server_velocity.rotate_y(-angle);
-            server_angular_velocity.rotate_y(-angle);
+            server_velocity.rotate_y(angle);
+            server_angular_velocity.rotate_y(angle);
 
             get_path(
                 ref p,
