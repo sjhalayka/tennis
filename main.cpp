@@ -115,19 +115,19 @@ void draw_objects(void)
 
 	glBegin(GL_QUADS);
 
-	glColor3f(1.0f, 0.5, 0.0f);
+		glColor3f(1.0f, 0.5, 0.0f);
 
-	glVertex3f(-half_court_width, 0, -half_court_length);
-	glVertex3f(-half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, -half_court_length);
+		glVertex3f(-half_court_width, 0, -half_court_length);
+		glVertex3f(-half_court_width, 0, half_court_length);
+		glVertex3f(half_court_width, 0, half_court_length);
+		glVertex3f(half_court_width, 0, -half_court_length);
 
-	glColor3f(0.0f, 0.5, 1.0f);
+		glColor3f(0.0f, 0.5, 1.0f);
 
-	glVertex3f(-half_court_width, 0, 0);
-	glVertex3f(half_court_width, 0, 0);
-	glVertex3f(half_court_width, net_height, 0);
-	glVertex3f(-half_court_width, net_height, 0);
+		glVertex3f(-half_court_width, 0, 0);
+		glVertex3f(half_court_width, 0, 0);
+		glVertex3f(half_court_width, net_height, 0);
+		glVertex3f(-half_court_width, net_height, 0);
 
 	glEnd();
 
@@ -141,17 +141,17 @@ void draw_objects(void)
 
 	glColor3f(1, 1, 1);
 
-	glVertex3f(-half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, half_court_length);
+		glVertex3f(-half_court_width, 0, half_court_length);
+		glVertex3f(half_court_width, 0, half_court_length);
 
-	glVertex3f(-half_court_width, 0, -half_court_length);
-	glVertex3f(half_court_width, 0, -half_court_length);
+		glVertex3f(-half_court_width, 0, -half_court_length);
+		glVertex3f(half_court_width, 0, -half_court_length);
 
-	glVertex3f(-half_court_width, 0, half_court_length);
-	glVertex3f(-half_court_width, 0, -half_court_length);
+		glVertex3f(-half_court_width, 0, half_court_length);
+		glVertex3f(-half_court_width, 0, -half_court_length);
 
-	glVertex3f(half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, -half_court_length);
+		glVertex3f(half_court_width, 0, half_court_length);
+		glVertex3f(half_court_width, 0, -half_court_length);
 
 	glEnd();
 
@@ -160,11 +160,11 @@ void draw_objects(void)
 
 	glBegin(GL_POINTS);
 
-	glColor3f(1, 1, 1);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+		glColor3f(1, 1, 1);
+		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
 
-	glColor3f(0, 0, 0);
-	glVertex3f(in_target_pos.x, in_target_pos.y, in_target_pos.z);
+		glColor3f(0, 0, 0);
+		glVertex3f(in_target_pos.x, in_target_pos.y, in_target_pos.z);
 
 	glEnd();
 
@@ -174,23 +174,23 @@ void draw_objects(void)
 
 	glBegin(GL_LINES);
 
-	glColor3f(0.5, 0.5, 0.5);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x, 0, in_server_pos.z);
+		glColor3f(0.5, 0.5, 0.5);
+		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+		glVertex3f(in_server_pos.x, 0, in_server_pos.z);
 
-	glColor3f(1, 1, 1);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_vel_1.x, in_server_pos.y + out_server_vel_1.y, in_server_pos.z + out_server_vel_1.z);
+		glColor3f(1, 1, 1);
+		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+		glVertex3f(in_server_pos.x + out_server_vel_1.x, in_server_pos.y + out_server_vel_1.y, in_server_pos.z + out_server_vel_1.z);
 
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_ang_vel_1.x, in_server_pos.y + out_server_ang_vel_1.y, in_server_pos.z + out_server_ang_vel_1.z);
+		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+		glVertex3f(in_server_pos.x + out_server_ang_vel_1.x, in_server_pos.y + out_server_ang_vel_1.y, in_server_pos.z + out_server_ang_vel_1.z);
 
-	glColor3f(0, 0, 0);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_vel_2.x, in_server_pos.y + out_server_vel_2.y, in_server_pos.z + out_server_vel_2.z);
+		glColor3f(0, 0, 0);
+		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+		glVertex3f(in_server_pos.x + out_server_vel_2.x, in_server_pos.y + out_server_vel_2.y, in_server_pos.z + out_server_vel_2.z);
 
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_ang_vel_2.x, in_server_pos.y + out_server_ang_vel_2.y, in_server_pos.z + out_server_ang_vel_2.z);
+		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+		glVertex3f(in_server_pos.x + out_server_ang_vel_2.x, in_server_pos.y + out_server_ang_vel_2.y, in_server_pos.z + out_server_ang_vel_2.z);
 
 	glEnd();
 
@@ -201,18 +201,19 @@ void draw_objects(void)
 
 	glBegin(GL_LINE_STRIP);
 
-	for (size_t i = 0; i < out_p_1.size(); i++)
-	{
-		glVertex3f(out_p_1[i].x, out_p_1[i].y, out_p_1[i].z);
-	}
+		for (size_t i = 0; i < out_p_1.size(); i++)
+		{
+			glVertex3f(out_p_1[i].x, out_p_1[i].y, out_p_1[i].z);
+		}
 
 	glEnd();
+
 	glBegin(GL_LINE_STRIP);
 
-	for (size_t i = 0; i < out_p_2.size(); i++)
-	{
-		glVertex3f(out_p_2[i].x, out_p_2[i].y, out_p_2[i].z);
-	}
+		for (size_t i = 0; i < out_p_2.size(); i++)
+		{
+			glVertex3f(out_p_2[i].x, out_p_2[i].y, out_p_2[i].z);
+		}
 
 	glEnd();
 
@@ -252,15 +253,15 @@ void display_func(void)
 
 		render_string(10, start + 1 * break_size, GLUT_BITMAP_HELVETICA_18, string("Keyboard controls:"));
 
-		render_string(10, start + 3 * break_size, GLUT_BITMAP_HELVETICA_18, string("  q: Server pos.x++"));
-		render_string(10, start + 4 * break_size, GLUT_BITMAP_HELVETICA_18, string("  w: Server pos.x--"));
-		render_string(10, start + 5 * break_size, GLUT_BITMAP_HELVETICA_18, string("  a: Server pos.z++"));
-		render_string(10, start + 6 * break_size, GLUT_BITMAP_HELVETICA_18, string("  s: Server pos.z--"));
+		render_string(10, start + 3 * break_size, GLUT_BITMAP_HELVETICA_18, string("  w: Server pos"));
+		render_string(10, start + 4 * break_size, GLUT_BITMAP_HELVETICA_18, string("  a: Server pos"));
+		render_string(10, start + 5 * break_size, GLUT_BITMAP_HELVETICA_18, string("  s: Server pos"));
+		render_string(10, start + 6 * break_size, GLUT_BITMAP_HELVETICA_18, string("  d: Server pos"));
 
-		render_string(10, start + 8 * break_size, GLUT_BITMAP_HELVETICA_18, string("  e: Target pos.x++"));
-		render_string(10, start + 9 * break_size, GLUT_BITMAP_HELVETICA_18, string("  r: Target pos.x--"));
-		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  d: Target pos.z++"));
-		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  f: Target pos.z--"));
+		render_string(10, start + 8 * break_size, GLUT_BITMAP_HELVETICA_18, string("  i: Target pos"));
+		render_string(10, start + 9 * break_size, GLUT_BITMAP_HELVETICA_18, string("  j: Target pos"));
+		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  k: Target pos"));
+		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  l: Target pos"));
 
 		render_string(10, start + 13 * break_size, GLUT_BITMAP_HELVETICA_18, string("  o: Angular velocity length++"));
 		render_string(10, start + 14 * break_size, GLUT_BITMAP_HELVETICA_18, string("  p: Angular velocity length--"));
@@ -294,22 +295,9 @@ void keyboard_func(unsigned char key, int x, int y)
 {
 	switch (tolower(key))
 	{
-	case 'q':
+	case 'd':
 	{
-		in_server_pos.x += 10;
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-		break;
-	}
-	case 'w':
-	{
-		in_server_pos.x -= 10;
+		in_server_pos.x += 1;
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
@@ -322,7 +310,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	}
 	case 'a':
 	{
-		in_server_pos.z += 10;
+		in_server_pos.x -= 1;
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
@@ -335,7 +323,20 @@ void keyboard_func(unsigned char key, int x, int y)
 	}
 	case 's':
 	{
-		in_server_pos.z -= 10;
+		in_server_pos.z += 1;
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
+		break;
+	}
+	case 'w':
+	{
+		in_server_pos.z -= 1;
 
 		if (in_server_pos.z < 0)
 			in_server_pos.z = 0;
@@ -350,9 +351,11 @@ void keyboard_func(unsigned char key, int x, int y)
 			out_p_2);
 		break;
 	}
-	case 'e':
+
+
+	case 'j':
 	{
-		in_target_pos.x += 10;
+		in_target_pos.x += 1;
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
@@ -363,9 +366,9 @@ void keyboard_func(unsigned char key, int x, int y)
 			out_p_2);
 		break;
 	}
-	case 'r':
+	case 'l':
 	{
-		in_target_pos.x -= 10;
+		in_target_pos.x -= 1;
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
@@ -376,9 +379,9 @@ void keyboard_func(unsigned char key, int x, int y)
 			out_p_2);
 		break;
 	}
-	case 'd':
+	case 'k':
 	{
-		in_target_pos.z += 10;
+		in_target_pos.z += 1;
 
 		if (in_target_pos.z > 0)
 			in_target_pos.z = 0;
@@ -393,9 +396,9 @@ void keyboard_func(unsigned char key, int x, int y)
 			out_p_2);
 		break;
 	}
-	case 'f':
+	case 'i':
 	{
-		in_target_pos.z -= 10;
+		in_target_pos.z -= 1;
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
 			out_server_vel_1,
