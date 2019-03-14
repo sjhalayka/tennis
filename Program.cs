@@ -188,13 +188,14 @@ namespace tennis_cs
             vector_3 grav_accel = new vector_3(0, -9.81, 0);
 
             // Magnus effect, in metres per second, per second
+            // http://farside.ph.utexas.edu/teaching/329/lectures/node43.html
+            // http://spiff.rit.edu/richmond/baseball/traj/traj.html
             vector_3 magnus_accel = ang_vel.cross(vel) * 0.5 * air_density * lift_coeff * ball_cross_section / ball_mass;
 
             // Wind and drag, in metres per second, per second
             vector_3 wind_vel = new vector_3(5, 0, 0); // Set this to 0, 0, 0 for plain drag
             vector_3 drag_vel = wind_vel - vel;
-            double drag_speed = drag_vel.length();
-            vector_3 drag_accel = drag_vel * drag_speed * 0.5 * air_density * drag_coeff * ball_cross_section / ball_mass;
+            vector_3 drag_accel = drag_vel * drag_vel.length() * 0.5 * air_density * drag_coeff * ball_cross_section / ball_mass;
 
             return grav_accel + magnus_accel + drag_accel;
         }
@@ -320,8 +321,8 @@ namespace tennis_cs
 
             double angle = Math.Acos(v1.dot(v2));
 
-            server_velocity.rotate_y(angle);
-            server_angular_velocity.rotate_y(angle);
+            server_velocity.rotate_y(-angle);
+            server_angular_velocity.rotate_y(-angle);
 
             get_path(
                 ref p,

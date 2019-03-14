@@ -77,7 +77,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(-10, 5, 0);
+custom_math::vector_3 in_server_ang_vel(10, 0, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -120,12 +120,14 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 
 	// Magnus effect, in metres per second, per second
 	// http://farside.ph.utexas.edu/teaching/329/lectures/node43.html
+	// http://spiff.rit.edu/richmond/baseball/traj/traj.html
 	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
 
 	// Wind and drag, in metres per second, per second
 	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	double drag_speed = drag_vel.length();
+	
 	custom_math::vector_3 drag_accel = drag_vel*drag_vel.length()*0.5*air_density*drag_coeff*ball_cross_section / ball_mass;
 	
 	return grav_accel + magnus_accel + drag_accel;
@@ -237,8 +239,8 @@ short unsigned int hone_path(
 
 	double angle = acos(v1.dot(v2));
 
-	server_velocity.rotate_y(angle);
-	server_angular_velocity.rotate_y(angle);
+	server_velocity.rotate_y(-angle);
+	server_angular_velocity.rotate_y(-angle);
 
 	get_path(
 		p,
