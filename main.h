@@ -57,7 +57,7 @@ public:
 
 
 void idle_func(void);
-void init_opengl(const int &width, const int &height);
+void init_opengl(const int &width, const int &height);	
 void reshape_func(int width, int height);
 void display_func(void);
 void keyboard_func(unsigned char key, int x, int y);
@@ -77,7 +77,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(-100, 5, 0);
+custom_math::vector_3 in_server_ang_vel(-10, 5, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -113,7 +113,7 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 
 	// Magnus effect, in metres per second,, per second
 	// angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
-	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.001;
+	custom_math::vector_3 magnus_accel = ang_vel.cross(vel);
 
 	// Wind and drag, in metres per second, per second
 	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
