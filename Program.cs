@@ -128,7 +128,7 @@ namespace tennis_cs
 
             in_server_pos = new vector_3(3, 1, 3);
             in_server_vel = new vector_3(-3, 1, -5);
-            in_server_ang_vel = new vector_3(-10, 5, 0);
+            in_server_ang_vel = new vector_3(0, 2000, 0);
             in_target_pos = new vector_3(5, 0, -5);
 
             out_server_vel_1 = new vector_3(0, 0, 0);
@@ -189,8 +189,12 @@ namespace tennis_cs
 
             // Magnus effect, in metres per second, per second
             // http://farside.ph.utexas.edu/teaching/329/lectures/node43.html
-            // http://spiff.rit.edu/richmond/baseball/traj/traj.html
-            vector_3 magnus_accel = ang_vel.cross(vel) * 0.5 * air_density * lift_coeff * ball_cross_section / ball_mass;
+            // http://spiff.rit.edu/richmond/baseball/traj/traj.html	custom_math::vector_3 temp_vel = vel;
+            vector_3 temp_vel = vel;
+            vector_3 temp_ang_vel = ang_vel;
+            temp_vel.normalize();
+            temp_ang_vel.normalize();
+            vector_3 magnus_accel = temp_vel.cross(temp_ang_vel) * vel.length() * vel.length() * 0.5 * air_density * lift_coeff * ball_cross_section / ball_mass;
 
             // Wind and drag, in metres per second, per second
             vector_3 wind_vel = new vector_3(5, 0, 0); // Set this to 0, 0, 0 for plain drag

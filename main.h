@@ -77,7 +77,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(10, 0, 0);
+custom_math::vector_3 in_server_ang_vel(0, 2000, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -121,7 +121,11 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	// Magnus effect, in metres per second, per second
 	// http://farside.ph.utexas.edu/teaching/329/lectures/node43.html
 	// http://spiff.rit.edu/richmond/baseball/traj/traj.html
-	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
+	custom_math::vector_3 temp_vel = vel;
+	custom_math::vector_3 temp_ang_vel = ang_vel;
+	temp_vel.normalize();
+	temp_ang_vel.normalize();
+	custom_math::vector_3 magnus_accel = temp_vel.cross(temp_ang_vel)*vel.length()*vel.length()*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
 
 	// Wind and drag, in metres per second, per second
 	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
