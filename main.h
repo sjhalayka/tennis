@@ -119,13 +119,14 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	custom_math::vector_3 grav_accel(0, -9.81, 0);
 
 	// Magnus effect, in metres per second, per second
+	// http://farside.ph.utexas.edu/teaching/329/lectures/node43.html
 	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
 
 	// Wind and drag, in metres per second, per second
 	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	double drag_speed = drag_vel.length();
-	custom_math::vector_3 drag_accel = drag_vel*drag_speed*0.5*air_density*drag_coeff*ball_cross_section / ball_mass;
+	custom_math::vector_3 drag_accel = drag_vel*drag_vel.length()*0.5*air_density*drag_coeff*ball_cross_section / ball_mass;
 	
 	return grav_accel + magnus_accel + drag_accel;
 }
