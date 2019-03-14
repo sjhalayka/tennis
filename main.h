@@ -69,18 +69,16 @@ void render_string(int x, const int y, void *font, const string &text);
 void draw_objects(void);
 
 
-double court_width = 36;
+double court_width = 10.9728; // 36 feet
 double half_court_width = court_width / 2.0;
-double court_length = 75;
+double court_length = 22.86; // 75 feet
 double half_court_length = court_length / 2.0;
-double net_height = 3;
+double net_height = 0.9144; // 3 feet
 
-
-
-custom_math::vector_3 in_server_pos(10, 4, 10);
-custom_math::vector_3 in_server_vel(-10, 3, -15);
-custom_math::vector_3 in_server_ang_vel(100, 5, 0);
-custom_math::vector_3 in_target_pos(15, 0, -15);
+custom_math::vector_3 in_server_pos(3, 1, 3);
+custom_math::vector_3 in_server_vel(-3, 1, -5);
+custom_math::vector_3 in_server_ang_vel(10, 5, 0);
+custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
 custom_math::vector_3 out_server_ang_vel_1;
@@ -113,11 +111,11 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	// Gravitation, in metres per second, per second
 	custom_math::vector_3 grav_accel(0, -9.81, 0);
 
-	// Magnus effect, in metres per second per second
+	// Magnus effect, in metres per second,, per second
 	// angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
 	custom_math::vector_3 magnus_accel = ang_vel.cross(vel)*0.001;
 
-	// Wind and drag, in metres per second per second
+	// Wind and drag, in metres per second, per second
 	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	double drag_speed = drag_vel.length();
@@ -125,8 +123,7 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	// velocity * (velocity length) * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball mass
 	custom_math::vector_3 drag_accel = drag_vel*drag_speed*0.001;
 	
-	// Convert metres to feet
-	return grav_accel*3.28084 + magnus_accel*3.28084 + drag_accel*3.28084;
+	return grav_accel + magnus_accel + drag_accel;
 }
 
 void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
@@ -341,7 +338,7 @@ uv_camera main_camera;
 
 GLint win_id = 0;
 GLint win_x = 800, win_y = 600;
-float camera_w = 100;
+float camera_w = 30;
 
 float camera_fov = 45;
 float camera_x_transform = 0;
