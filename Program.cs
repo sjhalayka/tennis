@@ -128,7 +128,7 @@ namespace tennis_cs
 
             in_server_pos = new vector_3(3, 1, 3);
             in_server_vel = new vector_3(-3, 1, -5);
-            in_server_ang_vel = new vector_3(10, 5, 0);
+            in_server_ang_vel = new vector_3(-10, 5, 0);
             in_target_pos = new vector_3(5, 0, -5);
 
             out_server_vel_1 = new vector_3(0, 0, 0);
@@ -182,7 +182,7 @@ namespace tennis_cs
 
             // Magnus effect, in metres per second, per second
             // angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
-            vector_3 magnus_accel = ang_vel.cross(vel) * 0.001;
+            vector_3 magnus_accel = ang_vel.cross(vel);
 
             // Wind and drag, in metres per second, per second
             vector_3 wind_vel = new vector_3(5, 0, 0); // Set this to 0, 0, 0 for plain drag
