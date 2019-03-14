@@ -177,20 +177,24 @@ namespace tennis_cs
 
         vector_3 acceleration(vector_3 pos, vector_3 vel, vector_3 ang_vel)
         {
+            // http://twu.tennis-warehouse.com/learning_center/aerodynamics2.php
+            const double air_density = 1.225;
+            const double lift_coeff = 0.5;
+            const double drag_coeff = 0.55;
+            const double ball_cross_section = 0.0034;
+            const double ball_mass = 0.0585;
+
             // Gravitation, in metres per second, per second
             vector_3 grav_accel = new vector_3(0, -9.81, 0);
 
             // Magnus effect, in metres per second, per second
-            // angular velocity x velocity * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball_mass
-            vector_3 magnus_accel = ang_vel.cross(vel);
+            vector_3 magnus_accel = ang_vel.cross(vel) * 0.5 * air_density * lift_coeff * ball_cross_section / ball_mass;
 
             // Wind and drag, in metres per second, per second
             vector_3 wind_vel = new vector_3(5, 0, 0); // Set this to 0, 0, 0 for plain drag
             vector_3 drag_vel = wind_vel - vel;
             double drag_speed = drag_vel.length();
-
-            // velocity * (velocity length) * 0.5*fluid_density*drag_coeff*ball_cross_section_area / ball mass
-            vector_3 drag_accel = drag_vel * drag_speed * 0.001;
+            vector_3 drag_accel = drag_vel * drag_speed * 0.5 * air_density * drag_coeff * ball_cross_section / ball_mass;
 
             return grav_accel + magnus_accel + drag_accel;
         }
