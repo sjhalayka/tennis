@@ -78,7 +78,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(100, 0, 0);
+custom_math::vector_3 in_server_ang_vel(10, 0, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -93,6 +93,33 @@ const double dt = 0.01;
 const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
 const size_t num_length_adjustment_iterations = 20;	
+
+#define REGION_PLAYER_IN_BOUNDS 0
+#define REGION_PLAYER_OUT_OF_BOUNDS 1
+#define REGION_OPPONENT_IN_BOUNDS 2
+#define REGION_OPPONENT_OUT_OF_BOUNDS 3
+
+
+
+size_t get_ball_region(const double x, const double z)
+{
+	if (z > 0) // landed on player's side
+	{
+		if (x > -half_court_width && x < half_court_width && z < half_court_length)
+			return REGION_PLAYER_IN_BOUNDS;
+		else
+			return REGION_PLAYER_OUT_OF_BOUNDS;
+	}
+	else // landed on opponent's side
+	{
+		if (x > -half_court_width && x < half_court_width && z > -half_court_length)
+			return REGION_OPPONENT_IN_BOUNDS;
+		else
+			return REGION_OPPONENT_OUT_OF_BOUNDS;
+	}
+
+	return 4; // this will never be executed
+}
 
 
 
@@ -126,8 +153,8 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 	custom_math::vector_3 temp_ang_vel = ang_vel;
 	temp_vel.normalize();
 	temp_ang_vel.normalize();
-	custom_math::vector_3 magnus_accel = temp_vel.cross(temp_ang_vel)*vel.length()*vel.length()*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
-
+	custom_math::vector_3 magnus_accel = vel.cross(ang_vel)*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
+	
 	// Wind and drag, in metres per second, per second
 	custom_math::vector_3 wind_vel(0, 0, 0); // Set this to 0, 0, 0 for plain drag
 	custom_math::vector_3 drag_vel = wind_vel - vel;
@@ -167,7 +194,7 @@ short unsigned int get_path(
 	custom_math::vector_3 last_pos = server_position;
 	custom_math::vector_3 last_vel = server_velocity;
 
-	while (1)
+	while (p.size() < 100000) // abort those paths that do not land on the ground in sufficient time
 	{
 		custom_math::vector_3 curr_pos = last_pos;
 		custom_math::vector_3 curr_vel = last_vel;
@@ -212,25 +239,6 @@ short unsigned int hone_path(
 		server_angular_velocity,
 		target_position);
 
-	// rotate vectors on y axis to get closer to the target position
-	custom_math::vector_3 end_position = p[p.size() - 1];
-	custom_math::vector_3 v1 = server_position - target_position;
-	custom_math::vector_3 v2 = server_position - end_position;
-	v1.normalize();
-	v2.normalize();
-
-	double angle = acos(v1.dot(v2));
-
-	server_velocity.rotate_y(-angle);
-	server_angular_velocity.rotate_y(-angle);
-
-	get_path(
-		p,
-		server_position,
-		server_velocity,
-		server_angular_velocity,
-		target_position);
-
 	for (size_t i = 0; i < num_length_adjustment_iterations; i++)
 	{
 		// adjust velocity length to get closer to the target position
@@ -239,7 +247,7 @@ short unsigned int hone_path(
 		custom_math::vector_3 diff_a = end_pos - begin_pos;
 		custom_math::vector_3 diff_b = target_position - begin_pos;
 		double len_a = diff_a.length();
-		double len_b = diff_b.length();	
+		double len_b = diff_b.length();
 		double slope = len_a / len_b;
 
 		server_velocity /= slope;
@@ -251,6 +259,25 @@ short unsigned int hone_path(
 			server_angular_velocity,
 			target_position);
 	}
+
+	// rotate vectors on y axis to get closer to the target position
+	custom_math::vector_3 end_position = p[p.size() - 1];
+	custom_math::vector_3 v1 = server_position - target_position;
+	custom_math::vector_3 v2 = server_position - end_position;
+	v1.normalize();
+	v2.normalize();
+
+	double angle = acos(v1.dot(v2));
+
+	server_velocity.rotate_y(angle);
+	server_angular_velocity.rotate_y(angle);
+
+	get_path(
+		p,
+		server_position,
+		server_velocity,
+		server_angular_velocity,
+		target_position);
 
 	return 0;
 }
