@@ -37,6 +37,7 @@ using std::map;
 #include <utility>
 using std::pair;
 
+vector<vector<custom_math::vector_3> > all_paths;
 
 
 class d
@@ -77,7 +78,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(0, 2000, 0);
+custom_math::vector_3 in_server_ang_vel(100, 0, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -91,7 +92,7 @@ vector<custom_math::vector_3> out_p_2;
 const double dt = 0.01;
 const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
-const size_t num_length_adjustment_iterations = 20;
+const size_t num_length_adjustment_iterations = 20;	
 
 
 
@@ -106,7 +107,7 @@ custom_math::vector_3 lerp(const custom_math::vector_3 &A, const custom_math::ve
 	return a + b;
 }
 
-custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
+custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vector_3 vel, custom_math::vector_3 ang_vel)
 {
 	// http://twu.tennis-warehouse.com/learning_center/aerodynamics2.php
 	const double air_density = 1.225;
@@ -128,11 +129,11 @@ custom_math::vector_3 acceleration(const custom_math::vector_3 &pos, const custo
 	custom_math::vector_3 magnus_accel = temp_vel.cross(temp_ang_vel)*vel.length()*vel.length()*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
 
 	// Wind and drag, in metres per second, per second
-	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
+	custom_math::vector_3 wind_vel(0, 0, 0); // Set this to 0, 0, 0 for plain drag
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	custom_math::vector_3 drag_accel = drag_vel*drag_vel.length()*0.5*air_density*drag_coeff*ball_cross_section / ball_mass;
 	
-	return grav_accel + magnus_accel + drag_accel;
+	return grav_accel + magnus_accel;// +drag_accel;
 }
 
 void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
@@ -210,7 +211,26 @@ short unsigned int hone_path(
 		server_velocity,
 		server_angular_velocity,
 		target_position);
-		
+
+	// rotate vectors on y axis to get closer to the target position
+	custom_math::vector_3 end_position = p[p.size() - 1];
+	custom_math::vector_3 v1 = server_position - target_position;
+	custom_math::vector_3 v2 = server_position - end_position;
+	v1.normalize();
+	v2.normalize();
+
+	double angle = acos(v1.dot(v2));
+
+	server_velocity.rotate_y(-angle);
+	server_angular_velocity.rotate_y(-angle);
+
+	get_path(
+		p,
+		server_position,
+		server_velocity,
+		server_angular_velocity,
+		target_position);
+
 	for (size_t i = 0; i < num_length_adjustment_iterations; i++)
 	{
 		// adjust velocity length to get closer to the target position
@@ -232,40 +252,21 @@ short unsigned int hone_path(
 			target_position);
 	}
 
-	// rotate vectors on y axis to get closer to the target position
-	custom_math::vector_3 end_position = p[p.size() - 1];
-	custom_math::vector_3 v1 = server_position - target_position;
-	custom_math::vector_3 v2 = server_position - end_position;
-	v1.normalize();
-	v2.normalize();
-
-	double angle = acos(v1.dot(v2));
-
-	server_velocity.rotate_y(-angle);
-	server_angular_velocity.rotate_y(-angle);
-
-	get_path(
-		p,
-		server_position,
-		server_velocity,
-		server_angular_velocity,
-		target_position);
-
 	return 0;
 }
 
 void get_targets(
-	custom_math::vector_3 in_server_pos, 
-	custom_math::vector_3 in_server_vel, 
-	custom_math::vector_3 in_server_ang_vel, 
+	custom_math::vector_3 in_server_pos,
+	custom_math::vector_3 in_server_vel,
+	custom_math::vector_3 in_server_ang_vel,
 	custom_math::vector_3 in_target_pos,
-	custom_math::vector_3 &out_server_vel_1, 
+	custom_math::vector_3 &out_server_vel_1,
 	custom_math::vector_3 &out_server_ang_vel_1,
-	custom_math::vector_3 &out_server_vel_2, 
+	custom_math::vector_3 &out_server_vel_2,
 	custom_math::vector_3 &out_server_ang_vel_2,
 	vector<custom_math::vector_3> &p_1,
 	vector<custom_math::vector_3> &p_2
-	)
+)
 {
 	vector< vector<custom_math::vector_3> > paths;
 	paths.resize(num_vectors);
@@ -289,6 +290,8 @@ void get_targets(
 
 		get_path(paths[i], in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos);
 	}
+
+	all_paths = paths;
 
 	// find two closest path ends
 	vector<d> index_double;

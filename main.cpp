@@ -194,7 +194,20 @@ void draw_objects(void)
 
 	glEnd();
 
+	
+	glColor3f(0.0, 0.0, 1.0);
 
+	for (size_t i = 0; i < all_paths.size(); i++)
+	{
+		glBegin(GL_LINE_STRIP);
+
+		for (size_t j = 0; j < all_paths[i].size(); j++)
+		{
+			glVertex3f(all_paths[i][j].x, all_paths[i][j].y, all_paths[i][j].z);
+		}
+
+		glEnd();
+	}
 
 
 	glColor3f(0.0, 1.0, 0.0);
@@ -349,7 +362,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	}
 
 
-	case 'j':
+	case 'l':
 	{
 		in_target_pos.x += 1;
 		get_targets(
@@ -362,7 +375,7 @@ void keyboard_func(unsigned char key, int x, int y)
 			out_p_2);
 		break;
 	}
-	case 'l':
+	case 'j':
 	{
 		in_target_pos.x -= 1;
 		get_targets(
