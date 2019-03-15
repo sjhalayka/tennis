@@ -133,7 +133,7 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	custom_math::vector_3 drag_accel = drag_vel*drag_vel.length()*0.5*air_density*drag_coeff*ball_cross_section / ball_mass;
 	
-	return grav_accel + magnus_accel;// +drag_accel;
+	return grav_accel + magnus_accel + drag_accel;
 }
 
 void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
