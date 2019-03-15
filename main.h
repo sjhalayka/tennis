@@ -78,7 +78,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(10, 0, 0);
+custom_math::vector_3 in_server_ang_vel(0, 10, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -265,8 +265,8 @@ short unsigned int hone_path(
 
 	double angle = acos(v1.dot(v2));
 
-	server_velocity.rotate_y(angle);
-	server_angular_velocity.rotate_y(angle);
+	server_velocity.rotate_y(-angle);
+	//server_angular_velocity.rotate_y(-angle);
 
 	get_path(
 		p,
