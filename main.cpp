@@ -442,7 +442,9 @@ void keyboard_func(unsigned char key, int x, int y)
 		double len = in_server_ang_vel.length();
 
 		in_server_ang_vel.normalize();
-		in_server_ang_vel *= len - 1;
+
+		if(len > 1)
+			in_server_ang_vel *= len - 1;
 
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
