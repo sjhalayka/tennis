@@ -78,7 +78,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(0, 100, 0);
+custom_math::vector_3 in_server_ang_vel(0, 1000, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
