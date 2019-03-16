@@ -199,7 +199,7 @@ short unsigned int get_path(
 
 		p.push_back(curr_pos);
 
-		// if collides with the ground, abort
+		// if collides with the ground
 		if (curr_pos.y < 0 && last_pos.y >= 0)
 		{
 			// Take a step back
