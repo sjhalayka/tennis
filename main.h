@@ -168,7 +168,19 @@ void proceed_Euler(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const
 	pos += vel * dt;
 }
 
-void proceed_rk4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
+inline void proceed_RK2(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
+{
+	custom_math::vector_3 k1_velocity = vel;
+	custom_math::vector_3 k1_acceleration = acceleration(pos, k1_velocity, ang_vel);
+	custom_math::vector_3 k2_velocity = vel + k1_acceleration * dt*0.5;
+	custom_math::vector_3 k2_acceleration = acceleration(pos + k1_velocity * dt*0.5, k2_velocity, ang_vel);
+
+	vel += k2_acceleration * dt;
+	pos += k2_velocity * dt;
+}
+
+
+void proceed_RK4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	static const double one_sixth = 1.0 / 6.0;
 
@@ -203,7 +215,8 @@ short unsigned int get_path(
 	{
 		custom_math::vector_3 curr_pos = last_pos;	
 		custom_math::vector_3 curr_vel = last_vel;
-		//proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
+		//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
+		//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
 		proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
 
 		p.push_back(curr_pos);
@@ -222,7 +235,8 @@ short unsigned int get_path(
 			// Step forward until the ball hits the ground
 			while (curr_pos.y > 0)
 			{
-				//proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
 				proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
@@ -251,7 +265,8 @@ short unsigned int get_path(
 			// Step forward until the ball hits the net
 			while (curr_pos.z > 0)
 			{
-				//proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
 				proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
