@@ -89,7 +89,8 @@ custom_math::vector_3 out_server_ang_vel_2;
 vector<custom_math::vector_3> out_p_1;
 vector<custom_math::vector_3> out_p_2;
 
-const double dt = 0.01;
+double dt = 0.1;
+
 const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
 const size_t num_length_adjustment_iterations = 20;	
@@ -199,8 +200,28 @@ short unsigned int get_path(
 		p.push_back(curr_pos);
 
 		// if collides with the ground, abort
-		if (curr_pos.y < 0)
+		if (curr_pos.y < 0 && last_pos.y >= 0)
+		{
+			// Take a step back
+			curr_pos = last_pos;
+			curr_vel = last_vel;
+			p.pop_back();
+
+			// Crank up the resolution to find the collision location
+			dt = 0.0001;
+
+			// Step forward until the ball hits the ground
+			while (curr_pos.y > 0)
+			{
+				proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
+				p.push_back(curr_pos);
+			}
+			
+			// Reset to the default resolution
+			dt = 0.01;
+
 			break;
+		}
 
 		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
 
@@ -209,6 +230,24 @@ short unsigned int get_path(
 			curr_pos.y >= 0 && curr_pos.y <= net_height &&
 			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
 		{
+			// Take a step back
+			curr_pos = last_pos;
+			curr_vel = last_vel;
+			p.pop_back();
+
+			// Crank up the resolution to find the collision location
+			dt = 0.0001;
+
+			// Step forward until the ball hits the net
+			while (curr_pos.z > 0)
+			{
+				proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
+				p.push_back(curr_pos);
+			}
+
+			// Reset to the default resolution
+			dt = 0.01;
+
 			custom_math::vector_3 N(0, 0, 1);
 			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 		}
