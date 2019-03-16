@@ -162,6 +162,34 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 	return grav_accel + magnus_accel + drag_accel;
 }
 
+// https://www.gamedev.net/forums/topic/701376-weird-circular-orbit-problem/?do=findComment&comment=5402054
+void proceed_symplectic4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
+{
+	double const cr2 = std::pow(2.0, 1.0 / 3.0);
+
+	double const c[4] =
+	{
+		1.0 / (2.0*(2.0 - cr2)),
+		(1.0 - cr2) / (2.0*(2.0 - cr2)),
+		(1.0 - cr2) / (2.0*(2.0 - cr2)),
+		1.0 / (2.0*(2.0 - cr2))
+	};
+
+	double const d[4] =
+	{
+		1.0 / (2.0 - cr2),
+		-cr2 / (2.0 - cr2),
+		1.0 / (2.0 - cr2),
+		0.0
+	};
+
+	for (int s = 0; s < 4; ++s)
+	{
+		pos += vel * c[s] * dt;
+		vel += acceleration(pos, vel, ang_vel) * d[s] * dt;
+	}
+}
+
 void proceed_Euler(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	vel += acceleration(pos, vel, ang_vel) * dt;
@@ -178,7 +206,6 @@ inline void proceed_RK2(custom_math::vector_3 &pos, custom_math::vector_3 &vel, 
 	vel += k2_acceleration * dt;
 	pos += k2_velocity * dt;
 }
-
 
 void proceed_RK4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
@@ -217,8 +244,8 @@ short unsigned int get_path(
 		custom_math::vector_3 curr_vel = last_vel;
 		//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
 		//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
-		proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
-
+		//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
+		proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
 		p.push_back(curr_pos);
 
 		// if collides with the ground
@@ -237,7 +264,8 @@ short unsigned int get_path(
 			{
 				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
-				proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
+				proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
 			
@@ -267,7 +295,8 @@ short unsigned int get_path(
 			{
 				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
-				proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
+				proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
 
