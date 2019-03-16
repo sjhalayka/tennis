@@ -78,7 +78,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(0, 10, 0);
+custom_math::vector_3 in_server_ang_vel(0, 100, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -138,7 +138,7 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 {
 	// http://twu.tennis-warehouse.com/learning_center/aerodynamics2.php
 	const double air_density = 1.225;
-	const double lift_coeff = 0.5;
+	const double lift_coeff = 0.05;
 	const double drag_coeff = 0.55;
 	const double ball_cross_section = 0.0034;
 	const double ball_mass = 0.0585;
@@ -152,7 +152,7 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 	custom_math::vector_3 magnus_accel = vel.cross(ang_vel)*0.5*air_density*lift_coeff*ball_cross_section / ball_mass;
 
 	// Wind and drag, in metres per second, per second
-	custom_math::vector_3 wind_vel(5, 0, 0); // Set this to 0, 0, 0 for plain drag
+	custom_math::vector_3 wind_vel(2.77778, 0, 0); // in metres per second
 	custom_math::vector_3 drag_vel = wind_vel - vel;
 	custom_math::vector_3 drag_accel = drag_vel*drag_vel.length()*0.5*air_density*drag_coeff*ball_cross_section / ball_mass;
 	
