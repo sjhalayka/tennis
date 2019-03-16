@@ -225,7 +225,7 @@ short unsigned int get_path(
 
 		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
 
-		// if collides with net, reflect vector
+		// if collides with net
 		if (is_near_net &&
 			curr_pos.y >= 0 && curr_pos.y <= net_height &&
 			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
@@ -248,6 +248,7 @@ short unsigned int get_path(
 			// Reset to the default resolution
 			dt = 0.01;
 
+			// reflect vector
 			custom_math::vector_3 N(0, 0, 1);
 			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 		}
