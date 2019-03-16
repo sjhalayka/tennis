@@ -78,7 +78,7 @@ double net_height = 0.9144; // 3 feet
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
-custom_math::vector_3 in_server_ang_vel(0, 1000, 0);
+custom_math::vector_3 in_server_ang_vel(0, 100, 0);
 custom_math::vector_3 in_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
@@ -192,14 +192,14 @@ short unsigned int get_path(
 
 	while (p.size() < 100000) // abort those paths that do not land on the ground in sufficient time
 	{
-		custom_math::vector_3 curr_pos = last_pos;
+		custom_math::vector_3 curr_pos = last_pos;	
 		custom_math::vector_3 curr_vel = last_vel;
 		proceed_rk4(curr_pos, curr_vel, server_angular_velocity);
 
 		p.push_back(curr_pos);
 
-		// if collides with surface
-		if (curr_pos.y <= 0)
+		// if collides with the ground, abort
+		if (curr_pos.y < 0)
 			break;
 
 		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
