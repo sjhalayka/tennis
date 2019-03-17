@@ -257,6 +257,7 @@ short unsigned int get_path(
 			p.pop_back();
 
 			// Crank up the resolution to find the collision location
+			double default_dt = dt;
 			dt = 0.0001;
 
 			// Step forward until the ball hits the ground
@@ -270,7 +271,7 @@ short unsigned int get_path(
 			}
 			
 			// Reset to the default resolution
-			dt = 0.01;
+			dt = default_dt;
 
 			break;
 		}
@@ -288,6 +289,7 @@ short unsigned int get_path(
 			p.pop_back();
 
 			// Crank up the resolution to find the collision location
+			double default_dt = dt;
 			dt = 0.0001;
 
 			// Step forward until the ball hits the net
@@ -301,7 +303,7 @@ short unsigned int get_path(
 			}
 
 			// Reset to the default resolution
-			dt = 0.01;
+			dt = default_dt;
 
 			// reflect vector
 			custom_math::vector_3 N(0, 0, 1);
