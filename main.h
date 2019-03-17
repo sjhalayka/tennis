@@ -162,7 +162,22 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 	return grav_accel + magnus_accel + drag_accel;
 }
 
+// https://en.wikipedia.org/wiki/Symplectic_integrator
+// Also known as Verlet integration
+void proceed_symplectic2(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
+{
+	static const double c[2] = { 0, 1 };
+	static const double d[2] = { 0.5, 0.5 };
+
+// 	pos += vel * c[0] * dt; // first element c[0] is always 0
+	vel += acceleration(pos, vel, ang_vel) * d[0] * dt;
+
+	pos += vel * c[1] * dt;
+	vel += acceleration(pos, vel, ang_vel) * d[1] * dt;
+}
+
 // https://www.gamedev.net/forums/topic/701376-weird-circular-orbit-problem/?do=findComment&comment=5402054
+// https://en.wikipedia.org/wiki/Symplectic_integrator
 void proceed_symplectic4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
 	static double const cr2 = pow(2.0, 1.0 / 3.0);
@@ -251,7 +266,8 @@ short unsigned int get_path(
 		//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
 		//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
 		//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
-		proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
+		proceed_symplectic2(curr_pos, curr_vel, server_angular_velocity);
+		//proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
 		p.push_back(curr_pos);
 
 		// if collides with the ground
@@ -272,7 +288,8 @@ short unsigned int get_path(
 				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
-				proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
+				proceed_symplectic2(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
 			
@@ -304,7 +321,8 @@ short unsigned int get_path(
 				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
-				proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
+				proceed_symplectic2(curr_pos, curr_vel, server_angular_velocity);
+				//proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
 
