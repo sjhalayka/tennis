@@ -5,7 +5,7 @@
 #include "custom_math.h"
 
 #include <cstdlib>
-#include <GL/glut.h>       //GLUT Library
+#include <GLUT/glut.h>       //GLUT Library
 
 #include <iostream>
 using std::cout;
@@ -288,11 +288,7 @@ short unsigned int get_path(
 			// Step forward until the ball hits the ground
 			while (curr_pos.y > 0)
 			{
-				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
-				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
-				//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
-				proceed_symplectic2(curr_pos, curr_vel, server_angular_velocity);
-				//proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
+                integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
 			
@@ -321,12 +317,7 @@ short unsigned int get_path(
 			// Step forward until the ball hits the net
 			while (curr_pos.z > 0)
 			{
-                
-				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
-				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
-				//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
-				proceed_symplectic2(curr_pos, curr_vel, server_angular_velocity);
-				//proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
+                integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
 
