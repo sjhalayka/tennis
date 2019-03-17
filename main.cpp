@@ -7,6 +7,8 @@
 int main(int argc, char **argv)
 {
 //	cout << setprecision(20) << endl;
+    
+    integrator_func_pointer = &proceed_Euler;
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
@@ -275,11 +277,48 @@ void display_func(void)
 		render_string(10, start + 9 * break_size, GLUT_BITMAP_HELVETICA_18, string("  j: Target pos"));
 		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  k: Target pos"));
 		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  l: Target pos"));
+        
+        render_string(10, start + 13 * break_size, GLUT_BITMAP_HELVETICA_18, string("  1: Euler"));
+        render_string(10, start + 14 * break_size, GLUT_BITMAP_HELVETICA_18, string("  2: Symplectic 2"));
+        render_string(10, start + 15 * break_size, GLUT_BITMAP_HELVETICA_18, string("  3: Symplectic 4"));
+        render_string(10, start + 16 * break_size, GLUT_BITMAP_HELVETICA_18, string("  4: RK2"));
+        render_string(10, start + 17 * break_size, GLUT_BITMAP_HELVETICA_18, string("  5: RK4"));
 
+        
 		custom_math::vector_3 eye = main_camera.eye;
 		custom_math::vector_3 eye_norm = eye;
 		eye_norm.normalize();
 
+        oss.clear();
+        oss.str("");
+        oss << "Integrator: ";
+        
+        if(integrator_func_pointer == proceed_Euler)
+        {
+            oss << "Euler";
+        }
+        else if(integrator_func_pointer == proceed_symplectic2)
+        {
+            oss << "Symplectic 2";
+        }
+        else if(integrator_func_pointer == proceed_symplectic4)
+        {
+            oss << "Symplectic 4";
+        }
+        else if(integrator_func_pointer == proceed_RK2)
+        {
+            oss << "RK2";
+        }
+        else if(integrator_func_pointer == proceed_RK4)
+        {
+            oss << "RK4";
+        }
+
+        
+        
+        render_string(10, win_y - 3 * break_size, GLUT_BITMAP_HELVETICA_18, oss.str());
+
+        
 		oss.clear();
 		oss.str("");
 		oss << "Camera position: " << eye.x << ' ' << eye.y << ' ' << eye.z;
@@ -457,8 +496,84 @@ void keyboard_func(unsigned char key, int x, int y)
 
 		break;
 	}
+    case '1':
+    {
+        integrator_func_pointer = &proceed_Euler;
+        
+        get_targets(
+                    in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+                    out_server_vel_1,
+                    out_server_ang_vel_1,
+                    out_server_vel_2,
+                    out_server_ang_vel_2,
+                    out_p_1,
+                    out_p_2);
+        
+        break;
+    }
+        case '2':
+        {
+            integrator_func_pointer = &proceed_symplectic2;
+            
+            get_targets(
+                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+                        out_server_vel_1,
+                        out_server_ang_vel_1,
+                        out_server_vel_2,
+                        out_server_ang_vel_2,
+                        out_p_1,
+                        out_p_2);
+            
+            break;
+        }
 
-	default:
+        case '3':
+        {
+            integrator_func_pointer = &proceed_symplectic4;
+            
+            get_targets(
+                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+                        out_server_vel_1,
+                        out_server_ang_vel_1,
+                        out_server_vel_2,
+                        out_server_ang_vel_2,
+                        out_p_1,
+                        out_p_2);
+            
+            break;
+        }
+        case '4':
+        {
+            integrator_func_pointer = &proceed_RK2;
+            
+            get_targets(
+                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+                        out_server_vel_1,
+                        out_server_ang_vel_1,
+                        out_server_vel_2,
+                        out_server_ang_vel_2,
+                        out_p_1,
+                        out_p_2);
+            
+            break;
+        }
+        case '5':
+        {
+            integrator_func_pointer = &proceed_RK4;
+            
+            get_targets(
+                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+                        out_server_vel_1,
+                        out_server_ang_vel_1,
+                        out_server_vel_2,
+                        out_server_ang_vel_2,
+                        out_p_1,
+                        out_p_2);
+            
+            break;
+        }
+
+        default:
 		break;
 	}
 }

@@ -2,7 +2,7 @@
 #define uv_camera_h
 
 #include <cstdlib>
-#include <GL/glut.h>       //GLUT Library
+#include <GLUT/glut.h>       //GLUT Library
 
 #include "custom_math.h"
 

@@ -5,7 +5,7 @@
 #include "custom_math.h"
 
 #include <cstdlib>
-#include <GL/glut.h>       //GLUT Library
+#include <GLUT/glut.h>       //GLUT Library
 
 #include <iostream>
 using std::cout;
@@ -97,6 +97,10 @@ const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
 const size_t num_length_adjustment_iterations = 20;	
 
+
+void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &, const custom_math::vector_3 &);
+
+
 #define REGION_PLAYER_IN_BOUNDS 0
 #define REGION_PLAYER_OUT_OF_BOUNDS 1
 #define REGION_OPPONENT_IN_BOUNDS 2
@@ -161,6 +165,9 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 	
 	return grav_accel + magnus_accel + drag_accel;
 }
+
+
+
 
 // https://en.wikipedia.org/wiki/Symplectic_integrator
 // Also known as Verlet integration
@@ -263,12 +270,8 @@ short unsigned int get_path(
 	{
 		custom_math::vector_3 curr_pos = last_pos;	
 		custom_math::vector_3 curr_vel = last_vel;
-		//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
-		//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
-		//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
-		proceed_symplectic2(curr_pos, curr_vel, server_angular_velocity);
-		//proceed_symplectic4(curr_pos, curr_vel, server_angular_velocity);
-		p.push_back(curr_pos);
+        integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
+        p.push_back(curr_pos);
 
 		// if collides with the ground
 		if (curr_pos.y < 0 && last_pos.y >= 0)
@@ -318,6 +321,7 @@ short unsigned int get_path(
 			// Step forward until the ball hits the net
 			while (curr_pos.z > 0)
 			{
+                
 				//proceed_RK4(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_RK2(curr_pos, curr_vel, server_angular_velocity);
 				//proceed_Euler(curr_pos, curr_vel, server_angular_velocity);
