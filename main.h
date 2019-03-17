@@ -5,7 +5,7 @@
 #include "custom_math.h"
 
 #include <cstdlib>
-#include <GLUT/glut.h>       //GLUT Library
+#include <GL/glut.h>       //GLUT Library
 
 #include <iostream>
 using std::cout;
