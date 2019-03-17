@@ -167,7 +167,7 @@ void proceed_symplectic4(custom_math::vector_3 &pos, custom_math::vector_3 &vel,
 {
 	double const cr2 = std::pow(2.0, 1.0 / 3.0);
 
-	double const c[4] =
+	static const double c[4] =
 	{
 		1.0 / (2.0*(2.0 - cr2)),
 		(1.0 - cr2) / (2.0*(2.0 - cr2)),
@@ -175,7 +175,7 @@ void proceed_symplectic4(custom_math::vector_3 &pos, custom_math::vector_3 &vel,
 		1.0 / (2.0*(2.0 - cr2))
 	};
 
-	double const d[4] =
+	static const double d[4] =
 	{
 		1.0 / (2.0 - cr2),
 		-cr2 / (2.0 - cr2),
@@ -183,11 +183,17 @@ void proceed_symplectic4(custom_math::vector_3 &pos, custom_math::vector_3 &vel,
 		0.0
 	};
 
-	for (int s = 0; s < 4; ++s)
-	{
-		pos += vel * c[s] * dt;
-		vel += acceleration(pos, vel, ang_vel) * d[s] * dt;
-	}
+	pos += vel * c[0] * dt;
+	vel += acceleration(pos, vel, ang_vel) * d[0] * dt;
+
+	pos += vel * c[1] * dt;
+	vel += acceleration(pos, vel, ang_vel) * d[1] * dt;
+
+	pos += vel * c[2] * dt;
+	vel += acceleration(pos, vel, ang_vel) * d[2] * dt;
+
+	pos += vel * c[3] * dt;
+	vel += acceleration(pos, vel, ang_vel) * d[3] * dt;
 }
 
 void proceed_Euler(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
