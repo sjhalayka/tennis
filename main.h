@@ -165,7 +165,7 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 // https://www.gamedev.net/forums/topic/701376-weird-circular-orbit-problem/?do=findComment&comment=5402054
 void proceed_symplectic4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
 {
-	double const cr2 = std::pow(2.0, 1.0 / 3.0);
+	static double const cr2 = std::pow(2.0, 1.0 / 3.0);
 
 	static const double c[4] =
 	{
@@ -193,7 +193,7 @@ void proceed_symplectic4(custom_math::vector_3 &pos, custom_math::vector_3 &vel,
 	vel += acceleration(pos, vel, ang_vel) * d[2] * dt;
 
 	pos += vel * c[3] * dt;
-	vel += acceleration(pos, vel, ang_vel) * d[3] * dt;
+//	vel += acceleration(pos, vel, ang_vel) * d[3] * dt; // last element d[3] is always 0
 }
 
 void proceed_Euler(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)

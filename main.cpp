@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv)
 {
-	cout << setprecision(20) << endl;
+//	cout << setprecision(20) << endl;
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
