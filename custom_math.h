@@ -25,7 +25,7 @@ using std::endl;
 
 #include <cmath>
 #include <cstdlib>
-#include <GLUT/glut.h>       //GLUT Library
+#include <GL/glut.h>       //GLUT Library
 
 
 namespace custom_math
