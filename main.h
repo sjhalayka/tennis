@@ -94,8 +94,7 @@ vector<custom_math::vector_3> out_p_2;
 double dt = 0.1;
 
 const size_t num_vectors = 10;
-const size_t num_hone_iterations = 1;
-const size_t num_length_adjustment_iterations = 20;	
+const size_t num_length_adjustment_iterations = 5;	
 
 const size_t max_bounces = 1;
 
@@ -525,7 +524,12 @@ void get_targets(
 		server_vels.push_back(in_server_vel);
 		server_ang_vels.push_back(in_server_ang_vel);
 
-		get_path(paths[i], in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos);
+		get_path(
+			paths[i], 
+			in_server_pos, 
+			in_server_vel, 
+			in_server_ang_vel, 
+			in_target_pos);
 	}
 
 	all_paths = paths;
@@ -555,8 +559,13 @@ void get_targets(
 	{
 		if (i == smallest_index)
 		{
-			for(size_t j = 0; j < num_hone_iterations; j++)
-				hone_path(paths[i], in_server_pos, server_vels[i], server_ang_vels[i], in_target_pos, num_length_adjustment_iterations);
+			hone_path(
+				paths[i], 
+				in_server_pos, 
+				server_vels[i], 
+				server_ang_vels[i], 
+				in_target_pos, 
+				num_length_adjustment_iterations);
 
 			get_extended_path(
 				paths[i],
@@ -572,8 +581,13 @@ void get_targets(
 
 		if (i == second_smallest_index)
 		{
-			for (size_t j = 0; j < num_hone_iterations; j++)
-				hone_path(paths[i], in_server_pos, server_vels[i], server_ang_vels[i], in_target_pos, num_length_adjustment_iterations);
+			hone_path(
+				paths[i], 
+				in_server_pos, 
+				server_vels[i], 
+				server_ang_vels[i], 
+				in_target_pos, 
+				num_length_adjustment_iterations);
 		
 			get_extended_path(
 				paths[i],
