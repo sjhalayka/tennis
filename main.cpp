@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv)
 {
-	integrator_func_pointer = &proceed_Euler;
+	integrator_func_pointer = &proceed_symplectic4;
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
