@@ -97,6 +97,8 @@ const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
 const size_t num_length_adjustment_iterations = 20;	
 
+const size_t max_bounces = 2;
+
 
 void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &, const custom_math::vector_3 &);
 
@@ -251,6 +253,102 @@ void proceed_RK4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const c
 	vel += (k1_acceleration + (k2_acceleration + k3_acceleration)*2.0 + k4_acceleration)*one_sixth*dt;
 	pos += (k1_velocity + (k2_velocity + k3_velocity)*2.0 + k4_velocity)*one_sixth*dt;
 }
+
+
+
+short unsigned int get_extended_path(
+	vector<custom_math::vector_3> &p,
+	custom_math::vector_3 server_position,
+	custom_math::vector_3 server_velocity,
+	custom_math::vector_3 server_angular_velocity,
+	custom_math::vector_3 target_position)
+{
+	p.clear();
+
+	p.push_back(server_position);
+
+	custom_math::vector_3 last_pos = server_position;
+	custom_math::vector_3 last_vel = server_velocity;
+
+	size_t bounce_count = 0;
+
+	while (p.size() < 100000) // abort those paths that do not land on the ground in sufficient time
+	{
+		custom_math::vector_3 curr_pos = last_pos;
+		custom_math::vector_3 curr_vel = last_vel;
+		integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
+		p.push_back(curr_pos);
+
+		// if collides with the ground
+		if (curr_pos.y < 0 && last_pos.y >= 0)
+		{
+			// Take a step back
+			curr_pos = last_pos;
+			curr_vel = last_vel;
+			p.pop_back();
+
+			// Crank up the resolution to find the collision location
+			double default_dt = dt;
+			dt = 0.0001;
+
+			// Step forward until the ball hits the ground
+			while (curr_pos.y > 0)
+			{
+				integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
+				p.push_back(curr_pos);
+			}
+
+			// Reset to the default resolution
+			dt = default_dt;
+
+			custom_math::vector_3 N(0, 1, 0);
+			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+
+			bounce_count++;
+
+			if(bounce_count == max_bounces)
+				break;
+		}
+
+		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
+
+		// if collides with net
+		if (is_near_net &&
+			curr_pos.y >= 0 && curr_pos.y <= net_height &&
+			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
+		{
+			// Take a step back
+			curr_pos = last_pos;
+			curr_vel = last_vel;
+			p.pop_back();
+
+			// Crank up the resolution to find the collision location
+			double default_dt = dt;
+			dt = 0.0001;
+
+			// Step forward until the ball hits the net
+			while (curr_pos.z > 0)
+			{
+				integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
+				p.push_back(curr_pos);
+			}
+
+			// Reset to the default resolution
+			dt = default_dt;
+
+			// reflect vector
+			custom_math::vector_3 N(0, 0, 1);
+			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+		}
+
+		last_pos = curr_pos;
+		last_vel = curr_vel;
+	}
+
+	return 0;
+}
+
+
 
 short unsigned int get_path(
 	vector<custom_math::vector_3> &p,
@@ -459,7 +557,14 @@ void get_targets(
 		{
 			for(size_t j = 0; j < num_hone_iterations; j++)
 				hone_path(paths[i], in_server_pos, server_vels[i], server_ang_vels[i], in_target_pos, num_length_adjustment_iterations);
-		
+
+			get_extended_path(
+				paths[i],
+				in_server_pos,
+				server_vels[i],
+				server_ang_vels[i],
+				in_target_pos);
+
 			out_server_vel_1 = server_vels[i];
 			out_server_ang_vel_1 = server_ang_vels[i];
 			p_1 = paths[i];
@@ -470,6 +575,13 @@ void get_targets(
 			for (size_t j = 0; j < num_hone_iterations; j++)
 				hone_path(paths[i], in_server_pos, server_vels[i], server_ang_vels[i], in_target_pos, num_length_adjustment_iterations);
 		
+			get_extended_path(
+				paths[i],
+				in_server_pos,
+				server_vels[i],
+				server_ang_vels[i],
+				in_target_pos);
+
 			out_server_vel_2 = server_vels[i];
 			out_server_ang_vel_2= server_ang_vels[i];
 			p_2 = paths[i];
