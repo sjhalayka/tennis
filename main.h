@@ -97,7 +97,7 @@ const size_t num_vectors = 10;
 const size_t num_hone_iterations = 1;
 const size_t num_length_adjustment_iterations = 20;	
 
-const size_t max_bounces = 2;
+const size_t max_bounces = 1;
 
 
 void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &, const custom_math::vector_3 &);
@@ -304,10 +304,10 @@ short unsigned int get_extended_path(
 			custom_math::vector_3 N(0, 1, 0);
 			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 
-			bounce_count++;
-
-			if(bounce_count == max_bounces)
+			if (bounce_count == max_bounces)
 				break;
+
+			bounce_count++;
 		}
 
 		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
