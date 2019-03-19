@@ -166,9 +166,6 @@ custom_math::vector_3 acceleration(custom_math::vector_3 pos, custom_math::vecto
 	return grav_accel + magnus_accel + drag_accel;
 }
 
-
-
-
 // https://en.wikipedia.org/wiki/Symplectic_integrator
 // Also known as Verlet integration
 void proceed_symplectic2(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const custom_math::vector_3 &ang_vel)
