@@ -95,7 +95,6 @@ double dt = 0.1;
 
 const size_t num_vectors = 10;
 const size_t num_length_adjustment_iterations = 5;	
-
 const size_t max_bounces = 1;
 
 
