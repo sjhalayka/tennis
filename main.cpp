@@ -170,6 +170,10 @@ void draw_objects(void)
 
 
 
+
+
+
+
 	glLineWidth(1.0f);
 
 	glBegin(GL_LINES);
@@ -229,6 +233,32 @@ void draw_objects(void)
 		}
 
 	glEnd();
+
+
+
+
+
+
+
+
+
+
+	glDisable(GL_DEPTH_TEST);
+
+	glBegin(GL_POINTS);
+
+	glColor3f(1.0, 0.0, 0.0);
+	//	glVertex3f(main_camera.eye.x, main_camera.eye.y, main_camera.eye.z);
+	//	glVertex3f(-main_camera.look_at.x + screen_ray.x, -main_camera.look_at.y + screen_ray.y, -main_camera.look_at.z + screen_ray.z);
+//	glVertex3f(main_camera.eye.x + screen_ray.x, main_camera.eye.y + screen_ray.y, main_camera.eye.z + screen_ray.z);
+	glVertex3f(screen_ray.x, screen_ray.y, screen_ray.z);
+
+	glEnd();
+
+	glEnable(GL_DEPTH_TEST);
+
+
+
 
 
 	glPopMatrix();
@@ -599,6 +629,38 @@ void mouse_func(int button, int state, int x, int y)
 		else
 			rmb_down = false;
 	}
+
+	custom_math::vector_3 E(main_camera.eye.x, main_camera.eye.y, main_camera.eye.z);
+	custom_math::vector_3 T(main_camera.look_at.x, main_camera.look_at.y, main_camera.look_at.z);
+	custom_math::vector_3 w(main_camera.up.x, main_camera.up.y, main_camera.up.z);
+	w.normalize();
+
+	custom_math::vector_3 t = T - E;
+	custom_math::vector_3 b = w.cross(t);
+
+	custom_math::vector_3 t_n = t;
+	t_n.normalize();
+
+	custom_math::vector_3 b_n = b;
+	b_n.normalize();
+
+	custom_math::vector_3 v_n = t_n.cross(b_n);
+
+	double theta = main_camera.fov * custom_math::pi / 180.0;
+	double d = 1.0;
+	double aspect = static_cast<double>(win_x) / static_cast<double>(win_y);
+	double g_y = -d * tan(theta / 2.0);
+	double g_x = g_y * aspect;
+
+	custom_math::vector_3 q_x = b_n * (2.0*g_x) / (static_cast<double>(win_x) - 1.0);
+	custom_math::vector_3 q_y = v_n * (2.0*g_y) / (static_cast<double>(win_y) - 1.0);
+
+	custom_math::vector_3 p_1m = t_n * d - b_n * g_x - v_n * g_y;
+	custom_math::vector_3 p_ij = p_1m + q_x * x + q_y * y;
+
+	custom_math::vector_3 P_ij = E + p_ij;
+	screen_ray = P_ij;
+
 }
 
 void motion_func(int x, int y)

@@ -72,6 +72,8 @@ void render_string(int x, const int y, void *font, const string &text);
 void draw_objects(void);
 
 
+custom_math::vector_3 screen_ray;
+
 double court_width = 10.9728; // 36 feet
 double half_court_width = court_width / 2.0;
 double court_length = 22.86; // 75 feet
@@ -530,7 +532,7 @@ void get_targets(
 
 	all_paths = paths;
 
-	// find two closest path ends
+	// find two closest path ends that end up on opponents court
 	vector<d> index_double;
 
 	for (size_t i = 0; i < num_vectors; i++)
@@ -538,16 +540,49 @@ void get_targets(
 		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
 		custom_math::vector_3 diff = end_point - in_target_pos;
 
-		double val = diff.length();
+		if (1)//REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
+		{
+			double val = diff.length();
+
+			d dval;
+			dval.index = i;
+			dval.val = val;
+
+			index_double.push_back(dval);
+		}
+	}
+		
+	if (0 == index_double.size())
+	{
+		cout << "no paths found" << endl;
 
 		d dval;
-		dval.index = i;
-		dval.val = val;
+		dval.index = paths[0].size() - 1;
+		dval.val = paths[0][dval.index].length();
+
+		index_double.push_back(dval);
+
+		dval.index = paths[0].size() - 2;
+		dval.val = paths[0][dval.index].length();
 
 		index_double.push_back(dval);
 	}
+	else if(1 == index_double.size())
+	{
+		cout << "one path found" << endl;
+
+		// Duplicate the good path
+		index_double.push_back(index_double[0]);
+	}
+	else
+	{
+		cout << index_double.size() << " paths found" << endl;
+	}
+	
+
 
 	sort(index_double.begin(), index_double.end());
+
 	size_t smallest_index = index_double[0].index;
 	size_t second_smallest_index = index_double[1].index;
 
@@ -628,5 +663,8 @@ bool rmb_down = false;
 int mouse_x = 0;
 int mouse_y = 0;
 
+float last_click_float_x = 0;
+float last_click_float_y = 0;
+float last_click_float_z = 0;
 
 #endif
