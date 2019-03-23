@@ -628,45 +628,13 @@ void mouse_func(int button, int state, int x, int y)
 
 	if (lmb_down)
 	{
-		custom_math::vector_3 E(main_camera.eye.x, main_camera.eye.y, main_camera.eye.z);
-		custom_math::vector_3 T(main_camera.look_at.x, main_camera.look_at.y, main_camera.look_at.z);
-		custom_math::vector_3 w(main_camera.up.x, main_camera.up.y, main_camera.up.z);
-		w.normalize();
-
-		custom_math::vector_3 t = T - E;
-		custom_math::vector_3 b = w.cross(t);
-
-		custom_math::vector_3 t_n = t;
-		t_n.normalize();
-
-		custom_math::vector_3 b_n = b;
-		b_n.normalize();
-
-		custom_math::vector_3 v_n = t_n.cross(b_n);
-
-		double theta = main_camera.fov * custom_math::pi / 180.0;
-		double d = 1.0;
-		double aspect = static_cast<double>(win_x) / static_cast<double>(win_y);
-		double g_y = -d * tan(theta / 2.0);
-		double g_x = g_y * aspect;
-
-		custom_math::vector_3 q_x = b_n * (2.0*g_x) / (static_cast<double>(win_x) - 1.0);
-		custom_math::vector_3 q_y = v_n * (2.0*g_y) / (static_cast<double>(win_y) - 1.0);
-
-		custom_math::vector_3 p_1m = t_n * d - b_n * g_x - v_n * g_y;
-		custom_math::vector_3 p_ij = p_1m + q_x * x + q_y * y;
-
-		custom_math::vector_3 P_ij = E + p_ij;
-		screen_ray = P_ij;
+		custom_math::vector_3 p_ij = main_camera.GetScreenRay(x, y, win_x, win_y);
 
 		custom_math::vector_3 N(0, 1, 0);
 		custom_math::vector_3 D(p_ij.x, p_ij.y, p_ij.z);
 		D.normalize();
-
 		custom_math::vector_3 O(main_camera.eye.x, main_camera.eye.y, main_camera.eye.z);
-
 		double u = -(N.dot(O) + 0.0) / N.dot(D);
-
 		custom_math::vector_3 P = O + D * u;
 
 		screen_ray = P;

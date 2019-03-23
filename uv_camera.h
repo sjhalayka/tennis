@@ -36,11 +36,15 @@ public:
 	void Set(const float u_rad, const float v_rad, const float w_metres, const float fov_deg, const int width_px, const int height_px, float src_near, float src_far);
 	void Set(void);
 	void Set_Large_Screenshot(size_t num_cams, size_t cam_num_x, size_t cam_num_y);
+	custom_math::vector_3 GetScreenRay(const int x, const int y, const int screen_width, const int screen_height);
+
 protected:
 	void Transform(void);
 	void Reset(void);
 	void Rotate(void);
 	void Translate(void);
+
+
 };
 
 

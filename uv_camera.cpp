@@ -146,3 +146,36 @@ void uv_camera::Translate(void)
 	eye.y = -look_at.y*w;
 	eye.z = -look_at.z*w;
 }
+
+custom_math::vector_3 uv_camera::GetScreenRay(const int x, const int y, const int screen_width, const int screen_height)
+{
+	custom_math::vector_3 E(eye.x, eye.y, eye.z);
+	custom_math::vector_3 T(look_at.x, look_at.y, look_at.z);
+	custom_math::vector_3 w(up.x, up.y, up.z);
+	w.normalize();
+
+	custom_math::vector_3 t = T - E;
+	custom_math::vector_3 b = w.cross(t);
+
+	custom_math::vector_3 t_n = t;
+	t_n.normalize();
+
+	custom_math::vector_3 b_n = b;
+	b_n.normalize();
+
+	custom_math::vector_3 v_n = t_n.cross(b_n);
+
+	double theta = fov * custom_math::pi / 180.0;
+	double d = 1.0;
+	double aspect = static_cast<double>(screen_width) / static_cast<double>(screen_height);
+	double g_y = -d * tan(theta / 2.0);
+	double g_x = g_y * aspect;
+
+	custom_math::vector_3 q_x = b_n * (2.0*g_x) / (static_cast<double>(win_x) - 1.0);
+	custom_math::vector_3 q_y = v_n * (2.0*g_y) / (static_cast<double>(win_y) - 1.0);
+
+	custom_math::vector_3 p_1m = t_n * d - b_n * g_x - v_n * g_y;
+	custom_math::vector_3 p_ij = p_1m + q_x * x + q_y * y;
+
+	return p_ij;
+}
