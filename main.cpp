@@ -236,21 +236,6 @@ void draw_objects(void)
 
 
 
-
-
-
-
-
-
-	//glBegin(GL_POINTS);
-	//glColor3f(1.0, 0.0, 0.0);
-	//glVertex3f(screen_ray.x, screen_ray.y, screen_ray.z);
-	//glEnd();
-
-
-
-
-
 	glPopMatrix();
 }
 
@@ -620,6 +605,7 @@ void mouse_func(int button, int state, int x, int y)
 
 	if (lmb_down)
 	{
+		// Intersect scree
 		custom_math::vector_3 p_ij = main_camera.Get_Screen_Ray(x, y, win_x, win_y);
 
 		custom_math::vector_3 N(0, 1, 0);
@@ -629,7 +615,6 @@ void mouse_func(int button, int state, int x, int y)
 		double u = -(N.dot(O) + 0.0) / N.dot(D);
 		custom_math::vector_3 P = O + D * u;
 
-		screen_ray = P;
 		in_target_pos = P;
 
 		if (in_target_pos.x < -half_court_width)
