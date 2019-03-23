@@ -296,16 +296,13 @@ void display_func(void)
 		render_string(10, start + 5 * break_size, GLUT_BITMAP_HELVETICA_18, string("  s: Server pos"));
 		render_string(10, start + 6 * break_size, GLUT_BITMAP_HELVETICA_18, string("  d: Server pos"));
 
-		render_string(10, start + 8 * break_size, GLUT_BITMAP_HELVETICA_18, string("  i: Target pos"));
-		render_string(10, start + 9 * break_size, GLUT_BITMAP_HELVETICA_18, string("  j: Target pos"));
-		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  k: Target pos"));
-		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  l: Target pos"));
+		render_string(10, start + 8 * break_size, GLUT_BITMAP_HELVETICA_18, string("  Click LMB: Target pos"));
         
-        render_string(10, start + 13 * break_size, GLUT_BITMAP_HELVETICA_18, string("  1: Euler"));
-        render_string(10, start + 14 * break_size, GLUT_BITMAP_HELVETICA_18, string("  2: Symplectic 2"));
-        render_string(10, start + 15 * break_size, GLUT_BITMAP_HELVETICA_18, string("  3: Symplectic 4"));
-        render_string(10, start + 16 * break_size, GLUT_BITMAP_HELVETICA_18, string("  4: RK2"));
-        render_string(10, start + 17 * break_size, GLUT_BITMAP_HELVETICA_18, string("  5: RK4"));
+        render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  1: Euler"));
+        render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  2: Symplectic 2"));
+        render_string(10, start + 12 * break_size, GLUT_BITMAP_HELVETICA_18, string("  3: Symplectic 4"));
+        render_string(10, start + 13 * break_size, GLUT_BITMAP_HELVETICA_18, string("  4: RK2"));
+        render_string(10, start + 14 * break_size, GLUT_BITMAP_HELVETICA_18, string("  5: RK4"));
 
         
 		custom_math::vector_3 eye = main_camera.eye;
@@ -424,62 +421,62 @@ void keyboard_func(unsigned char key, int x, int y)
 	}
 
 
-	case 'l':
-	{
-		in_target_pos.x += 1;
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-		break;
-	}
-	case 'j':
-	{
-		in_target_pos.x -= 1;
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-		break;
-	}
-	case 'k':
-	{
-		in_target_pos.z += 1;
+	//case 'l':
+	//{
+	//	in_target_pos.x += 1;
+	//	get_targets(
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		out_server_vel_1,
+	//		out_server_ang_vel_1,
+	//		out_server_vel_2,
+	//		out_server_ang_vel_2,
+	//		out_p_1,
+	//		out_p_2);
+	//	break;
+	//}
+	//case 'j':
+	//{
+	//	in_target_pos.x -= 1;
+	//	get_targets(
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		out_server_vel_1,
+	//		out_server_ang_vel_1,
+	//		out_server_vel_2,
+	//		out_server_ang_vel_2,
+	//		out_p_1,
+	//		out_p_2);
+	//	break;
+	//}
+	//case 'k':
+	//{
+	//	in_target_pos.z += 1;
 
-		if (in_target_pos.z > 0)
-			in_target_pos.z = 0;
+	//	if (in_target_pos.z > 0)
+	//		in_target_pos.z = 0;
 
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-		break;
-	}
-	case 'i':
-	{
-		in_target_pos.z -= 1;
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-		break;
-	}
+	//	get_targets(
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		out_server_vel_1,
+	//		out_server_ang_vel_1,
+	//		out_server_vel_2,
+	//		out_server_ang_vel_2,
+	//		out_p_1,
+	//		out_p_2);
+	//	break;
+	//}
+	//case 'i':
+	//{
+	//	in_target_pos.z -= 1;
+	//	get_targets(
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		out_server_vel_1,
+	//		out_server_ang_vel_1,
+	//		out_server_vel_2,
+	//		out_server_ang_vel_2,
+	//		out_p_1,
+	//		out_p_2);
+	//	break;
+	//}
 
 	case 'o':
 	{
@@ -639,6 +636,16 @@ void mouse_func(int button, int state, int x, int y)
 
 		screen_ray = P;
 		in_target_pos = P;
+
+		if (in_target_pos.x < -half_court_width)
+			in_target_pos.x = -half_court_width;
+		else if (in_target_pos.x > half_court_width)
+			in_target_pos.x = half_court_width;
+
+		if (in_target_pos.z < -half_court_length)
+			in_target_pos.z = -half_court_length;
+		else if (in_target_pos.z > half_court_length)
+			in_target_pos.z = half_court_length;
 
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
