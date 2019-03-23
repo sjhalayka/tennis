@@ -242,15 +242,10 @@ void draw_objects(void)
 
 
 
-
-	glDisable(GL_DEPTH_TEST);
-
-	glBegin(GL_POINTS);
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(screen_ray.x, screen_ray.y, screen_ray.z);
-	glEnd();
-
-	glEnable(GL_DEPTH_TEST);
+	//glBegin(GL_POINTS);
+	//glColor3f(1.0, 0.0, 0.0);
+	//glVertex3f(screen_ray.x, screen_ray.y, screen_ray.z);
+	//glEnd();
 
 
 
@@ -644,8 +639,8 @@ void mouse_func(int button, int state, int x, int y)
 
 		if (in_target_pos.z < -half_court_length)
 			in_target_pos.z = -half_court_length;
-		else if (in_target_pos.z > half_court_length)
-			in_target_pos.z = half_court_length;
+		else if (in_target_pos.z > 0)
+			in_target_pos.z = 0;
 
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
