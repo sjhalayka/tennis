@@ -628,7 +628,7 @@ void mouse_func(int button, int state, int x, int y)
 
 	if (lmb_down)
 	{
-		custom_math::vector_3 p_ij = main_camera.GetScreenRay(x, y, win_x, win_y);
+		custom_math::vector_3 p_ij = main_camera.Get_Screen_Ray(x, y, win_x, win_y);
 
 		custom_math::vector_3 N(0, 1, 0);
 		custom_math::vector_3 D(p_ij.x, p_ij.y, p_ij.z);

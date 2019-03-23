@@ -147,7 +147,7 @@ void uv_camera::Translate(void)
 	eye.z = -look_at.z*w;
 }
 
-custom_math::vector_3 uv_camera::GetScreenRay(const int x, const int y, const int screen_width, const int screen_height)
+custom_math::vector_3 uv_camera::Get_Screen_Ray(const int x, const int y, const int screen_width, const int screen_height)
 {
 	custom_math::vector_3 E(eye.x, eye.y, eye.z);
 	custom_math::vector_3 T(look_at.x, look_at.y, look_at.z);
