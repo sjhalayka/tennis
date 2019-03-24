@@ -72,7 +72,6 @@ void render_string(int x, const int y, void *font, const string &text);
 void draw_objects(void);
 
 
-custom_math::vector_3 screen_ray;
 
 double court_width = 10.9728; // 36 feet
 double half_court_width = court_width / 2.0;
