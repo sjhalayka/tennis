@@ -93,7 +93,7 @@ custom_math::vector_3 out_server_ang_vel_2;
 vector<custom_math::vector_3> out_p_1;
 vector<custom_math::vector_3> out_p_2;
 
-double dt = 0.1;
+double dt = 0.01;
 
 const size_t num_vectors = 10;
 const size_t num_length_adjustment_iterations = 5;	
