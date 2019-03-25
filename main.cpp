@@ -205,25 +205,42 @@ void draw_objects(void)
 	//}
 
 
+	bool use_first_path = false;
+
+	custom_math::vector_3 end_point(out_p_1[out_p_1.size() - 1].x, out_p_1[out_p_1.size() - 1].y, out_p_1[out_p_1.size() - 1].z);
+
+	if (REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
+		use_first_path = true;
+	
 	glColor3f(0.0, 1.0, 0.0);
 
-	glBegin(GL_LINE_STRIP);
+	if (use_first_path)
+	{
+		glBegin(GL_LINE_STRIP);
 
 		for (size_t i = 0; i < out_p_1.size(); i++)
 		{
 			glVertex3f(out_p_1[i].x, out_p_1[i].y, out_p_1[i].z);
 		}
 
-	glEnd();
-
-	glBegin(GL_LINE_STRIP);
+		glEnd();
+	}
+	else
+	{
+		glBegin(GL_LINE_STRIP);
 
 		for (size_t i = 0; i < out_p_2.size(); i++)
 		{
 			glVertex3f(out_p_2[i].x, out_p_2[i].y, out_p_2[i].z);
 		}
 
-	glEnd();
+		glEnd();
+	}
+
+
+
+
+
 
 	glDisable(GL_CULL_FACE);
 

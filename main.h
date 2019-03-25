@@ -650,7 +650,7 @@ void get_targets(
 
 
 
-custom_math::vector_3 background_colour(0.5f, 0.5f, 0.5f);
+custom_math::vector_3 background_colour(0.25f, 0.25f, 0.25f);
 custom_math::vector_3 control_list_colour(1.0f, 1.0f, 1.0f);
 
 bool draw_axis = true;
