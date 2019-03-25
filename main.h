@@ -96,7 +96,7 @@ double dt = 0.01;
 const size_t num_vectors = 10;
 const size_t num_length_adjustment_iterations = 5;	
 const size_t max_bounces = 1;
-const bool pro_mode = true;
+const bool pro_mode = false;
 
 void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &, const custom_math::vector_3 &);
 
