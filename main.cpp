@@ -376,40 +376,16 @@ void keyboard_func(unsigned char key, int x, int y)
 	case 'd':
 	{
 		in_server_pos.x += 1;
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
 		break;
 	}
 	case 'a':
 	{
 		in_server_pos.x -= 1;
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
 		break;
 	}
 	case 's':
 	{
 		in_server_pos.z += 1;
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
 		break;
 	}
 	case 'w':
@@ -419,90 +395,14 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (in_server_pos.z < 0)
 			in_server_pos.z = 0;
 
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
 		break;
 	}
-
-
-	//case 'l':
-	//{
-	//	in_target_pos.x += 1;
-	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-	//		out_server_vel_1,
-	//		out_server_ang_vel_1,
-	//		out_server_vel_2,
-	//		out_server_ang_vel_2,
-	//		out_p_1,
-	//		out_p_2);
-	//	break;
-	//}
-	//case 'j':
-	//{
-	//	in_target_pos.x -= 1;
-	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-	//		out_server_vel_1,
-	//		out_server_ang_vel_1,
-	//		out_server_vel_2,
-	//		out_server_ang_vel_2,
-	//		out_p_1,
-	//		out_p_2);
-	//	break;
-	//}
-	//case 'k':
-	//{
-	//	in_target_pos.z += 1;
-
-	//	if (in_target_pos.z > 0)
-	//		in_target_pos.z = 0;
-
-	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-	//		out_server_vel_1,
-	//		out_server_ang_vel_1,
-	//		out_server_vel_2,
-	//		out_server_ang_vel_2,
-	//		out_p_1,
-	//		out_p_2);
-	//	break;
-	//}
-	//case 'i':
-	//{
-	//	in_target_pos.z -= 1;
-	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-	//		out_server_vel_1,
-	//		out_server_ang_vel_1,
-	//		out_server_vel_2,
-	//		out_server_ang_vel_2,
-	//		out_p_1,
-	//		out_p_2);
-	//	break;
-	//}
-
 	case 'o':
 	{
 		double len = in_server_ang_vel.length();
 
 		in_server_ang_vel.normalize();
 		in_server_ang_vel *= len + 1;
-
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
 
 		break;
 	}
@@ -515,97 +415,46 @@ void keyboard_func(unsigned char key, int x, int y)
 		if (len > 1)
 			in_server_ang_vel *= len - 1;
 
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-
 		break;
 	}
 	case '1':
 	{
 		integrator_func_pointer = &proceed_Euler;
-
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-
 		break;
 	}
 	case '2':
 	{
 		integrator_func_pointer = &proceed_symplectic2;
-
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-
 		break;
 	}
 
 	case '3':
 	{
 		integrator_func_pointer = &proceed_symplectic4;
-
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-
 		break;
 	}
 	case '4':
 	{
 		integrator_func_pointer = &proceed_RK2;
-
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-
 		break;
 	}
 	case '5':
 	{
 		integrator_func_pointer = &proceed_RK4;
-
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
-
 		break;
 	}
-
 	default:
 		break;
 	}
+
+	get_targets(
+		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
+		out_server_vel_1,
+		out_server_ang_vel_1,
+		out_server_vel_2,
+		out_server_ang_vel_2,
+		out_p_1,
+		out_p_2);
 }
 
 void mouse_func(int button, int state, int x, int y)
@@ -635,7 +484,7 @@ void mouse_func(int button, int state, int x, int y)
 
 	if (lmb_down)
 	{
-		// Intersect scree
+		// Intersect screen ray with tennis court plane
 		custom_math::vector_3 p_ij = main_camera.Get_Screen_Ray(x, y, win_x, win_y);
 
 		custom_math::vector_3 N(0, 1, 0);
@@ -647,15 +496,18 @@ void mouse_func(int button, int state, int x, int y)
 
 		in_out_target_pos = P;
 
-		if (in_out_target_pos.x < -half_court_width)
-			in_out_target_pos.x = -half_court_width;
-		else if (in_out_target_pos.x > half_court_width)
-			in_out_target_pos.x = half_court_width;
+		if (false == pro_mode)
+		{
+			if (in_out_target_pos.x < -half_court_width)
+				in_out_target_pos.x = -half_court_width;
+			else if (in_out_target_pos.x > half_court_width)
+				in_out_target_pos.x = half_court_width;
 
-		if (in_out_target_pos.z < -half_court_length)
-			in_out_target_pos.z = -half_court_length;
-		else if (in_out_target_pos.z > 0)
-			in_out_target_pos.z = 0;
+			if (in_out_target_pos.z < -half_court_length)
+				in_out_target_pos.z = -half_court_length;
+			else if (in_out_target_pos.z > 0)
+				in_out_target_pos.z = 0;
+		}
 
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
