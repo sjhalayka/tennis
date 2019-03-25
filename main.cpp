@@ -115,25 +115,16 @@ void draw_objects(void)
 
 	glBegin(GL_QUADS);
 
-		glColor3f(1.0f, 0.5, 0.0f);
+	glColor3f(1.0f, 0.5, 0.0f);
 
-		glVertex3f(-half_court_width, 0, -half_court_length);
-		glVertex3f(-half_court_width, 0, half_court_length);
-		glVertex3f(half_court_width, 0, half_court_length);
-		glVertex3f(half_court_width, 0, -half_court_length);
-
-		glColor3f(0.0f, 0.5, 1.0f);
-
-		glVertex3f(-half_court_width, 0, 0);
-		glVertex3f(half_court_width, 0, 0);
-		glVertex3f(half_court_width, net_height, 0);
-		glVertex3f(-half_court_width, net_height, 0);
+	glVertex3f(-half_court_width, 0, -half_court_length);
+	glVertex3f(-half_court_width, 0, half_court_length);
+	glVertex3f(half_court_width, 0, half_court_length);
+	glVertex3f(half_court_width, 0, -half_court_length);
 
 	glEnd();
 
 	glEnable(GL_CULL_FACE);
-
-
 
 	glLineWidth(2.0);
 
@@ -234,7 +225,20 @@ void draw_objects(void)
 
 	glEnd();
 
+	glDisable(GL_CULL_FACE);
 
+	glBegin(GL_QUADS);
+
+	glColor4f(0.0f, 0.5, 1.0f, 0.5f);
+
+	glVertex3f(-half_court_width, 0, 0);
+	glVertex3f(half_court_width, 0, 0);
+	glVertex3f(half_court_width, net_height, 0);
+	glVertex3f(-half_court_width, net_height, 0);
+
+	glEnd();
+
+	glEnable(GL_CULL_FACE);
 
 	glPopMatrix();
 }
