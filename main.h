@@ -81,7 +81,8 @@ double net_height = 0.9144; // 3 feet
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
 custom_math::vector_3 in_server_ang_vel(0, 100, 0);
-custom_math::vector_3 in_target_pos(5, 0, -5);
+
+custom_math::vector_3 in_out_target_pos(5, 0, -5);
 
 custom_math::vector_3 out_server_vel_1;
 custom_math::vector_3 out_server_ang_vel_1;
@@ -107,7 +108,6 @@ void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &
 #define REGION_OPPONENT_OUT_OF_BOUNDS 3
 
 
-
 size_t get_first_ground_hit(const vector<custom_math::vector_3> &path)
 {
 	size_t index = 0;
@@ -123,8 +123,6 @@ size_t get_first_ground_hit(const vector<custom_math::vector_3> &path)
 
 	return index;
 }
-
-
 
 size_t get_ball_region(const double x, const double z)
 {
@@ -493,7 +491,6 @@ short unsigned int hone_path(
 	double angle = acos(v1.dot(v2));
 
 	server_velocity.rotate_y(-angle);
-	//server_angular_velocity.rotate_y(-angle);
 
 	get_path(
 		p,
@@ -509,7 +506,7 @@ void get_targets(
 	custom_math::vector_3 in_server_pos,
 	custom_math::vector_3 in_server_vel,
 	custom_math::vector_3 in_server_ang_vel,
-	custom_math::vector_3 &in_target_pos,
+	custom_math::vector_3 &in_out_target_pos,
 	custom_math::vector_3 &out_server_vel_1,
 	custom_math::vector_3 &out_server_ang_vel_1,
 	custom_math::vector_3 &out_server_vel_2,
@@ -521,7 +518,7 @@ void get_targets(
 	vector< vector<custom_math::vector_3> > paths;
 	paths.resize(num_vectors);
 
-	in_server_vel = in_target_pos - in_server_pos;
+	in_server_vel = in_out_target_pos - in_server_pos;
 	const double server_vel_len = in_server_vel.length();
 	const custom_math::vector_3 up(0, server_vel_len, 0);
 	double step_size = 1.0 / num_vectors;
@@ -531,7 +528,7 @@ void get_targets(
 
 	for (size_t i = 0; i < num_vectors; i++)
 	{
-		in_server_vel = lerp(in_target_pos - in_server_pos, up, i*step_size);
+		in_server_vel = lerp(in_out_target_pos - in_server_pos, up, i*step_size);
 		in_server_vel.normalize();
 		in_server_vel *= server_vel_len;
 
@@ -543,7 +540,7 @@ void get_targets(
 			in_server_pos, 
 			in_server_vel, 
 			in_server_ang_vel, 
-			in_target_pos);
+			in_out_target_pos);
 	}
 
 	all_paths = paths;
@@ -554,7 +551,7 @@ void get_targets(
 	for (size_t i = 0; i < num_vectors; i++)
 	{
 		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
-		custom_math::vector_3 diff = end_point - in_target_pos;
+		custom_math::vector_3 diff = end_point - in_out_target_pos;
 
 		if (pro_mode || REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
 		{
@@ -572,10 +569,10 @@ void get_targets(
 	{
 		if (false == pro_mode)
 		{
-			in_target_pos.z -= 1.0;
+			in_out_target_pos.z -= 1.0;
 
 			get_targets(
-				in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+				in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 				out_server_vel_1,
 				out_server_ang_vel_1,
 				out_server_vel_2,
@@ -627,7 +624,7 @@ void get_targets(
 				in_server_pos, 
 				server_vels[i], 
 				server_ang_vels[i], 
-				in_target_pos, 
+				in_out_target_pos,
 				num_length_adjustment_iterations);
 
 			get_extended_path(
@@ -635,7 +632,7 @@ void get_targets(
 				in_server_pos,
 				server_vels[i],
 				server_ang_vels[i],
-				in_target_pos);
+				in_out_target_pos);
 
 			out_server_vel_1 = server_vels[i];
 			out_server_ang_vel_1 = server_ang_vels[i];
@@ -649,7 +646,7 @@ void get_targets(
 				in_server_pos, 
 				server_vels[i], 
 				server_ang_vels[i], 
-				in_target_pos, 
+				in_out_target_pos,
 				num_length_adjustment_iterations);
 		
 			get_extended_path(
@@ -657,7 +654,7 @@ void get_targets(
 				in_server_pos,
 				server_vels[i],
 				server_ang_vels[i],
-				in_target_pos);
+				in_out_target_pos);
 
 			out_server_vel_2 = server_vels[i];
 			out_server_ang_vel_2= server_ang_vels[i];

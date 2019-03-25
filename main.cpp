@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	integrator_func_pointer = &proceed_symplectic4;
 
 	get_targets(
-		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 		out_server_vel_1,
 		out_server_ang_vel_1,
 		out_server_vel_2,
@@ -155,7 +155,7 @@ void draw_objects(void)
 	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
 
 	glColor3f(0, 0, 0);
-	glVertex3f(in_target_pos.x, in_target_pos.y, in_target_pos.z);
+	glVertex3f(in_out_target_pos.x, in_out_target_pos.y, in_out_target_pos.z);
 
 	glEnd();
 
@@ -214,8 +214,8 @@ void draw_objects(void)
 		use_first = false;
 	else
 	{
-		custom_math::vector_3 dist_1 = in_target_pos - out_p_1[hit_1_index];
-		custom_math::vector_3 dist_2 = in_target_pos - out_p_2[hit_2_index];
+		custom_math::vector_3 dist_1 = in_out_target_pos - out_p_1[hit_1_index];
+		custom_math::vector_3 dist_2 = in_out_target_pos - out_p_2[hit_2_index];
 
 		if (dist_1.length() > dist_2.length())
 			use_first = false;
@@ -377,7 +377,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	{
 		in_server_pos.x += 1;
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -390,7 +390,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	{
 		in_server_pos.x -= 1;
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -403,7 +403,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	{
 		in_server_pos.z += 1;
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -420,7 +420,7 @@ void keyboard_func(unsigned char key, int x, int y)
 			in_server_pos.z = 0;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -435,7 +435,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	//{
 	//	in_target_pos.x += 1;
 	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 	//		out_server_vel_1,
 	//		out_server_ang_vel_1,
 	//		out_server_vel_2,
@@ -448,7 +448,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	//{
 	//	in_target_pos.x -= 1;
 	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 	//		out_server_vel_1,
 	//		out_server_ang_vel_1,
 	//		out_server_vel_2,
@@ -465,7 +465,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	//		in_target_pos.z = 0;
 
 	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 	//		out_server_vel_1,
 	//		out_server_ang_vel_1,
 	//		out_server_vel_2,
@@ -478,7 +478,7 @@ void keyboard_func(unsigned char key, int x, int y)
 	//{
 	//	in_target_pos.z -= 1;
 	//	get_targets(
-	//		in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+	//		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 	//		out_server_vel_1,
 	//		out_server_ang_vel_1,
 	//		out_server_vel_2,
@@ -496,7 +496,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		in_server_ang_vel *= len + 1;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -516,7 +516,7 @@ void keyboard_func(unsigned char key, int x, int y)
 			in_server_ang_vel *= len - 1;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -531,7 +531,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		integrator_func_pointer = &proceed_Euler;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -546,7 +546,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		integrator_func_pointer = &proceed_symplectic2;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -562,7 +562,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		integrator_func_pointer = &proceed_symplectic4;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -577,7 +577,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		integrator_func_pointer = &proceed_RK2;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -592,7 +592,7 @@ void keyboard_func(unsigned char key, int x, int y)
 		integrator_func_pointer = &proceed_RK4;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
@@ -645,20 +645,20 @@ void mouse_func(int button, int state, int x, int y)
 		double u = -(N.dot(O) + 0.0) / N.dot(D);
 		custom_math::vector_3 P = O + D * u;
 
-		in_target_pos = P;
+		in_out_target_pos = P;
 
-		if (in_target_pos.x < -half_court_width)
-			in_target_pos.x = -half_court_width;
-		else if (in_target_pos.x > half_court_width)
-			in_target_pos.x = half_court_width;
+		if (in_out_target_pos.x < -half_court_width)
+			in_out_target_pos.x = -half_court_width;
+		else if (in_out_target_pos.x > half_court_width)
+			in_out_target_pos.x = half_court_width;
 
-		if (in_target_pos.z < -half_court_length)
-			in_target_pos.z = -half_court_length;
-		else if (in_target_pos.z > 0)
-			in_target_pos.z = 0;
+		if (in_out_target_pos.z < -half_court_length)
+			in_out_target_pos.z = -half_court_length;
+		else if (in_out_target_pos.z > 0)
+			in_out_target_pos.z = 0;
 
 		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 			out_server_vel_1,
 			out_server_ang_vel_1,
 			out_server_vel_2,
