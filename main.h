@@ -114,7 +114,7 @@ size_t get_first_ground_hit(const vector<custom_math::vector_3> &path)
 
 	for (size_t i = 0; i < path.size(); i++)
 	{
-		if (path[i].y <= 0)
+		if (path[i].y <= 0.0)
 		{
 			index = i;
 			break;
