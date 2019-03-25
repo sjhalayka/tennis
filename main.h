@@ -96,7 +96,7 @@ double dt = 0.01;
 const size_t num_vectors = 10;
 const size_t num_length_adjustment_iterations = 5;	
 const size_t max_bounces = 1;
-
+const bool pro_mode = true;
 
 void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &, const custom_math::vector_3 &);
 
@@ -538,7 +538,7 @@ void get_targets(
 		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
 		custom_math::vector_3 diff = end_point - in_target_pos;
 
-		if (REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
+		if (pro_mode || REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
 		{
 			double val = diff.length();
 
@@ -552,18 +552,34 @@ void get_targets(
 		
 	if (0 == index_double.size())
 	{
-		in_target_pos.z -= 0.01;
+		if (false == pro_mode)
+		{
+			in_target_pos.z -= 1.0;
 
-		get_targets(
-			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
+			get_targets(
+				in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+				out_server_vel_1,
+				out_server_ang_vel_1,
+				out_server_vel_2,
+				out_server_ang_vel_2,
+				out_p_1,
+				out_p_2);
 
-		return;
+			return;
+		}	
+		else
+		{
+			d dval;
+			dval.index = paths[0].size() - 1;
+			dval.val = paths[0][dval.index].length();
+
+			index_double.push_back(dval);
+
+			dval.index = paths[0].size() - 2;
+			dval.val = paths[0][dval.index].length();
+
+			index_double.push_back(dval);
+		}
 	}
 	else if(1 == index_double.size())
 	{
