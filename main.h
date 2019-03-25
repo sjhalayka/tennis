@@ -84,13 +84,11 @@ custom_math::vector_3 in_server_ang_vel(0, 100, 0);
 
 custom_math::vector_3 in_out_target_pos(5, 0, -5);
 
-custom_math::vector_3 out_server_vel_1;
-custom_math::vector_3 out_server_ang_vel_1;
-custom_math::vector_3 out_server_vel_2;
-custom_math::vector_3 out_server_ang_vel_2;
+custom_math::vector_3 out_server_vel;
+custom_math::vector_3 out_server_ang_vel;
 
-vector<custom_math::vector_3> out_p_1;
-vector<custom_math::vector_3> out_p_2;
+vector<custom_math::vector_3> out_path;
+
 
 double dt = 0.01;
 
@@ -507,13 +505,9 @@ void get_targets(
 	custom_math::vector_3 in_server_vel,
 	custom_math::vector_3 in_server_ang_vel,
 	custom_math::vector_3 &in_out_target_pos,
-	custom_math::vector_3 &out_server_vel_1,
-	custom_math::vector_3 &out_server_ang_vel_1,
-	custom_math::vector_3 &out_server_vel_2,
-	custom_math::vector_3 &out_server_ang_vel_2,
-	vector<custom_math::vector_3> &p_1,
-	vector<custom_math::vector_3> &p_2
-)
+	custom_math::vector_3 &out_server_vel,
+	custom_math::vector_3 &out_server_ang_vel,
+	vector<custom_math::vector_3> &path)
 {
 	vector< vector<custom_math::vector_3> > paths;
 	paths.resize(num_vectors);
@@ -573,12 +567,9 @@ void get_targets(
 
 			get_targets(
 				in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-				out_server_vel_1,
-				out_server_ang_vel_1,
-				out_server_vel_2,
-				out_server_ang_vel_2,
-				out_p_1,
-				out_p_2);
+				out_server_vel,
+				out_server_ang_vel,
+				out_path);
 
 			return;
 		}	
@@ -598,68 +589,57 @@ void get_targets(
 	}
 	else if(1 == index_double.size())
 	{
-		//cout << "one path found" << endl;
-
 		// Duplicate the good path
 		index_double.push_back(index_double[0]);
 	}
-	//else
-	//{
-	//	cout << index_double.size() << " paths found" << endl;
-	//}
-	
-
 
 	sort(index_double.begin(), index_double.end());
 
 	size_t smallest_index = index_double[0].index;
 	size_t second_smallest_index = index_double[1].index;
+	size_t hit_index = get_first_ground_hit(paths[smallest_index]);
 
-	for (size_t i = 0; i < num_vectors; i++)
+	if (REGION_OPPONENT_IN_BOUNDS == get_ball_region(paths[smallest_index][hit_index].x, paths[smallest_index][hit_index].z))
 	{
-		if (i == smallest_index)
-		{
-			hone_path(
-				paths[i], 
-				in_server_pos, 
-				server_vels[i], 
-				server_ang_vels[i], 
-				in_out_target_pos,
-				num_length_adjustment_iterations);
+		hone_path(
+			paths[smallest_index],
+			in_server_pos,
+			server_vels[smallest_index],
+			server_ang_vels[smallest_index],
+			in_out_target_pos,
+			num_length_adjustment_iterations);
 
-			get_extended_path(
-				paths[i],
-				in_server_pos,
-				server_vels[i],
-				server_ang_vels[i],
-				in_out_target_pos);
+		get_extended_path(
+			paths[smallest_index],
+			in_server_pos,
+			server_vels[smallest_index],
+			server_ang_vels[smallest_index],
+			in_out_target_pos);
 
-			out_server_vel_1 = server_vels[i];
-			out_server_ang_vel_1 = server_ang_vels[i];
-			p_1 = paths[i];
-		}
+		out_server_vel = server_vels[smallest_index];
+		out_server_ang_vel = server_ang_vels[smallest_index];
+		path = paths[smallest_index];
+	}
+	else
+	{
+		hone_path(
+			paths[second_smallest_index],
+			in_server_pos,
+			server_vels[second_smallest_index],
+			server_ang_vels[second_smallest_index],
+			in_out_target_pos,
+			num_length_adjustment_iterations);
 
-		if (i == second_smallest_index)
-		{
-			hone_path(
-				paths[i], 
-				in_server_pos, 
-				server_vels[i], 
-				server_ang_vels[i], 
-				in_out_target_pos,
-				num_length_adjustment_iterations);
-		
-			get_extended_path(
-				paths[i],
-				in_server_pos,
-				server_vels[i],
-				server_ang_vels[i],
-				in_out_target_pos);
+		get_extended_path(
+			paths[second_smallest_index],
+			in_server_pos,
+			server_vels[second_smallest_index],
+			server_ang_vels[second_smallest_index],
+			in_out_target_pos);
 
-			out_server_vel_2 = server_vels[i];
-			out_server_ang_vel_2= server_ang_vels[i];
-			p_2 = paths[i];
-		}
+		out_server_vel = server_vels[second_smallest_index];
+		out_server_ang_vel = server_ang_vels[second_smallest_index];
+		path = paths[second_smallest_index];
 	}
 }
 
@@ -680,11 +660,11 @@ float camera_w = 30;
 float camera_fov = 45;
 float camera_x_transform = 0;
 float camera_y_transform = 0;
-float u_spacer = 0.01;
-float v_spacer = 0.5*u_spacer;
-float w_spacer = 0.1;
-float camera_near = 0.1;
-float camera_far = 10000;
+float u_spacer = 0.01f;
+float v_spacer = 0.5f*u_spacer;
+float w_spacer = 0.1f;
+float camera_near = 0.1f;
+float camera_far = 10000.0f;
 
 bool lmb_down = false;
 bool mmb_down = false;

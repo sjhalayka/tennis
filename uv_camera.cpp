@@ -48,8 +48,8 @@ void uv_camera::Set(const float u_rad, const float v_rad, const float w_metres, 
 //		w = 10000;
 
 	fov = fov_deg;
-	win_x = width_px;
-	win_y = height_px;
+	win_x = static_cast<float>(width_px);
+	win_y = static_cast<float>(height_px);
 
 	Transform();
 }
@@ -78,7 +78,7 @@ void uv_camera::Transform(void)
 void uv_camera::Set(void)
 {
 	// Force a recalculation of the camera vectors and frustum.
-	Set(u, v, w, fov, win_x, win_y, near_plane, far_plane);
+	Set(u, v, w, fov, static_cast<int>(win_x), static_cast<int>(win_y), near_plane, far_plane);
 }
 
 void uv_camera::Set_Large_Screenshot(size_t num_cams, size_t cam_index_x, size_t cam_index_y)
@@ -90,9 +90,9 @@ void uv_camera::Set_Large_Screenshot(size_t num_cams, size_t cam_index_x, size_t
 
 	// Image plane reference:
 	// http://www.songho.ca/opengl/gl_transform.html
-    const float deg_to_rad = (1.0/360.0)*2*pi;
+    const float deg_to_rad = (1.0f/360.0f)*2.0f*pi;
 	float aspect = win_x/win_y;
-    float tangent = tan((fov/2.0)*deg_to_rad);
+    float tangent = tanf((fov/2.0f)*deg_to_rad);
     float height = near_plane * tangent; // Half height of near_plane plane.
     float width = height * aspect; // Half width of near_plane plane.
 

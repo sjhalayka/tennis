@@ -10,15 +10,11 @@ int main(int argc, char **argv)
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-		out_server_vel_1,
-		out_server_ang_vel_1,
-		out_server_vel_2,
-		out_server_ang_vel_2,
-		out_p_1,
-		out_p_2);
+		out_server_vel,
+		out_server_ang_vel,
+		out_path);
 
-	cout << out_p_1[out_p_1.size() - 1].x << " " << out_p_1[out_p_1.size() - 1].y << " " << out_p_1[out_p_1.size() - 1].z << endl;
-	cout << out_p_2[out_p_2.size() - 1].x << " " << out_p_2[out_p_2.size() - 1].y << " " << out_p_2[out_p_2.size() - 1].z << endl;
+	cout << out_path[out_path.size() - 1].x << " " << out_path[out_path.size() - 1].y << " " << out_path[out_path.size() - 1].z << endl;
 
 	glutInit(&argc, argv);
 	init_opengl(win_x, win_y);
@@ -66,12 +62,12 @@ void init_opengl(const int &width, const int &height)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glClearColor(background_colour.x, background_colour.y, background_colour.z, 1);
+	glClearColor(static_cast<float>(background_colour.x), static_cast<float>(background_colour.y), static_cast<float>(background_colour.z), 1.0f);
 	glClearDepth(1.0f);
 
 	main_camera.Set(0, 0, camera_w, camera_fov, win_x, win_y, camera_near, camera_far);
-	main_camera.u += custom_math::pi / 6.0;
-	main_camera.v += custom_math::pi / 4.0;
+	main_camera.u += static_cast<float>(custom_math::pi) / 6.0f;
+	main_camera.v += static_cast<float>(custom_math::pi) / 4.0f;
 	main_camera.Set();
 }
 
@@ -117,10 +113,10 @@ void draw_objects(void)
 
 	glColor3f(1.0f, 0.5, 0.0f);
 
-	glVertex3f(-half_court_width, 0, -half_court_length);
-	glVertex3f(-half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, -half_court_length);
+	glVertex3d(-half_court_width, 0, -half_court_length);
+	glVertex3d(-half_court_width, 0, half_court_length);
+	glVertex3d(half_court_width, 0, half_court_length);
+	glVertex3d(half_court_width, 0, -half_court_length);
 
 	glEnd();
 
@@ -132,17 +128,17 @@ void draw_objects(void)
 
 	glColor3f(1, 1, 1);
 
-	glVertex3f(-half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, half_court_length);
+	glVertex3d(-half_court_width, 0, half_court_length);
+	glVertex3d(half_court_width, 0, half_court_length);
 
-	glVertex3f(-half_court_width, 0, -half_court_length);
-	glVertex3f(half_court_width, 0, -half_court_length);
+	glVertex3d(-half_court_width, 0, -half_court_length);
+	glVertex3d(half_court_width, 0, -half_court_length);
 
-	glVertex3f(-half_court_width, 0, half_court_length);
-	glVertex3f(-half_court_width, 0, -half_court_length);
+	glVertex3d(-half_court_width, 0, half_court_length);
+	glVertex3d(-half_court_width, 0, -half_court_length);
 
-	glVertex3f(half_court_width, 0, half_court_length);
-	glVertex3f(half_court_width, 0, -half_court_length);
+	glVertex3d(half_court_width, 0, half_court_length);
+	glVertex3d(half_court_width, 0, -half_court_length);
 
 	glEnd();
 
@@ -152,10 +148,10 @@ void draw_objects(void)
 	glBegin(GL_POINTS);
 
 	glColor3f(1, 1, 1);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3d(in_server_pos.x, in_server_pos.y, in_server_pos.z);
 
 	glColor3f(0, 0, 0);
-	glVertex3f(in_out_target_pos.x, in_out_target_pos.y, in_out_target_pos.z);
+	glVertex3d(in_out_target_pos.x, in_out_target_pos.y, in_out_target_pos.z);
 
 	glEnd();
 
@@ -170,22 +166,15 @@ void draw_objects(void)
 	glBegin(GL_LINES);
 
 	glColor3f(0.5, 0.5, 0.5);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x, 0, in_server_pos.z);
+	glVertex3d(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3d(in_server_pos.x, 0, in_server_pos.z);
 
 	glColor3f(1, 1, 1);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_vel_1.x, in_server_pos.y + out_server_vel_1.y, in_server_pos.z + out_server_vel_1.z);
+	glVertex3d(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3d(in_server_pos.x + out_server_vel.x, in_server_pos.y + out_server_vel.y, in_server_pos.z + out_server_vel.z);
 
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_ang_vel_1.x, in_server_pos.y + out_server_ang_vel_1.y, in_server_pos.z + out_server_ang_vel_1.z);
-
-	glColor3f(0, 0, 0);
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_vel_2.x, in_server_pos.y + out_server_vel_2.y, in_server_pos.z + out_server_vel_2.z);
-
-	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-	glVertex3f(in_server_pos.x + out_server_ang_vel_2.x, in_server_pos.y + out_server_ang_vel_2.y, in_server_pos.z + out_server_ang_vel_2.z);
+	glVertex3d(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3d(in_server_pos.x + out_server_ang_vel.x, in_server_pos.y + out_server_ang_vel.y, in_server_pos.z + out_server_ang_vel.z);
 
 	glEnd();
 
@@ -198,54 +187,23 @@ void draw_objects(void)
 
 	//	for (size_t j = 0; j < all_paths[i].size(); j++)
 	//	{
-	//		glVertex3f(all_paths[i][j].x, all_paths[i][j].y, all_paths[i][j].z);
+	//		glVertex3d(all_paths[i][j].x, all_paths[i][j].y, all_paths[i][j].z);
 	//	}
 
 	//	glEnd();
 	//}
 
 
-	size_t hit_1_index = get_first_ground_hit(out_p_1);
-	size_t hit_2_index = get_first_ground_hit(out_p_2);
-
-	bool use_first = true;
-
-	if (REGION_OPPONENT_IN_BOUNDS != get_ball_region(out_p_1[hit_1_index].x, out_p_1[hit_1_index].z))
-		use_first = false;
-	else
-	{
-		custom_math::vector_3 dist_1 = in_out_target_pos - out_p_1[hit_1_index];
-		custom_math::vector_3 dist_2 = in_out_target_pos - out_p_2[hit_2_index];
-
-		if (dist_1.length() > dist_2.length())
-			use_first = false;
-	}
-
-
 	glColor3f(0.0, 1.0, 0.0);
 
-	if (use_first)
+	glBegin(GL_LINE_STRIP);
+
+	for (size_t i = 0; i < out_path.size(); i++)
 	{
-		glBegin(GL_LINE_STRIP);
-
-		for (size_t i = 0; i < out_p_1.size(); i++)
-		{
-			glVertex3f(out_p_1[i].x, out_p_1[i].y, out_p_1[i].z);
-		}
-
-		glEnd();
+		glVertex3d(out_path[i].x, out_path[i].y, out_path[i].z);
 	}
-	else
-	{
-		glBegin(GL_LINE_STRIP);
 
-		for (size_t i = 0; i < out_p_2.size(); i++)
-		{
-			glVertex3f(out_p_2[i].x, out_p_2[i].y, out_p_2[i].z);
-		}
-
-		glEnd();
-	}
+	glEnd();
 
 
 
@@ -257,10 +215,10 @@ void draw_objects(void)
 
 	glColor4f(0.0f, 0.5, 1.0f, 0.5f);
 
-	glVertex3f(-half_court_width, 0, 0);
-	glVertex3f(half_court_width, 0, 0);
-	glVertex3f(half_court_width, net_height, 0);
-	glVertex3f(-half_court_width, net_height, 0);
+	glVertex3d(-half_court_width, 0, 0);
+	glVertex3d(half_court_width, 0, 0);
+	glVertex3d(half_court_width, net_height, 0);
+	glVertex3d(-half_court_width, net_height, 0);
 
 	glEnd();
 
@@ -288,12 +246,12 @@ void display_func(void)
 		glLoadIdentity();
 		gluOrtho2D(0, win_x, 0, win_y);
 		glScalef(1, -1, 1); // Neat. :)
-		glTranslatef(0, -win_y, 0); // Neat. :)
+		glTranslatef(0, -static_cast<float>(win_y), 0); // Neat. :)
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glLoadIdentity();
 
-		glColor3f(control_list_colour.x, control_list_colour.y, control_list_colour.z);
+		glColor3d(control_list_colour.x, control_list_colour.y, control_list_colour.z);
 
 		size_t break_size = 22;
 		size_t start = 20;
@@ -449,12 +407,9 @@ void keyboard_func(unsigned char key, int x, int y)
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-		out_server_vel_1,
-		out_server_ang_vel_1,
-		out_server_vel_2,
-		out_server_ang_vel_2,
-		out_p_1,
-		out_p_2);
+		out_server_vel,
+		out_server_ang_vel,
+		out_path);
 }
 
 void mouse_func(int button, int state, int x, int y)
@@ -511,12 +466,9 @@ void mouse_func(int button, int state, int x, int y)
 
 		get_targets(
 			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-			out_server_vel_1,
-			out_server_ang_vel_1,
-			out_server_vel_2,
-			out_server_ang_vel_2,
-			out_p_1,
-			out_p_2);
+			out_server_vel,
+			out_server_ang_vel,
+			out_path);
 	}
 }
 

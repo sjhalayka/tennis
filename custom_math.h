@@ -569,16 +569,16 @@ public:
 		for(size_t i = 0; i < local_triangles.size(); i++)
 		{
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, &local_materials[local_triangles[i].i0][0]);
-			glNormal3f(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
-			glVertex3f(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
+			glNormal3d(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
+			glVertex3d(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
 
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, &local_materials[local_triangles[i].i1][0]);
-			glNormal3f(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
-			glVertex3f(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
+			glNormal3d(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
+			glVertex3d(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
 
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, &local_materials[local_triangles[i].i2][0]);
-			glNormal3f(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
-			glVertex3f(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
+			glNormal3d(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
+			glVertex3d(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
 		}
 	}
 
@@ -586,17 +586,17 @@ public:
 	{
 		for(size_t i = 0; i < local_triangles.size(); i++)
 		{
-			glColor3f(local_materials[local_triangles[i].i0][0], local_materials[local_triangles[i].i0][1], local_materials[local_triangles[i].i0][2]);
-			glNormal3f(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
-			glVertex3f(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
+			glColor3d(local_materials[local_triangles[i].i0][0], local_materials[local_triangles[i].i0][1], local_materials[local_triangles[i].i0][2]);
+			glNormal3d(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
+			glVertex3d(local_vertices[local_triangles[i].i0].x, local_vertices[local_triangles[i].i0].y, local_vertices[local_triangles[i].i0].z);
 
-			glColor3f(local_materials[local_triangles[i].i1][0], local_materials[local_triangles[i].i1][1], local_materials[local_triangles[i].i1][2]);
-			glNormal3f(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
-			glVertex3f(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
+			glColor3d(local_materials[local_triangles[i].i1][0], local_materials[local_triangles[i].i1][1], local_materials[local_triangles[i].i1][2]);
+			glNormal3d(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
+			glVertex3d(local_vertices[local_triangles[i].i1].x, local_vertices[local_triangles[i].i1].y, local_vertices[local_triangles[i].i1].z);
 
-			glColor3f(local_materials[local_triangles[i].i2][0], local_materials[local_triangles[i].i2][1], local_materials[local_triangles[i].i2][2]);
-			glNormal3f(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
-			glVertex3f(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
+			glColor3d(local_materials[local_triangles[i].i2][0], local_materials[local_triangles[i].i2][1], local_materials[local_triangles[i].i2][2]);
+			glNormal3d(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
+			glVertex3d(local_vertices[local_triangles[i].i2].x, local_vertices[local_triangles[i].i2].y, local_vertices[local_triangles[i].i2].z);
 		}
 	}
 
@@ -604,8 +604,8 @@ public:
 	{
 		for(set<sorted_indexed_edge>::const_iterator ci = local_curved_outline_edges.begin(); ci != local_curved_outline_edges.end(); ci++)
 		{
-			glVertex3f(local_vertices[ci->v0].x, local_vertices[ci->v0].y, local_vertices[ci->v0].z);
-			glVertex3f(local_vertices[ci->v1].x, local_vertices[ci->v1].y, local_vertices[ci->v1].z);
+			glVertex3d(local_vertices[ci->v0].x, local_vertices[ci->v0].y, local_vertices[ci->v0].z);
+			glVertex3d(local_vertices[ci->v1].x, local_vertices[ci->v1].y, local_vertices[ci->v1].z);
 		}
 	}
 
