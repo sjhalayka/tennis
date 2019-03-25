@@ -598,15 +598,15 @@ void get_targets(
 	}
 	else if(1 == index_double.size())
 	{
-		cout << "one path found" << endl;
+		//cout << "one path found" << endl;
 
 		// Duplicate the good path
 		index_double.push_back(index_double[0]);
 	}
-	else
-	{
-		cout << index_double.size() << " paths found" << endl;
-	}
+	//else
+	//{
+	//	cout << index_double.size() << " paths found" << endl;
+	//}
 	
 
 
