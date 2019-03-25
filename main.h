@@ -492,7 +492,7 @@ void get_targets(
 	custom_math::vector_3 in_server_pos,
 	custom_math::vector_3 in_server_vel,
 	custom_math::vector_3 in_server_ang_vel,
-	custom_math::vector_3 in_target_pos,
+	custom_math::vector_3 &in_target_pos,
 	custom_math::vector_3 &out_server_vel_1,
 	custom_math::vector_3 &out_server_ang_vel_1,
 	custom_math::vector_3 &out_server_vel_2,
@@ -539,7 +539,7 @@ void get_targets(
 		custom_math::vector_3 end_point = paths[i][paths[i].size() - 1];
 		custom_math::vector_3 diff = end_point - in_target_pos;
 
-		if (1)//REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
+		if (REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
 		{
 			double val = diff.length();
 
@@ -553,18 +553,18 @@ void get_targets(
 		
 	if (0 == index_double.size())
 	{
-		cout << "no paths found" << endl;
+		in_target_pos.z -= 0.01;
 
-		d dval;
-		dval.index = paths[0].size() - 1;
-		dval.val = paths[0][dval.index].length();
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 
-		index_double.push_back(dval);
-
-		dval.index = paths[0].size() - 2;
-		dval.val = paths[0][dval.index].length();
-
-		index_double.push_back(dval);
+		return;
 	}
 	else if(1 == index_double.size())
 	{
