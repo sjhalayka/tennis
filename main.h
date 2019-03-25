@@ -108,6 +108,24 @@ void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &
 
 
 
+size_t get_first_ground_hit(const vector<custom_math::vector_3> &path)
+{
+	size_t index = 0;
+
+	for (size_t i = 0; i < path.size(); i++)
+	{
+		if (path[i].y <= 0)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	return index;
+}
+
+
+
 size_t get_ball_region(const double x, const double z)
 {
 	if (z > 0) // landed on player's side

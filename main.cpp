@@ -132,17 +132,17 @@ void draw_objects(void)
 
 	glColor3f(1, 1, 1);
 
-		glVertex3f(-half_court_width, 0, half_court_length);
-		glVertex3f(half_court_width, 0, half_court_length);
+	glVertex3f(-half_court_width, 0, half_court_length);
+	glVertex3f(half_court_width, 0, half_court_length);
 
-		glVertex3f(-half_court_width, 0, -half_court_length);
-		glVertex3f(half_court_width, 0, -half_court_length);
+	glVertex3f(-half_court_width, 0, -half_court_length);
+	glVertex3f(half_court_width, 0, -half_court_length);
 
-		glVertex3f(-half_court_width, 0, half_court_length);
-		glVertex3f(-half_court_width, 0, -half_court_length);
+	glVertex3f(-half_court_width, 0, half_court_length);
+	glVertex3f(-half_court_width, 0, -half_court_length);
 
-		glVertex3f(half_court_width, 0, half_court_length);
-		glVertex3f(half_court_width, 0, -half_court_length);
+	glVertex3f(half_court_width, 0, half_court_length);
+	glVertex3f(half_court_width, 0, -half_court_length);
 
 	glEnd();
 
@@ -151,11 +151,11 @@ void draw_objects(void)
 
 	glBegin(GL_POINTS);
 
-		glColor3f(1, 1, 1);
-		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glColor3f(1, 1, 1);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
 
-		glColor3f(0, 0, 0);
-		glVertex3f(in_target_pos.x, in_target_pos.y, in_target_pos.z);
+	glColor3f(0, 0, 0);
+	glVertex3f(in_target_pos.x, in_target_pos.y, in_target_pos.z);
 
 	glEnd();
 
@@ -169,27 +169,27 @@ void draw_objects(void)
 
 	glBegin(GL_LINES);
 
-		glColor3f(0.5, 0.5, 0.5);
-		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-		glVertex3f(in_server_pos.x, 0, in_server_pos.z);
+	glColor3f(0.5, 0.5, 0.5);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x, 0, in_server_pos.z);
 
-		glColor3f(1, 1, 1);
-		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-		glVertex3f(in_server_pos.x + out_server_vel_1.x, in_server_pos.y + out_server_vel_1.y, in_server_pos.z + out_server_vel_1.z);
+	glColor3f(1, 1, 1);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_vel_1.x, in_server_pos.y + out_server_vel_1.y, in_server_pos.z + out_server_vel_1.z);
 
-		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-		glVertex3f(in_server_pos.x + out_server_ang_vel_1.x, in_server_pos.y + out_server_ang_vel_1.y, in_server_pos.z + out_server_ang_vel_1.z);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_ang_vel_1.x, in_server_pos.y + out_server_ang_vel_1.y, in_server_pos.z + out_server_ang_vel_1.z);
 
-		glColor3f(0, 0, 0);
-		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-		glVertex3f(in_server_pos.x + out_server_vel_2.x, in_server_pos.y + out_server_vel_2.y, in_server_pos.z + out_server_vel_2.z);
+	glColor3f(0, 0, 0);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_vel_2.x, in_server_pos.y + out_server_vel_2.y, in_server_pos.z + out_server_vel_2.z);
 
-		glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
-		glVertex3f(in_server_pos.x + out_server_ang_vel_2.x, in_server_pos.y + out_server_ang_vel_2.y, in_server_pos.z + out_server_ang_vel_2.z);
+	glVertex3f(in_server_pos.x, in_server_pos.y, in_server_pos.z);
+	glVertex3f(in_server_pos.x + out_server_ang_vel_2.x, in_server_pos.y + out_server_ang_vel_2.y, in_server_pos.z + out_server_ang_vel_2.z);
 
 	glEnd();
 
-	
+
 	//glColor3f(0.0, 0.0, 1.0);
 
 	//for (size_t i = 0; i < all_paths.size(); i++)
@@ -205,16 +205,26 @@ void draw_objects(void)
 	//}
 
 
-	bool use_first_path = false;
+	size_t hit_1_index = get_first_ground_hit(out_p_1);
+	size_t hit_2_index = get_first_ground_hit(out_p_2);
 
-	custom_math::vector_3 end_point(out_p_1[out_p_1.size() - 1].x, out_p_1[out_p_1.size() - 1].y, out_p_1[out_p_1.size() - 1].z);
+	bool use_first = true;
 
-	if (REGION_OPPONENT_IN_BOUNDS == get_ball_region(end_point.x, end_point.z))
-		use_first_path = true;
-	
+	if (REGION_OPPONENT_IN_BOUNDS != get_ball_region(out_p_1[hit_1_index].x, out_p_1[hit_1_index].z))
+		use_first = false;
+	else
+	{
+		custom_math::vector_3 dist_1 = in_target_pos - out_p_1[hit_1_index];
+		custom_math::vector_3 dist_2 = in_target_pos - out_p_2[hit_2_index];
+
+		if (dist_1.length() > dist_2.length())
+			use_first = false;
+	}
+
+
 	glColor3f(0.0, 1.0, 0.0);
 
-	if (use_first_path)
+	if (use_first)
 	{
 		glBegin(GL_LINE_STRIP);
 
@@ -236,7 +246,6 @@ void draw_objects(void)
 
 		glEnd();
 	}
-
 
 
 
@@ -298,48 +307,48 @@ void display_func(void)
 		render_string(10, start + 6 * break_size, GLUT_BITMAP_HELVETICA_18, string("  d: Server pos"));
 
 		render_string(10, start + 8 * break_size, GLUT_BITMAP_HELVETICA_18, string("  Click LMB: Target pos"));
-        
-        render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  1: Euler"));
-        render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  2: Symplectic 2"));
-        render_string(10, start + 12 * break_size, GLUT_BITMAP_HELVETICA_18, string("  3: Symplectic 4"));
-        render_string(10, start + 13 * break_size, GLUT_BITMAP_HELVETICA_18, string("  4: RK2"));
-        render_string(10, start + 14 * break_size, GLUT_BITMAP_HELVETICA_18, string("  5: RK4"));
 
-        
+		render_string(10, start + 10 * break_size, GLUT_BITMAP_HELVETICA_18, string("  1: Euler"));
+		render_string(10, start + 11 * break_size, GLUT_BITMAP_HELVETICA_18, string("  2: Symplectic 2"));
+		render_string(10, start + 12 * break_size, GLUT_BITMAP_HELVETICA_18, string("  3: Symplectic 4"));
+		render_string(10, start + 13 * break_size, GLUT_BITMAP_HELVETICA_18, string("  4: RK2"));
+		render_string(10, start + 14 * break_size, GLUT_BITMAP_HELVETICA_18, string("  5: RK4"));
+
+
 		custom_math::vector_3 eye = main_camera.eye;
 		custom_math::vector_3 eye_norm = eye;
 		eye_norm.normalize();
 
-        oss.clear();
-        oss.str("");
-        oss << "Integrator: ";
-        
-        if(integrator_func_pointer == proceed_Euler)
-        {
-            oss << "Euler";
-        }
-        else if(integrator_func_pointer == proceed_symplectic2)
-        {
-            oss << "Symplectic 2";
-        }
-        else if(integrator_func_pointer == proceed_symplectic4)
-        {
-            oss << "Symplectic 4";
-        }
-        else if(integrator_func_pointer == proceed_RK2)
-        {
-            oss << "RK2";
-        }
-        else if(integrator_func_pointer == proceed_RK4)
-        {
-            oss << "RK4";
-        }
+		oss.clear();
+		oss.str("");
+		oss << "Integrator: ";
 
-        
-        
-        render_string(10, win_y - 3 * break_size, GLUT_BITMAP_HELVETICA_18, oss.str());
+		if (integrator_func_pointer == proceed_Euler)
+		{
+			oss << "Euler";
+		}
+		else if (integrator_func_pointer == proceed_symplectic2)
+		{
+			oss << "Symplectic 2";
+		}
+		else if (integrator_func_pointer == proceed_symplectic4)
+		{
+			oss << "Symplectic 4";
+		}
+		else if (integrator_func_pointer == proceed_RK2)
+		{
+			oss << "RK2";
+		}
+		else if (integrator_func_pointer == proceed_RK4)
+		{
+			oss << "RK4";
+		}
 
-        
+
+
+		render_string(10, win_y - 3 * break_size, GLUT_BITMAP_HELVETICA_18, oss.str());
+
+
 		oss.clear();
 		oss.str("");
 		oss << "Camera position: " << eye.x << ' ' << eye.y << ' ' << eye.z;
@@ -503,7 +512,7 @@ void keyboard_func(unsigned char key, int x, int y)
 
 		in_server_ang_vel.normalize();
 
-		if(len > 1)
+		if (len > 1)
 			in_server_ang_vel *= len - 1;
 
 		get_targets(
@@ -517,84 +526,84 @@ void keyboard_func(unsigned char key, int x, int y)
 
 		break;
 	}
-    case '1':
-    {
-        integrator_func_pointer = &proceed_Euler;
-        
-        get_targets(
-                    in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-                    out_server_vel_1,
-                    out_server_ang_vel_1,
-                    out_server_vel_2,
-                    out_server_ang_vel_2,
-                    out_p_1,
-                    out_p_2);
-        
-        break;
-    }
-        case '2':
-        {
-            integrator_func_pointer = &proceed_symplectic2;
-            
-            get_targets(
-                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-                        out_server_vel_1,
-                        out_server_ang_vel_1,
-                        out_server_vel_2,
-                        out_server_ang_vel_2,
-                        out_p_1,
-                        out_p_2);
-            
-            break;
-        }
+	case '1':
+	{
+		integrator_func_pointer = &proceed_Euler;
 
-        case '3':
-        {
-            integrator_func_pointer = &proceed_symplectic4;
-            
-            get_targets(
-                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-                        out_server_vel_1,
-                        out_server_ang_vel_1,
-                        out_server_vel_2,
-                        out_server_ang_vel_2,
-                        out_p_1,
-                        out_p_2);
-            
-            break;
-        }
-        case '4':
-        {
-            integrator_func_pointer = &proceed_RK2;
-            
-            get_targets(
-                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-                        out_server_vel_1,
-                        out_server_ang_vel_1,
-                        out_server_vel_2,
-                        out_server_ang_vel_2,
-                        out_p_1,
-                        out_p_2);
-            
-            break;
-        }
-        case '5':
-        {
-            integrator_func_pointer = &proceed_RK4;
-            
-            get_targets(
-                        in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
-                        out_server_vel_1,
-                        out_server_ang_vel_1,
-                        out_server_vel_2,
-                        out_server_ang_vel_2,
-                        out_p_1,
-                        out_p_2);
-            
-            break;
-        }
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
 
-        default:
+		break;
+	}
+	case '2':
+	{
+		integrator_func_pointer = &proceed_symplectic2;
+
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
+
+		break;
+	}
+
+	case '3':
+	{
+		integrator_func_pointer = &proceed_symplectic4;
+
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
+
+		break;
+	}
+	case '4':
+	{
+		integrator_func_pointer = &proceed_RK2;
+
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
+
+		break;
+	}
+	case '5':
+	{
+		integrator_func_pointer = &proceed_RK4;
+
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_target_pos,
+			out_server_vel_1,
+			out_server_ang_vel_1,
+			out_server_vel_2,
+			out_server_ang_vel_2,
+			out_p_1,
+			out_p_2);
+
+		break;
+	}
+
+	default:
 		break;
 	}
 }
