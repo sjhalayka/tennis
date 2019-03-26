@@ -91,7 +91,7 @@ double dt = 0.01;
 
 const size_t num_vectors = 10;
 const size_t num_length_adjustment_iterations = 5;	
-const size_t max_bounces = 1;
+const size_t max_bounce_count = 1;
 const bool pro_mode = true;
 
 void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &, const custom_math::vector_3 &);
@@ -262,12 +262,13 @@ void proceed_RK4(custom_math::vector_3 &pos, custom_math::vector_3 &vel, const c
 
 
 
-short unsigned int get_extended_path(
+short unsigned int get_path(
 	vector<custom_math::vector_3> &p,
 	custom_math::vector_3 server_position,
 	custom_math::vector_3 server_velocity,
 	custom_math::vector_3 server_angular_velocity,
-	custom_math::vector_3 target_position)
+	custom_math::vector_3 target_position,
+	size_t max_bounces)
 {
 	p.clear();
 
@@ -354,92 +355,6 @@ short unsigned int get_extended_path(
 	return 0;
 }
 
-
-
-short unsigned int get_path(
-	vector<custom_math::vector_3> &p,
-	custom_math::vector_3 server_position,
-	custom_math::vector_3 server_velocity,
-	custom_math::vector_3 server_angular_velocity,
-	custom_math::vector_3 target_position)
-{
-	p.clear();
-
-	p.push_back(server_position);
-
-	custom_math::vector_3 last_pos = server_position;
-	custom_math::vector_3 last_vel = server_velocity;
-
-	while (p.size() < 100000) // abort those paths that do not land on the ground in sufficient time
-	{
-		custom_math::vector_3 curr_pos = last_pos;	
-		custom_math::vector_3 curr_vel = last_vel;
-        integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
-        p.push_back(curr_pos);
-
-		// if collides with the ground
-		if (curr_pos.y < 0 && last_pos.y >= 0)
-		{
-			// Take a step back
-			curr_pos = last_pos;
-			curr_vel = last_vel;
-			p.pop_back();
-
-			// Crank up the resolution to find the collision location
-			double default_dt = dt;
-			dt = 0.0001;
-
-			// Step forward until the ball hits the ground
-			while (curr_pos.y > 0)
-			{
-                integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
-				p.push_back(curr_pos);
-			}
-			
-			// Reset to the default resolution
-			dt = default_dt;
-
-			break;
-		}
-
-		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
-
-		// if collides with net
-		if (is_near_net &&
-			curr_pos.y >= 0 && curr_pos.y <= net_height &&
-			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
-		{
-			// Take a step back
-			curr_pos = last_pos;
-			curr_vel = last_vel;
-			p.pop_back();
-
-			// Crank up the resolution to find the collision location
-			double default_dt = dt;
-			dt = 0.0001;
-
-			// Step forward until the ball hits the net
-			while (curr_pos.z > 0)
-			{
-                integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
-				p.push_back(curr_pos);
-			}
-
-			// Reset to the default resolution
-			dt = default_dt;
-
-			// reflect vector
-			custom_math::vector_3 N(0, 0, 1);
-			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
-		}
-
-		last_pos = curr_pos;
-		last_vel = curr_vel;
-	}
-
-	return 0;
-}
-
 short unsigned int hone_path(
 	vector<custom_math::vector_3> &p,
 	custom_math::vector_3 server_position,
@@ -453,7 +368,8 @@ short unsigned int hone_path(
 		server_position,
 		server_velocity,
 		server_angular_velocity,
-		target_position);
+		target_position,
+		0);
 
 	for (size_t i = 0; i < num_length_adjustment_iterations; i++)
 	{
@@ -473,7 +389,8 @@ short unsigned int hone_path(
 			server_position,
 			server_velocity,
 			server_angular_velocity,
-			target_position);
+			target_position,
+			0);
 	}
 
 	// rotate vectors on y axis to get closer to the target position
@@ -492,7 +409,8 @@ short unsigned int hone_path(
 		server_position,
 		server_velocity,
 		server_angular_velocity,
-		target_position);
+		target_position,
+		0);
 
 	return 0;
 }
@@ -531,7 +449,8 @@ void get_targets(
 			in_server_pos, 
 			in_server_vel, 
 			in_server_ang_vel, 
-			in_out_target_pos);
+			in_out_target_pos,
+			0);
 	}
 
 	// find two closest path ends that end up on opponents court
@@ -588,12 +507,13 @@ void get_targets(
 		in_out_target_pos,
 		num_length_adjustment_iterations);
 
-	get_extended_path(
+	get_path(
 		paths[index_double[0].index],
 		in_server_pos,
 		server_vels[index_double[0].index],
 		server_ang_vels[index_double[0].index],
-		in_out_target_pos);
+		in_out_target_pos,
+		max_bounce_count);
 
 	out_server_vel = server_vels[index_double[0].index];
 	out_server_ang_vel = server_ang_vels[index_double[0].index];
