@@ -38,9 +38,6 @@ using std::pair;
 
 
 
-vector<vector<custom_math::vector_3> > all_paths;
-
-
 class d
 {
 public:
@@ -537,8 +534,6 @@ void get_targets(
 			in_out_target_pos);
 	}
 
-	all_paths = paths;
-
 	// find two closest path ends that end up on opponents court
 	vector<d> index_double;
 
@@ -580,67 +575,29 @@ void get_targets(
 			dval.val = paths[0][dval.index].length();
 
 			index_double.push_back(dval);
-
-			dval.index = paths[0].size() - 2;
-			dval.val = paths[0][dval.index].length();
-
-			index_double.push_back(dval);
 		}
-	}
-	else if(1 == index_double.size())
-	{
-		// Duplicate the good path
-		index_double.push_back(index_double[0]);
 	}
 
 	sort(index_double.begin(), index_double.end());
 
-	size_t smallest_index = index_double[0].index;
-	size_t second_smallest_index = index_double[1].index;
-	size_t hit_index = get_first_ground_hit(paths[smallest_index]);
+	hone_path(
+		paths[index_double[0].index],
+		in_server_pos,
+		server_vels[index_double[0].index],
+		server_ang_vels[index_double[0].index],
+		in_out_target_pos,
+		num_length_adjustment_iterations);
 
-	if (REGION_OPPONENT_IN_BOUNDS == get_ball_region(paths[smallest_index][hit_index].x, paths[smallest_index][hit_index].z))
-	{
-		hone_path(
-			paths[smallest_index],
-			in_server_pos,
-			server_vels[smallest_index],
-			server_ang_vels[smallest_index],
-			in_out_target_pos,
-			num_length_adjustment_iterations);
+	get_extended_path(
+		paths[index_double[0].index],
+		in_server_pos,
+		server_vels[index_double[0].index],
+		server_ang_vels[index_double[0].index],
+		in_out_target_pos);
 
-		get_extended_path(
-			paths[smallest_index],
-			in_server_pos,
-			server_vels[smallest_index],
-			server_ang_vels[smallest_index],
-			in_out_target_pos);
-
-		out_server_vel = server_vels[smallest_index];
-		out_server_ang_vel = server_ang_vels[smallest_index];
-		path = paths[smallest_index];
-	}
-	else
-	{
-		hone_path(
-			paths[second_smallest_index],
-			in_server_pos,
-			server_vels[second_smallest_index],
-			server_ang_vels[second_smallest_index],
-			in_out_target_pos,
-			num_length_adjustment_iterations);
-
-		get_extended_path(
-			paths[second_smallest_index],
-			in_server_pos,
-			server_vels[second_smallest_index],
-			server_ang_vels[second_smallest_index],
-			in_out_target_pos);
-
-		out_server_vel = server_vels[second_smallest_index];
-		out_server_ang_vel = server_ang_vels[second_smallest_index];
-		path = paths[second_smallest_index];
-	}
+	out_server_vel = server_vels[index_double[0].index];
+	out_server_ang_vel = server_ang_vels[index_double[0].index];
+	path = paths[index_double[0].index];
 }
 
 

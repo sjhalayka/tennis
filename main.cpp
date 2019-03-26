@@ -179,19 +179,7 @@ void draw_objects(void)
 	glEnd();
 
 
-	//glColor3f(0.0, 0.0, 1.0);
 
-	//for (size_t i = 0; i < all_paths.size(); i++)
-	//{
-	//	glBegin(GL_LINE_STRIP);
-
-	//	for (size_t j = 0; j < all_paths[i].size(); j++)
-	//	{
-	//		glVertex3d(all_paths[i][j].x, all_paths[i][j].y, all_paths[i][j].z);
-	//	}
-
-	//	glEnd();
-	//}
 
 
 	glColor3f(0.0, 1.0, 0.0);
