@@ -472,7 +472,7 @@ void get_targets(
 			index_double.push_back(dval);
 		}
 	}
-		
+	
 	if (0 == index_double.size())
 	{
 		in_out_target_pos.z -= 1.0;
