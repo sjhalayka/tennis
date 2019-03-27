@@ -2,17 +2,32 @@
 
 #pragma comment(lib, "freeglut.lib")
 
+#include <chrono>
+using namespace std::chrono;
 
 
 int main(int argc, char **argv)
 {
-	integrator_func_pointer = &proceed_symplectic4;
+	integrator_func_pointer = &proceed_RK4;
 
+	//high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+	//size_t num_reps = 100000;
+
+	//for(size_t i = 0; i < num_reps; i++)
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
 		out_server_vel,
 		out_server_ang_vel,
 		out_path);
+
+	//high_resolution_clock::time_point t2 = high_resolution_clock::now();
+
+	//duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
+
+	//cout << 1.0 / (time_span.count() / num_reps) << endl;
+
+
 
 	cout << out_path[out_path.size() - 1].x << " " << out_path[out_path.size() - 1].y << " " << out_path[out_path.size() - 1].z << endl;
 

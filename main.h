@@ -453,7 +453,7 @@ void get_targets(
 			0);
 	}
 
-	// find two closest path ends that end up on opponents court
+	// find the closest path end that lands in the opponent's court
 	vector<d> index_double;
 
 	for (size_t i = 0; i < num_vectors; i++)
@@ -475,26 +475,15 @@ void get_targets(
 		
 	if (0 == index_double.size())
 	{
-		if (false == pro_mode)
-		{
-			in_out_target_pos.z -= 1.0;
+		in_out_target_pos.z -= 1.0;
 
-			get_targets(
-				in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
-				out_server_vel,
-				out_server_ang_vel,
-				out_path);
+		get_targets(
+			in_server_pos, in_server_vel, in_server_ang_vel, in_out_target_pos,
+			out_server_vel,
+			out_server_ang_vel,
+			out_path);
 
-			return;
-		}	
-		else
-		{
-			d dval;
-			dval.index = paths[0].size() - 1;
-			dval.val = paths[0][dval.index].length();
-
-			index_double.push_back(dval);
-		}
+		return;
 	}
 
 	sort(index_double.begin(), index_double.end());
