@@ -430,7 +430,7 @@ void get_targets(
 	in_server_vel = in_out_target_pos - in_server_pos;
 	const double server_vel_len = in_server_vel.length();
 	const custom_math::vector_3 up(0, server_vel_len, 0);
-	double step_size = 1.0 / num_vectors;
+	double step_size = 1.0 / (double)(num_vectors);
 
 	vector<custom_math::vector_3> server_vels;
 	vector<custom_math::vector_3> server_ang_vels;
