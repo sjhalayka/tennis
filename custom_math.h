@@ -34,6 +34,8 @@ namespace custom_math
 	class line_segment_3;
 	class circle_3;
 
+	class triangle;
+
 	class indexed_triangle;
 	class sorted_indexed_triangle;
 	class sorted_indexed_edge;
@@ -55,6 +57,8 @@ namespace custom_math
 	double d_3_sq(const vector_3 &a, const vector_3 &b);
 	double d_4(const vector_4 &a, const vector_4 &b);
 };
+
+
 
 class custom_math::vector_3
 {
@@ -86,6 +90,13 @@ public:
 	double dot(const vector_3 &rhs) const;
 	double self_dot(void) const;
 	vector_3 cross(const vector_3 &rhs) const;
+};
+
+
+class custom_math::triangle
+{
+public:
+	custom_math::vector_3 A, B, C;
 };
 
 

@@ -75,6 +75,8 @@ double court_length = 22.86; // 75 feet
 double half_court_length = court_length / 2.0;
 double net_height = 0.9144; // 3 feet
 
+double ball_radius = 0.0335;
+
 custom_math::vector_3 in_server_pos(3, 1, 3);
 custom_math::vector_3 in_server_vel(-3, 1, -5);
 custom_math::vector_3 in_server_ang_vel(0, 100, 0);
@@ -101,6 +103,49 @@ void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &
 #define REGION_PLAYER_OUT_OF_BOUNDS 1
 #define REGION_OPPONENT_IN_BOUNDS 2
 #define REGION_OPPONENT_OUT_OF_BOUNDS 3
+
+
+class net
+{
+public:
+	vector<custom_math::triangle> tris;
+
+	void init_rectangular_net(double net_height, double half_court_width)
+	{
+		custom_math::vector_3 p0(-half_court_width, net_height, 0);
+		custom_math::vector_3 p1(half_court_width, net_height, 0);
+		custom_math::vector_3 p2(half_court_width, 0, 0);
+		custom_math::vector_3 p3(-half_court_width, 0, 0);
+
+		custom_math::triangle t1, t2;
+
+		t1.A = p0;
+		t1.B = p1;
+		t1.C = p3;
+
+		t2.A = p1;
+		t2.B = p3;
+		t2.C = p2;
+
+		tris.push_back(t1);
+		tris.push_back(t2);
+	}
+
+	void init_regulation_net(double net_height_at_centre, double net_height_at_edges, double half_court_width)
+	{
+
+	}
+
+	void init_saggy_net(double catenary_parameter, double net_height_at_edges, double half_court_width)
+	{
+
+	}
+
+};
+
+
+net n;
+
 
 // http://realtimecollisiondetection.net/blog/?p=103
 bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math::vector_3 C, custom_math::vector_3 P, double r)
@@ -172,6 +217,20 @@ bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math:
 
 	if (sep7)
 		return true;
+
+	return false;
+}
+
+bool is_colliding(custom_math::vector_3 A, custom_math::vector_3 B, custom_math::vector_3 C, custom_math::vector_3 P, double r)
+{
+	return !is_separated(A, B, C, P, r);
+}
+
+bool is_colliding(const vector<custom_math::triangle> &tris, custom_math::vector_3 P, double r)
+{
+	for (size_t i = 0; i < tris.size(); i++)
+		if (true == is_colliding(tris[i].A, tris[i].B, tris[i].C, P, r))
+			return true;
 
 	return false;
 }
@@ -396,9 +455,7 @@ short unsigned int get_path(
 		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
 
 		// if collides with net
-		if (is_near_net &&
-			curr_pos.y >= 0 && curr_pos.y <= net_height &&
-			curr_pos.x >= -half_court_width && curr_pos.x <= half_court_width)
+		if (is_near_net)
 		{
 			// Take a step back
 			curr_pos = last_pos;
@@ -409,19 +466,23 @@ short unsigned int get_path(
 			double default_dt = dt;
 			dt = 0.0001;
 
-			// Step forward until the ball hits the net
+			// Step forward until the ball hits the net's z location
 			while (curr_pos.z > 0)
 			{
 				integrator_func_pointer(curr_pos, curr_vel, server_angular_velocity);
 				p.push_back(curr_pos);
 			}
 
+			// Does the sphere collide with any of the net's triangles
+			if (is_colliding(n.tris, curr_pos, ball_radius))
+			{
+				// reflect vector
+				custom_math::vector_3 N(0, 0, 1);
+				curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+			}
+
 			// Reset to the default resolution
 			dt = default_dt;
-
-			// reflect vector
-			custom_math::vector_3 N(0, 0, 1);
-			curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 		}
 
 		last_pos = curr_pos;

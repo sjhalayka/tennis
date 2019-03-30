@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 
 	cout << in_server_vel.x << " " << in_server_vel.y << " " << in_server_vel.z << endl;
 
-
+	n.init_rectangular_net(net_height, half_court_width);
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, 
@@ -136,7 +136,7 @@ void draw_objects(void)
 	{
 		glPushMatrix();
 		glTranslated(out_path[i].x, out_path[i].y, out_path[i].z);
-		glutSolidSphere(0.1, 8, 8);
+		glutSolidSphere(ball_radius, 8, 8);
 		glPopMatrix();
 	}
 
@@ -231,22 +231,44 @@ void draw_objects(void)
 
 
 
-
-
 	glDisable(GL_CULL_FACE);
 
-	glBegin(GL_QUADS);
+	glBegin(GL_TRIANGLES);
 
 	glColor4f(0.0f, 0.5, 1.0f, 0.5f);
 
-	glVertex3d(-half_court_width, 0, 0);
-	glVertex3d(half_court_width, 0, 0);
-	glVertex3d(half_court_width, net_height, 0);
-	glVertex3d(-half_court_width, net_height, 0);
+	for (size_t i = 0; i < n.tris.size(); i++)
+	{
+		glVertex3d(n.tris[i].A.x, n.tris[i].A.y, n.tris[i].A.z);
+		glVertex3d(n.tris[i].B.x, n.tris[i].B.y, n.tris[i].B.z);
+		glVertex3d(n.tris[i].C.x, n.tris[i].C.y, n.tris[i].C.z);
+	}
 
 	glEnd();
 
 	glEnable(GL_CULL_FACE);
+
+
+
+
+
+	//glDisable(GL_CULL_FACE);
+
+	//glBegin(GL_QUADS);
+
+	//glColor4f(0.0f, 0.5, 1.0f, 0.5f);
+
+	//glVertex3d(-half_court_width, 0, 0);
+	//glVertex3d(half_court_width, 0, 0);
+	//glVertex3d(half_court_width, net_height, 0);
+	//glVertex3d(-half_court_width, net_height, 0);
+
+	//glEnd();
+
+	//glEnable(GL_CULL_FACE);
+
+
+
 
 	glPopMatrix();
 }
