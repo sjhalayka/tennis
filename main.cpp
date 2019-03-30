@@ -10,6 +10,10 @@ int main(int argc, char **argv)
 {
 	integrator_func_pointer = &proceed_RK4;
 
+	cout << in_server_vel.x << " " << in_server_vel.y << " " << in_server_vel.z << endl;
+
+
+
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, 
 		in_out_target_pos,
@@ -17,9 +21,10 @@ int main(int argc, char **argv)
 		out_server_ang_vel,
 		out_path);
 
+	cout << out_server_vel.x << " " << out_server_vel.y << " " << out_server_vel.z << endl;
+
 	cout << out_path[out_path.size() - 1].x << " " << out_path[out_path.size() - 1].y << " " << out_path[out_path.size() - 1].z << endl;
 
-	return 0;
 
 	glutInit(&argc, argv);
 	init_opengl(win_x, win_y);
@@ -108,9 +113,35 @@ void render_string(int x, const int y, void *font, const string &text)
 
 void draw_objects(void)
 {
-	glDisable(GL_LIGHTING);
-
 	glPushMatrix();
+
+	glEnable(GL_LIGHTING);
+
+	GLfloat ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	GLfloat diffuse[] = { 0.75f, 0.75f, 0.75f, 1.0f };
+	GLfloat light0_pos[] = { 2.0f, 2.0f, 2.0f, 1.0f };
+	GLfloat light1_pos[] = { -2.0f, -2.0f, -2.0f, 1.0f };
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+	glLightfv(GL_LIGHT0, GL_POSITION, light0_pos);
+	glEnable(GL_LIGHT0);
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse);
+	glLightfv(GL_LIGHT1, GL_POSITION, light1_pos);
+	glEnable(GL_LIGHT1);
+
+	for (size_t i = 0; i < out_path.size(); i++)
+	{
+		glPushMatrix();
+		glTranslated(out_path[i].x, out_path[i].y, out_path[i].z);
+		glutSolidSphere(0.1, 8, 8);
+		glPopMatrix();
+	}
+
+
+	glDisable(GL_LIGHTING);
 
 	glDisable(GL_CULL_FACE);
 
