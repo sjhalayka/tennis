@@ -108,43 +108,72 @@ bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math:
 	A = A - P;
 	B = B - P;
 	C = C - P;
-	double rr = r * r;
 
+	double rr = r * r;
 	custom_math::vector_3 V = (B - A).cross(C - A);
 	double d = A.dot(V);
 	double e = V.dot(V);
 	int sep1 = d * d > rr * e;
+
+	if (sep1)
+		return true;
+
 	double aa = A.dot(A);
 	double ab = A.dot(B);
 	double ac = A.dot(C);
+	int sep2 = (aa > rr) & (ab > aa) & (ac > aa);
+
+	if (sep2)
+		return true;
+
 	double bb = B.dot(B);
 	double bc = B.dot(C);
-	double cc = C.dot(C);
-	int sep2 = (aa > rr) & (ab > aa) & (ac > aa);
 	int sep3 = (bb > rr) & (ab > bb) & (bc > bb);
+
+	if (sep3)
+		return true;
+
+	double cc = C.dot(C);
 	int sep4 = (cc > rr) & (ac > cc) & (bc > cc);
-	
+
+	if (sep4)
+		return true;
+
 	custom_math::vector_3 AB = B - A;
 	custom_math::vector_3 BC = C - B;
 	custom_math::vector_3 CA = A - C;
-	double d1 = ab - aa;
-	double d2 = bc - bb;
-	double d3 = ac - cc;
-	double e1 = AB.dot(AB);
-	double e2 = BC.dot(BC);
-	double e3 = CA.dot(CA);
-	custom_math::vector_3 Q1 = A * e1 - AB * d1;
-	custom_math::vector_3 Q2 = B * e2 - BC * d2;
-	custom_math::vector_3 Q3 = C * e3 - CA * d3;
-	custom_math::vector_3 QC = C * e1 - Q1;
-	custom_math::vector_3 QA = A * e2 - Q2;
-	custom_math::vector_3 QB = B * e3 - Q3;
-	int sep5 = (Q1.dot(Q1) > rr * e1 * e1) & (Q1.dot(QC) > 0);
-	int sep6 = (Q2.dot(Q2) > rr * e2 * e2) & (Q2.dot(QA) > 0);
-	int sep7 = (Q3.dot(Q3) > rr * e3 * e3) & (Q3.dot(QB) > 0);
-	int separated = sep1 | sep2 | sep3 | sep4 | sep5 | sep6 | sep7;
 
-	return separated;
+	double d1 = ab - aa;
+	double e1 = AB.dot(AB);
+
+	custom_math::vector_3 Q1 = A * e1 - AB * d1;
+	custom_math::vector_3 QC = C * e1 - Q1;
+	int sep5 = (Q1.dot(Q1) > rr * e1 * e1) & (Q1.dot(QC) > 0);
+
+	if (sep5)
+		return true;
+
+	double d2 = bc - bb;
+	double e2 = BC.dot(BC);
+
+	custom_math::vector_3 Q2 = B * e2 - BC * d2;
+	custom_math::vector_3 QA = A * e2 - Q2;
+	int sep6 = (Q2.dot(Q2) > rr * e2 * e2) & (Q2.dot(QA) > 0);
+
+	if (sep6)
+		return true;
+
+	double d3 = ac - cc;
+	double e3 = CA.dot(CA);
+
+	custom_math::vector_3 Q3 = C * e3 - CA * d3;
+	custom_math::vector_3 QB = B * e3 - Q3;
+	int sep7 = (Q3.dot(Q3) > rr * e3 * e3) & (Q3.dot(QB) > 0);
+
+	if (sep7)
+		return true;
+
+	return false;
 }
 
 
