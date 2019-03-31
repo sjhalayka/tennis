@@ -112,6 +112,8 @@ public:
 
 	void init_rectangular_net(double net_height, double half_court_width)
 	{
+		tris.clear();
+
 		custom_math::vector_3 p0(-half_court_width, net_height, 0);
 		custom_math::vector_3 p1(half_court_width, net_height, 0);
 		custom_math::vector_3 p2(half_court_width, 0, 0);
@@ -133,11 +135,38 @@ public:
 
 	void init_regulation_net(double net_height_at_centre, double net_height_at_edges, double half_court_width)
 	{
+		tris.clear();
 
+		custom_math::vector_3 p0(-half_court_width, net_height_at_edges, 0);
+		custom_math::vector_3 p1(0, net_height_at_centre, 0);
+		custom_math::vector_3 p2(half_court_width, net_height_at_edges, 0);
+		custom_math::vector_3 p3(half_court_width, 0, 0);
+		custom_math::vector_3 p4(-half_court_width, 0, 0);
+
+		custom_math::triangle t1;
+		t1.A = p0;
+		t1.B = p1;
+		t1.C = p4;
+
+		custom_math::triangle t2;
+		t2.A = p1;
+		t2.B = p2;
+		t2.C = p3;
+
+		custom_math::triangle t3;
+		t3.A = p1;
+		t3.B = p3;
+		t3.C = p4;
+
+		tris.push_back(t1);
+		tris.push_back(t2);
+		tris.push_back(t3);
 	}
 
 	void init_saggy_net(double catenary_parameter, double net_height_at_edges, double half_court_width, size_t res)
 	{
+		tris.clear();
+
 		const double x_grid_min = -half_court_width;
 		const double x_grid_max = half_court_width;
 		const double x_step_size = (x_grid_max - x_grid_min) / (res - 1.0);

@@ -12,7 +12,8 @@ int main(int argc, char **argv)
 
 	cout << in_server_vel.x << " " << in_server_vel.y << " " << in_server_vel.z << endl;
 
-	n.init_saggy_net(0.5, net_height, half_court_width, 20);
+	n.init_regulation_net(0.914, 1.07, half_court_width);
+	//n.init_saggy_net(0.5, net_height, half_court_width, 20);
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, 
