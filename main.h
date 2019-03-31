@@ -136,9 +136,41 @@ public:
 
 	}
 
-	void init_saggy_net(double catenary_parameter, double net_height_at_edges, double half_court_width)
+	void init_saggy_net(double catenary_parameter, double net_height_at_edges, double half_court_width, size_t res)
 	{
+		const double x_grid_min = -half_court_width;
+		const double x_grid_max = half_court_width;
+		const double x_step_size = (x_grid_max - x_grid_min) / (res - 1.0);
+		
+		double x_start_point = x_grid_min;
+		double x_end_point = x_grid_min + x_step_size;
 
+		for (size_t i = 0; i < res - 1; i++)
+		{
+			double y_start_point = catenary_parameter *cosh(x_start_point / (x_grid_max - x_grid_min)/ catenary_parameter);
+			double y_end_point = catenary_parameter *cosh(x_end_point / (x_grid_max - x_grid_min)/ catenary_parameter);
+
+			custom_math::vector_3 p0(x_start_point, y_start_point, 0);
+			custom_math::vector_3 p1(x_end_point, y_end_point, 0);
+			custom_math::vector_3 p2(x_end_point, 0, 0);
+			custom_math::vector_3 p3(x_start_point, 0, 0);
+
+			custom_math::triangle t1;
+			t1.A = p0;
+			t1.B = p1;
+			t1.C = p2;
+
+			custom_math::triangle t2;
+			t2.A = p0;
+			t2.B = p2;
+			t2.C = p3;
+
+			tris.push_back(t1);
+			tris.push_back(t2);
+
+			x_start_point += x_step_size;
+			x_end_point += x_step_size;
+		}
 	}
 
 };
@@ -473,7 +505,7 @@ short unsigned int get_path(
 				p.push_back(curr_pos);
 			}
 
-			// Does the sphere collide with any of the net's triangles
+			// Check to see if the ball collides with any of the net's triangles
 			if (is_colliding(n.tris, curr_pos, ball_radius))
 			{
 				// reflect vector
