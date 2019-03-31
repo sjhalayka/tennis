@@ -163,7 +163,7 @@ public:
 		tris.push_back(t3);
 	}
 
-	void init_saggy_net(double a, double net_height_at_edges, double half_court_width, size_t res)
+	void init_saggy_net(double catenary_parameter, double net_height_at_edges, double half_court_width, size_t res)
 	{
 		tris.clear();
 
@@ -178,18 +178,15 @@ public:
 
 		for (size_t i = 0; i < res - 1; i++)
 		{
-			double y_start_point = a*cosh(x_start_point / (x_grid_max - x_grid_min) / a);
+			double y_start_point = catenary_parameter *cosh(x_start_point / (x_grid_max - x_grid_min) / catenary_parameter);
 			
 			if (i == 0)
 				factor = 1.0 / (y_start_point / net_height_at_edges);
 			
-			double y_end_point = a*cosh(x_end_point / (x_grid_max - x_grid_min) / a);
+			double y_end_point = catenary_parameter *cosh(x_end_point / (x_grid_max - x_grid_min) / catenary_parameter);
 
 			y_start_point *= factor;
 			y_end_point *= factor;
-
-			if (i == (res - 1) / 2)
-				cout << y_start_point << endl;
 
 			custom_math::vector_3 p0(x_start_point, y_start_point, 0);
 			custom_math::vector_3 p1(x_end_point, y_end_point, 0);
