@@ -10,10 +10,10 @@ int main(int argc, char **argv)
 {
 	integrator_func_pointer = &proceed_RK4;
 
-	cout << in_server_vel.x << " " << in_server_vel.y << " " << in_server_vel.z << endl;
+//	cout << in_server_vel.x << " " << in_server_vel.y << " " << in_server_vel.z << endl;
 
-	n.init_regulation_net(0.914, 1.07, half_court_width);
-	//n.init_saggy_net(0.5, net_height, half_court_width, 20);
+//	n.init_regulation_net(0.914, 1.07, half_court_width);
+	n.init_saggy_net(0.865, 1.07, half_court_width, 20);
 
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, 
@@ -22,9 +22,9 @@ int main(int argc, char **argv)
 		out_server_ang_vel,
 		out_path);
 
-	cout << out_server_vel.x << " " << out_server_vel.y << " " << out_server_vel.z << endl;
+	//cout << out_server_vel.x << " " << out_server_vel.y << " " << out_server_vel.z << endl;
 
-	cout << out_path[out_path.size() - 1].x << " " << out_path[out_path.size() - 1].y << " " << out_path[out_path.size() - 1].z << endl;
+	//cout << out_path[out_path.size() - 1].x << " " << out_path[out_path.size() - 1].y << " " << out_path[out_path.size() - 1].z << endl;
 
 
 	glutInit(&argc, argv);
