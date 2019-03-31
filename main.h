@@ -228,7 +228,7 @@ bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math:
 	custom_math::vector_3 V = (B - A).cross(C - A);
 	double d = A.dot(V);
 	double e = V.dot(V);
-	int sep1 = d * d > rr * e;
+	bool sep1 = d * d > rr * e;
 
 	if (sep1)
 		return true;
@@ -236,20 +236,20 @@ bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math:
 	double aa = A.dot(A);
 	double ab = A.dot(B);
 	double ac = A.dot(C);
-	int sep2 = (aa > rr) & (ab > aa) & (ac > aa);
+	bool sep2 = (aa > rr) & (ab > aa) & (ac > aa);
 
 	if (sep2)
 		return true;
 
 	double bb = B.dot(B);
 	double bc = B.dot(C);
-	int sep3 = (bb > rr) & (ab > bb) & (bc > bb);
+	bool sep3 = (bb > rr) & (ab > bb) & (bc > bb);
 
 	if (sep3)
 		return true;
 
 	double cc = C.dot(C);
-	int sep4 = (cc > rr) & (ac > cc) & (bc > cc);
+	bool sep4 = (cc > rr) & (ac > cc) & (bc > cc);
 
 	if (sep4)
 		return true;
@@ -263,7 +263,7 @@ bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math:
 
 	custom_math::vector_3 Q1 = A * e1 - AB * d1;
 	custom_math::vector_3 QC = C * e1 - Q1;
-	int sep5 = (Q1.dot(Q1) > rr * e1 * e1) & (Q1.dot(QC) > 0);
+	bool sep5 = (Q1.dot(Q1) > rr * e1 * e1) & (Q1.dot(QC) > 0);
 
 	if (sep5)
 		return true;
@@ -273,7 +273,7 @@ bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math:
 
 	custom_math::vector_3 Q2 = B * e2 - BC * d2;
 	custom_math::vector_3 QA = A * e2 - Q2;
-	int sep6 = (Q2.dot(Q2) > rr * e2 * e2) & (Q2.dot(QA) > 0);
+	bool sep6 = (Q2.dot(Q2) > rr * e2 * e2) & (Q2.dot(QA) > 0);
 
 	if (sep6)
 		return true;
@@ -283,7 +283,7 @@ bool is_separated(custom_math::vector_3 A, custom_math::vector_3 B, custom_math:
 
 	custom_math::vector_3 Q3 = C * e3 - CA * d3;
 	custom_math::vector_3 QB = B * e3 - Q3;
-	int sep7 = (Q3.dot(Q3) > rr * e3 * e3) & (Q3.dot(QB) > 0);
+	bool sep7 = (Q3.dot(Q3) > rr * e3 * e3) & (Q3.dot(QB) > 0);
 
 	if (sep7)
 		return true;
