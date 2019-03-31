@@ -73,8 +73,8 @@ double court_width = 10.9728; // 36 feet
 double half_court_width = court_width / 2.0;
 double court_length = 22.86; // 75 feet
 double half_court_length = court_length / 2.0;
-double net_height = 0.9144; // 3 feet
-
+const double net_height_at_centre = 0.914; // 3 feet
+const double net_height_at_edges = 1.07; // 3.5 feet
 double ball_radius = 0.0335;
 
 custom_math::vector_3 in_server_pos(3, 1, 3);
@@ -96,6 +96,8 @@ const size_t num_length_adjustment_iterations = 5;
 const size_t max_bounce_count = 1;//;
 const bool pro_mode = true;
 
+
+
 void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &, const custom_math::vector_3 &);
 
 
@@ -105,33 +107,21 @@ void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &
 #define REGION_OPPONENT_OUT_OF_BOUNDS 3
 
 
+double get_net_height(double x)
+{
+	x = abs(x) / half_court_width;
+	return net_height_at_centre + (net_height_at_edges - net_height_at_centre) * x;
+}
+
+
+
+
+
+
 class net
 {
 public:
 	vector<custom_math::triangle> tris;
-
-	void init_rectangular_net(double net_height, double half_court_width)
-	{
-		tris.clear();
-
-		custom_math::vector_3 p0(-half_court_width, net_height, 0);
-		custom_math::vector_3 p1(half_court_width, net_height, 0);
-		custom_math::vector_3 p2(half_court_width, 0, 0);
-		custom_math::vector_3 p3(-half_court_width, 0, 0);
-
-		custom_math::triangle t1, t2;
-
-		t1.A = p0;
-		t1.B = p1;
-		t1.C = p3;
-
-		t2.A = p1;
-		t2.B = p3;
-		t2.C = p2;
-
-		tris.push_back(t1);
-		tris.push_back(t2);
-	}
 
 	void init_regulation_net(double net_height_at_centre, double net_height_at_edges, double half_court_width)
 	{
@@ -162,55 +152,6 @@ public:
 		tris.push_back(t2);
 		tris.push_back(t3);
 	}
-
-	void init_saggy_net(double catenary_parameter, double net_height_at_edges, double half_court_width, size_t res)
-	{
-		tris.clear();
-
-		const double x_grid_min = -half_court_width;
-		const double x_grid_max = half_court_width;
-		const double x_step_size = (x_grid_max - x_grid_min) / (res - 1.0);
-		
-		double x_start_point = x_grid_min;
-		double x_end_point = x_grid_min + x_step_size;
-		
-		double factor = 0;
-
-		for (size_t i = 0; i < res - 1; i++)
-		{
-			double y_start_point = catenary_parameter *cosh(x_start_point / (x_grid_max - x_grid_min) / catenary_parameter);
-			
-			if (i == 0)
-				factor = 1.0 / (y_start_point / net_height_at_edges);
-			
-			double y_end_point = catenary_parameter *cosh(x_end_point / (x_grid_max - x_grid_min) / catenary_parameter);
-
-			y_start_point *= factor;
-			y_end_point *= factor;
-
-			custom_math::vector_3 p0(x_start_point, y_start_point, 0);
-			custom_math::vector_3 p1(x_end_point, y_end_point, 0);
-			custom_math::vector_3 p2(x_end_point, 0, 0);
-			custom_math::vector_3 p3(x_start_point, 0, 0);
-
-			custom_math::triangle t1;
-			t1.A = p0;
-			t1.B = p1;
-			t1.C = p2;
-
-			custom_math::triangle t2;
-			t2.A = p0;
-			t2.B = p2;
-			t2.C = p3;
-
-			tris.push_back(t1);
-			tris.push_back(t2);
-
-			x_start_point += x_step_size;
-			x_end_point += x_step_size;
-		}
-	}
-
 };
 
 
@@ -546,9 +487,40 @@ short unsigned int get_path(
 			// Check to see if the ball collides with any of the net's triangles
 			if (is_colliding(n.tris, curr_pos, ball_radius))
 			{
-				// reflect vector
-				custom_math::vector_3 N(0, 0, 1);
-				curr_vel = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+				double net_height_at_collision_location = get_net_height(curr_pos.x);
+
+				custom_math::vector_3 up(0, curr_vel.length(), 0);
+
+				if (curr_pos.y == net_height_at_collision_location)
+				{
+					curr_vel = up;
+				}
+				else if(curr_pos.y > net_height_at_collision_location)
+				{
+					// go from 0 to 1 and lerp(curr_vel, up)
+					double t = (curr_pos.y - net_height_at_collision_location) / ball_radius + 0.5;
+
+					double curr_vel_len = curr_vel.length();
+					curr_vel = lerp(curr_vel, up, t);
+					curr_vel.normalize();
+					curr_vel *= curr_vel_len;
+				}
+				else if(curr_pos.y < net_height_at_collision_location)
+				{
+					custom_math::vector_3 reflected;
+					custom_math::vector_3 N(0, 0, 1);
+					reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+
+					// go from 0 to 1 and lerp(up, reflected)
+					double t = (curr_pos.y - net_height_at_collision_location) / ball_radius + 1;
+
+					cout << t << endl;
+
+					double curr_vel_len = curr_vel.length();
+					curr_vel = lerp(up, reflected, t);
+					curr_vel.normalize();
+					curr_vel *= curr_vel_len;
+				}
 			}
 
 			// Reset to the default resolution
