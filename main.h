@@ -498,7 +498,10 @@ short unsigned int get_path(
 				else if(curr_pos.y > net_height_at_collision_location)
 				{
 					// go from 0 to 1 and lerp(curr_vel, up)
-					double t = (curr_pos.y - net_height_at_collision_location) / ball_radius + 0.5;
+					double t = (curr_pos.y - net_height_at_collision_location) / (ball_radius*2) + 0.5;
+
+					cout << "lerp curr_vel up" << endl;
+					cout << t << endl;
 
 					double curr_vel_len = curr_vel.length();
 					curr_vel = lerp(curr_vel, up, t);
@@ -512,8 +515,9 @@ short unsigned int get_path(
 					reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 
 					// go from 0 to 1 and lerp(up, reflected)
-					double t = (curr_pos.y - net_height_at_collision_location) / ball_radius + 1;
+					double t = (curr_pos.y - net_height_at_collision_location) / (ball_radius*2) + 1;
 
+					cout << "lerp up reflected" << endl;
 					cout << t << endl;
 
 					double curr_vel_len = curr_vel.length();
