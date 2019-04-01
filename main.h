@@ -484,6 +484,9 @@ short unsigned int get_path(
 				p.push_back(curr_pos);
 			}
 
+			// Reset to the default resolution
+			dt = default_dt;
+
 			// Check to see if the ball collides with any of the net's triangles
 			if (is_colliding(n.tris, curr_pos, ball_radius))
 			{
@@ -493,6 +496,7 @@ short unsigned int get_path(
 
 				if (curr_pos.y == net_height_at_collision_location)
 				{
+					cout << "up" << endl;
 					curr_vel = up;
 				}
 				else if(curr_pos.y > net_height_at_collision_location)
@@ -510,25 +514,35 @@ short unsigned int get_path(
 				}
 				else if(curr_pos.y < net_height_at_collision_location)
 				{
-					custom_math::vector_3 reflected;
-					custom_math::vector_3 N(0, 0, 1);
-					reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+					if (curr_pos.y < (net_height_at_collision_location - ball_radius))
+					{
+						cout << "reflectedp" << endl;
 
-					// go from 0 to 1 and lerp(up, reflected)
-					double t = (curr_pos.y - net_height_at_collision_location) / (ball_radius*2) + 1;
+						custom_math::vector_3 reflected;
+						custom_math::vector_3 N(0, 0, 1);
+						reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 
-					cout << "lerp up reflected" << endl;
-					cout << t << endl;
+						curr_vel = reflected;
+					}
+					else
+					{
+						custom_math::vector_3 reflected;
+						custom_math::vector_3 N(0, 0, 1);
+						reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
 
-					double curr_vel_len = curr_vel.length();
-					curr_vel = lerp(up, reflected, t);
-					curr_vel.normalize();
-					curr_vel *= curr_vel_len;
+						// go from 0 to 1 and lerp(up, reflected)
+						double t = (curr_pos.y - net_height_at_collision_location) / (ball_radius * 2) + 1;
+
+						cout << "lerp up reflected" << endl;
+						cout << t << endl;
+
+						double curr_vel_len = curr_vel.length();
+						curr_vel = lerp(up, reflected, t);
+						curr_vel.normalize();
+						curr_vel *= curr_vel_len;
+					}
 				}
 			}
-
-			// Reset to the default resolution
-			dt = default_dt;
 		}
 
 		last_pos = curr_pos;
