@@ -13,6 +13,7 @@ int main(int argc, char **argv)
 //	cout << in_server_vel.x << " " << in_server_vel.y << " " << in_server_vel.z << endl;
 
 	n.init_regulation_net(0.914, 1.07, half_court_width);
+	the_posts.init_regulation_posts(0.1524, 1.07, half_court_width);
 	
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, 
@@ -246,6 +247,21 @@ void draw_objects(void)
 
 	glEnd();
 
+
+
+	glBegin(GL_TRIANGLES);
+
+	glColor4f(1.0f, 0.0, 0.0f, 0.5f);
+
+	for (size_t i = 0; i < the_posts.tris.size(); i++)
+	{
+		glVertex3d(the_posts.tris[i].A.x, the_posts.tris[i].A.y, the_posts.tris[i].A.z);
+		glVertex3d(the_posts.tris[i].B.x, the_posts.tris[i].B.y, the_posts.tris[i].B.z);
+		glVertex3d(the_posts.tris[i].C.x, the_posts.tris[i].C.y, the_posts.tris[i].C.z);
+	}
+
+	glEnd();
+	
 	glEnable(GL_CULL_FACE);
 
 

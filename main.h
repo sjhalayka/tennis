@@ -109,11 +109,68 @@ void (*integrator_func_pointer)(custom_math::vector_3 &, custom_math::vector_3 &
 
 double get_net_height(double x)
 {
+	if (abs(x) >= half_court_width)
+		return net_height_at_edges;
+
 	x = abs(x) / half_court_width;
 	return net_height_at_centre + (net_height_at_edges - net_height_at_centre) * x;
 }
 
+// todo: add posts
 
+
+class posts
+{
+public:
+	vector<custom_math::triangle> tris;
+
+	void init_regulation_posts(double width, double height, double half_court_width)
+	{
+		tris.clear();
+
+		// do one post
+		double begin = -half_court_width;
+		double end = -half_court_width - width;
+		
+		custom_math::vector_3 p0(end, height, 0);
+		custom_math::vector_3 p1(begin, height, 0);
+		custom_math::vector_3 p2(begin, 0, 0);
+		custom_math::vector_3 p3(end, 0, 0);
+
+		custom_math::triangle t1;
+		t1.A = p0;
+		t1.B = p1;
+		t1.C = p3;
+
+		custom_math::triangle t2;
+		t2.A = p1;
+		t2.B = p2;
+		t2.C = p3;
+
+		tris.push_back(t1);
+		tris.push_back(t2);
+
+		// now the other triangle
+		begin = half_court_width;
+		end = half_court_width + width;
+
+		p0 = custom_math::vector_3(end, height, 0);
+		p1 = custom_math::vector_3(begin, height, 0);
+		p2 = custom_math::vector_3(begin, 0, 0);
+		p3 = custom_math::vector_3(end, 0, 0);
+
+		t1.A = p0;
+		t1.B = p1;
+		t1.C = p3;
+
+		t2.A = p1;
+		t2.B = p2;
+		t2.C = p3;
+
+		tris.push_back(t1);
+		tris.push_back(t2);
+	}
+};
 
 
 
@@ -156,6 +213,7 @@ public:
 
 
 net n;
+posts the_posts;
 
 
 // http://realtimecollisiondetection.net/blog/?p=103
@@ -487,8 +545,16 @@ short unsigned int get_path(
 			// Reset to the default resolution
 			dt = default_dt;
 
+			// Check to see if the ball collides with any of the posts' triangles
+			if (is_colliding(the_posts.tris, curr_pos, ball_radius))
+			{
+				custom_math::vector_3 reflected;
+				custom_math::vector_3 N(0, 0, 1);
+				reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+				curr_vel = reflected;
+			}
 			// Check to see if the ball collides with any of the net's triangles
-			if (is_colliding(n.tris, curr_pos, ball_radius))
+			else if (is_colliding(n.tris, curr_pos, ball_radius))
 			{
 				double net_height_at_collision_location = get_net_height(curr_pos.x);
 
@@ -516,7 +582,7 @@ short unsigned int get_path(
 				{
 					if (curr_pos.y < (net_height_at_collision_location - ball_radius))
 					{
-						cout << "reflectedp" << endl;
+						cout << "reflected" << endl;
 
 						custom_math::vector_3 reflected;
 						custom_math::vector_3 N(0, 0, 1);
