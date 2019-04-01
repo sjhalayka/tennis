@@ -13,7 +13,6 @@ int main(int argc, char **argv)
 //	cout << in_server_vel.x << " " << in_server_vel.y << " " << in_server_vel.z << endl;
 
 	n.init_regulation_net(0.914, 1.07, half_court_width);
-	the_posts.init_regulation_posts(0.1524, 1.07, half_court_width);
 	
 	get_targets(
 		in_server_pos, in_server_vel, in_server_ang_vel, 

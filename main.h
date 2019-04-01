@@ -124,7 +124,7 @@ class posts
 public:
 	vector<custom_math::triangle> tris;
 
-	void init_regulation_posts(double width, double height, double half_court_width)
+	posts(double width, double height, double half_court_width)
 	{
 		tris.clear();
 
@@ -213,7 +213,7 @@ public:
 
 
 net n;
-posts the_posts;
+posts the_posts(0.1524, net_height_at_edges, half_court_width);
 
 
 // http://realtimecollisiondetection.net/blog/?p=103
@@ -523,7 +523,7 @@ short unsigned int get_path(
 
 		bool is_near_net = (curr_pos.z < 0 && last_pos.z >= 0);
 
-		// if collides with net
+		// if near net
 		if (is_near_net)
 		{
 			// Take a step back
