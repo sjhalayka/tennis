@@ -545,13 +545,63 @@ short unsigned int get_path(
 			// Reset to the default resolution
 			dt = default_dt;
 
-			// Check to see if the ball collides with any of the posts' triangles
+			// Check to see if the ball collides with the posts triangles
 			if (is_colliding(the_posts.tris, curr_pos, ball_radius))
 			{
-				custom_math::vector_3 reflected;
-				custom_math::vector_3 N(0, 0, 1);
-				reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
-				curr_vel = reflected;
+				double net_height_at_collision_location = net_height_at_edges;
+
+				custom_math::vector_3 up(0, curr_vel.length(), 0);
+
+				if (curr_pos.y == net_height_at_collision_location)
+				{
+					cout << "up" << endl;
+					curr_vel = up;
+				}
+				else if (curr_pos.y > net_height_at_collision_location)
+				{
+					// go from 0 to 1 and lerp(curr_vel, up)
+					double t = (curr_pos.y - net_height_at_collision_location) / (ball_radius * 2) + 0.5;
+
+					cout << "lerp curr_vel up" << endl;
+					cout << t << endl;
+
+					double curr_vel_len = curr_vel.length();
+					curr_vel = lerp(curr_vel, up, t);
+					curr_vel.normalize();
+					curr_vel *= curr_vel_len;
+				}
+				else if (curr_pos.y < net_height_at_collision_location)
+				{
+					if (curr_pos.y < (net_height_at_collision_location - ball_radius))
+					{
+						cout << "reflected" << endl;
+
+						custom_math::vector_3 reflected;
+						custom_math::vector_3 N(0, 0, 1);
+						reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+
+						curr_vel = reflected;
+					}
+					else
+					{
+						custom_math::vector_3 reflected;
+						custom_math::vector_3 N(0, 0, 1);
+						reflected = -(N * curr_vel.dot(N)*2.0 - curr_vel);
+
+						// go from 0 to 1 and lerp(up, reflected)
+						double t = (curr_pos.y - net_height_at_collision_location) / (ball_radius * 2) + 1;
+
+						cout << "lerp up reflected" << endl;
+						cout << t << endl;
+
+						double curr_vel_len = curr_vel.length();
+						curr_vel = lerp(up, reflected, t);
+						curr_vel.normalize();
+						curr_vel *= curr_vel_len;
+					}
+				}
+
+
 			}
 			// Check to see if the ball collides with any of the net's triangles
 			else if (is_colliding(n.tris, curr_pos, ball_radius))
